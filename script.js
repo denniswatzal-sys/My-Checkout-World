@@ -1937,6 +1937,7 @@
         document.getElementById('rangeCard').style.display = 'none';
         
         document.getElementById('challengeCard').classList.remove('hidden');
+        document.getElementById('challengeGifContainer').classList.remove('hidden');
         document.getElementById('challengeTime').textContent = `⏱️ ${timeLeft}s`;
         updateChallengeStats();
         
@@ -1959,6 +1960,7 @@
       window.challengeMode = false;
       
       document.getElementById('challengeCard').classList.add('hidden');
+      document.getElementById('challengeGifContainer').classList.add('hidden');
       document.getElementById('rangeCard').style.display = 'block';
       
       // Add to leaderboard
@@ -2065,6 +2067,7 @@
       
       // Hide challenge card, show range card
       document.getElementById('challengeCard').classList.add('hidden');
+      document.getElementById('challengeGifContainer').classList.add('hidden');
       document.getElementById('rangeCard').style.display = 'block';
       
       // Reset to 3-Dart mode
