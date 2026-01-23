@@ -1,0 +1,25 @@
+{
+  "name": "My Checkout World - Dart Trainer",
+  "short_name": "Checkout World",
+  "description": "Trainiere Dart Checkouts mit verschiedenen Modi und Schwierigkeitsgraden",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#004e7a",
+  "theme_color": "#004e7a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
