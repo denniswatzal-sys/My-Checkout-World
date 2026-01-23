@@ -592,6 +592,31 @@
       z-index: 1;
     }
     
+    .start-logo {
+      width: 100%;
+      max-width: 300px;
+      margin: 0 auto 30px auto;
+      animation: fadeInDown 0.8s ease-out;
+    }
+    
+    .start-logo img {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+    }
+    
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
     .start-title {
       width: 495px;
       max-width: 100%;
