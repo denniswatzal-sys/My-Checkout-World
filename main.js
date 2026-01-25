@@ -1,0 +1,3447 @@
+// ============================================
+// VERSION: GELB-v3-FINAL-2025-01-25
+// Tutorial Fix: Verwendet .start-btn-tutorial
+// ============================================
+console.log('✅ SCRIPT LOADED: GELB-v3-FINAL-2025-01-25');
+
+// Vollständige Checkout-Datenbank
+    let defaultCheckouts = {
+      2: ['D1'], 3: ['S1', 'D1'], 4: ['D2'], 5: ['S1', 'D2'], 6: ['D3'], 7: ['S3', 'D2'], 8: ['D4'], 
+      9: ['S1', 'D4'], 10: ['D5'], 11: ['S3', 'D4'], 12: ['D6'], 13: ['S5', 'D4'], 14: ['D7'], 
+      15: ['S7', 'D4'], 16: ['D8'], 17: ['S9', 'D4'], 18: ['D9'], 19: ['S11', 'D4'], 20: ['D10'], 
+      21: ['S17', 'D2'], 22: ['D11'], 23: ['S7', 'D8'], 24: ['D12'], 25: ['S17', 'D4'], 26: ['D13'], 
+      27: ['S7', 'D10'], 28: ['D14'], 29: ['S13', 'D8'], 30: ['D15'], 31: ['S7', 'D12'], 32: ['D16'], 
+      33: ['S17', 'D8'], 34: ['D17'], 35: ['S3', 'D16'], 36: ['D18'], 37: ['S17', 'D10'], 38: ['D19'], 
+      39: ['S7', 'D16'], 40: ['D20'], 41: ['S9', 'D16'], 42: ['S10', 'D16'], 43: ['S3', 'D20'], 
+      44: ['S4', 'D20'], 45: ['S13', 'D16'], 46: ['S6', 'D20'], 47: ['S7', 'D20'], 48: ['S8', 'D20'], 
+      49: ['S9', 'D20'], 50: ['S10', 'D20'], 51: ['S11', 'D20'], 52: ['T12', 'D8'], 53: ['S13', 'D20'], 
+      54: ['S14', 'D20'], 55: ['S15', 'D20'], 56: ['S16', 'D20'], 57: ['S17', 'D20'], 58: ['S18', 'D20'], 
+      59: ['S19', 'D20'], 60: ['S20', 'D20'], 61: ['T15', 'D8'], 62: ['T10', 'D16'], 63: ['T17', 'D6'], 
+      64: ['T16', 'D8'], 65: ['T11', 'D16'], 66: ['T10', 'D18'], 67: ['T9', 'D20'], 68: ['T16', 'D10'], 
+      69: ['T15', 'D12'], 70: ['T18', 'D8'], 71: ['T13', 'D16'], 72: ['T20', 'D6'], 73: ['T19', 'D8'], 
+      74: ['T14', 'D16'], 75: ['T15', 'D15'], 76: ['T20', 'D8'], 77: ['T19', 'D10'], 78: ['T18', 'D12'], 
+      79: ['T19', 'D11'], 80: ['T20', 'D10'], 81: ['T15', 'D18'], 82: ['Bull', 'D16'], 83: ['T17', 'D16'], 
+      84: ['T20', 'D12'], 85: ['T15', 'D20'], 86: ['T18', 'D16'], 87: ['T17', 'D18'], 88: ['T20', 'D14'], 
+      89: ['T19', 'D16'], 90: ['T20', 'D15'], 91: ['Bull', 'S9', 'D16'], 92: ['Bull', 'S10', 'D16'], 
+      93: ['Bull', 'S3', 'D20'], 94: ['Bull', 'S4', 'D20'], 95: ['Bull', 'S13', 'D16'], 96: ['T20', 'D18'], 
+      97: ['T19', 'D20'], 98: ['T20', 'D19'], 99: ['T19', 'S10', 'D16'], 100: ['T20', 'D20'], 
+      101: ['T20', 'S9', 'D16'], 102: ['T20', 'S10', 'D16'], 103: ['T19', 'S6', 'D20'], 104: ['T19', 'S7', 'D20'], 
+      105: ['T20', 'S13', 'D16'], 106: ['T20', 'S6', 'D20'], 107: ['T19', 'S10', 'D20'], 108: ['T18', 'S14', 'D20'], 
+      109: ['T20', 'S9', 'D20'], 110: ['T20', 'S10', 'D20'], 111: ['T20', 'S11', 'D20'], 112: ['T20', 'T12', 'D8'], 
+      113: ['T19', 'S16', 'D20'], 114: ['T18', 'S20', 'D20'], 115: ['T20', 'S15', 'D20'], 116: ['T19', 'S19', 'D20'], 
+      117: ['T19', 'S20', 'D20'], 118: ['T20', 'S18', 'D20'], 119: ['T19', 'T12', 'D13'], 120: ['T20', 'S20', 'D20'], 
+      121: ['T20', 'T11', 'D14'], 122: ['T18', 'T18', 'D7'], 123: ['T19', 'T16', 'D9'], 124: ['T20', 'T14', 'D11'], 
+      125: ['Bull', 'T15', 'D15'], 126: ['T19', 'T19', 'D6'], 127: ['T20', 'T17', 'D8'], 128: ['T18', 'T14', 'D16'], 
+      129: ['T19', 'D18', 'D18'], 130: ['T20', 'T20', 'D5'], 131: ['T20', 'T17', 'D10'], 132: ['Bull', 'Bull', 'D16'], 
+      133: ['T20', 'T19', 'D8'], 134: ['T20', 'T14', 'D16'], 135: ['Bull', 'T15', 'D20'], 136: ['T20', 'T20', 'D8'], 
+      137: ['T20', 'T19', 'D10'], 138: ['T19', 'T19', 'D12'], 139: ['T20', 'T19', 'D11'], 140: ['T20', 'D20', 'D20'], 
+      141: ['T20', 'T19', 'D12'], 142: ['T19', 'T19', 'D14'], 143: ['T20', 'T17', 'D16'], 144: ['T20', 'T20', 'D12'], 
+      145: ['T20', 'T15', 'D20'], 146: ['T19', 'T19', 'D16'], 147: ['T20', 'T17', 'D18'], 148: ['T20', 'T16', 'D20'], 
+      149: ['T20', 'T19', 'D16'], 150: ['T19', 'T19', 'D18'], 151: ['T20', 'T17', 'D20'], 152: ['T19', 'T19', 'D19'], 
+      153: ['T20', 'T19', 'D18'], 154: ['T20', 'T18', 'D20'], 155: ['T20', 'T19', 'D19'], 156: ['T20', 'T20', 'D18'], 
+      157: ['T20', 'T19', 'D20'], 158: ['T20', 'T20', 'D19'], 159: ['T20', 'T19', 'S10'], 160: ['T20', 'T20', 'D20'], 
+      161: ['T20', 'T17', 'Bull'], 162: ['T20', 'T20', 'S10'], 163: ['T20', 'T19', 'S6'], 164: ['T19', 'T19', 'Bull'], 
+      165: ['T20', 'T20', 'S13'], 166: ['T20', 'T20', 'S6'], 167: ['T20', 'T19', 'Bull'], 168: ['T20', 'T18', 'S14'], 
+      169: ['T20', 'T20', 'S9'], 170: ['T20', 'T20', 'Bull']
+    };
+    
+    let twoDartCheckouts = {
+      61: ['T11', 'D14'], 62: ['T12', 'D13'], 63: ['T13', 'D12'], 64: ['T14', 'D11'], 65: ['T15', 'D10'], 
+      66: ['T16', 'D9'], 67: ['T17', 'D8'], 68: ['T18', 'D7'], 69: ['T19', 'D6'], 70: ['T20', 'D5'], 
+      71: ['T17', 'D10'], 72: ['D18', 'D18'], 80: ['D20', 'D20'], 81: ['T19', 'D12'], 82: ['T14', 'D20'], 
+      88: ['T16', 'D20'], 90: ['T18', 'D18'], 91: ['T17', 'D20'], 92: ['T20', 'D16'], 93: ['T19', 'D18'], 
+      94: ['T18', 'D20'], 95: ['T19', 'D19'], 101: ['T17', 'Bull'], 104: ['T18', 'Bull'], 107: ['T19', 'Bull'], 
+      110: ['T20', 'Bull']
+    };
+    
+    // Create deep copies of original checkouts for reset functionality
+    const originalDefaultCheckouts = JSON.parse(JSON.stringify(defaultCheckouts));
+    const originalTwoDartCheckouts = JSON.parse(JSON.stringify(twoDartCheckouts));
+    
+    const boardOrder = [20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5];
+    const stellZahlen = [159, 162, 163, 165, 166, 168, 169];
+    
+    let currentMode = '3darts';
+    let currentCheckouts = defaultCheckouts;
+    let currentScore = 87;
+    let currentCheckout = ['T17', 'D18'];
+    let userInputs = [];
+    let highlightedFields = [];
+    
+    // Track current range for challenge mode
+    let currentRangeMin = 2;
+    let currentRangeMax = 170;
+    
+    // Track manual score entry
+    let manualScoreActive = false;
+    
+    // Track recently generated scores to avoid repetition
+    // Each entry: { score: number, mode: '2darts'|'3darts'|'mixed' }
+    let recentlyGenerated = [];
+    
+    // Generation mode: 'random', 'ascending', 'descending'
+    let generationMode = 'random';
+    let currentSequentialScore = null; // Track current position in sequential mode
+    
+    // Helper function to clear anti-repetition history (call when changing range/mode)
+    function clearAntiRepetitionHistory() {
+      recentlyGenerated = [];
+    }
+    
+    // Track black ring visibility
+    let numbersVisible = true;
+    
+    // Make challengeMode and challengeTimer global (no let)
+    window.challengeMode = false;
+    window.challengeTimer = null;
+    
+    let challengeStats = { correct: 0, wrong: 0 };
+    
+    let leaderboard = [];
+    let problemScores = {};
+    let feedback = null;
+    let mainSettingsVisible = true;
+    let visibleElements = {
+      'userInputs': true
+    };
+    
+    function createDartboard() {
+      const svg = document.getElementById('dartboard');
+      svg.innerHTML = '';
+      
+      // Background circle (large black ring - ALWAYS visible)
+      const bg = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      bg.setAttribute('cx', '250');
+      bg.setAttribute('cy', '250');
+      bg.setAttribute('r', '248');
+      bg.setAttribute('fill', '#1a1a1a');
+      bg.setAttribute('stroke', 'white');
+      bg.setAttribute('stroke-width', '2');
+      bg.setAttribute('id', 'dartboard-outer-ring');
+      svg.appendChild(bg);
+      
+      // Create segments
+      boardOrder.forEach((number, index) => {
+        const angle = (index * 18) - 100;
+        const startAngle = angle * Math.PI / 180;
+        const endAngle = (angle + 18) * Math.PI / 180;
+        
+        const isDouble = highlightedFields.includes(`D${number}`);
+        const isSingle = highlightedFields.includes(`S${number}`);
+        const isTriple = highlightedFields.includes(`T${number}`);
+        
+        const isBlack = index % 2 === 0;
+        
+        // Double ring (30% bigger: 29px, 177-206)
+        createSegment(svg, 177, 206, startAngle, endAngle, 
+          isDouble ? '#60A5FA' : (isBlack ? '#DC2626' : '#16A34A'),
+          isDouble ? '#2563EB' : '#C0C0C0',
+          isDouble ? '4' : '1',
+          () => handleDartClick(`D${number}`));
+        
+        // Outer single (118-177, 59px)
+        createSegment(svg, 118, 177, startAngle, endAngle,
+          isSingle ? '#60A5FA' : (isBlack ? '#1F2937' : '#FEF3C7'),
+          isSingle ? '#2563EB' : '#C0C0C0',
+          isSingle ? '4' : '1',
+          () => handleDartClick(`S${number}`));
+        
+        // Triple ring (30% bigger: 30px, 88-118, CENTERED between singles)
+        createSegment(svg, 88, 118, startAngle, endAngle,
+          isTriple ? '#60A5FA' : (isBlack ? '#DC2626' : '#16A34A'),
+          isTriple ? '#2563EB' : '#C0C0C0',
+          isTriple ? '4' : '1',
+          () => handleDartClick(`T${number}`));
+        
+        // Inner single (32-88, 56px)
+        createSegment(svg, 32, 88, startAngle, endAngle,
+          isSingle ? '#60A5FA' : (isBlack ? '#1F2937' : '#FEF3C7'),
+          isSingle ? '#2563EB' : '#C0C0C0',
+          isSingle ? '4' : '1',
+          () => handleDartClick(`S${number}`));
+        
+        // Number text (only if numbersVisible is true)
+        if (numbersVisible) {
+          const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          const textAngle = startAngle + 9 * Math.PI / 180;
+          text.setAttribute('x', 250 + 227 * Math.cos(textAngle));
+          text.setAttribute('y', 250 + 227 * Math.sin(textAngle));
+          text.setAttribute('text-anchor', 'middle');
+          text.setAttribute('dominant-baseline', 'middle');
+          text.setAttribute('font-size', '28');
+          text.setAttribute('font-weight', 'bold');
+          text.setAttribute('fill', 'white');
+          text.textContent = number;
+          svg.appendChild(text);
+        }
+        
+        // Separator line (to edge of doubles)
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', 250 + 32 * Math.cos(startAngle));
+        line.setAttribute('y1', 250 + 32 * Math.sin(startAngle));
+        line.setAttribute('x2', 250 + 206 * Math.cos(startAngle));
+        line.setAttribute('y2', 250 + 206 * Math.sin(startAngle));
+        line.setAttribute('stroke', '#999');
+        line.setAttribute('stroke-width', '1.5');
+        svg.appendChild(line);
+      });
+      
+      // S25 (outer bull)
+      const s25 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      s25.setAttribute('cx', '250');
+      s25.setAttribute('cy', '250');
+      s25.setAttribute('r', '32');
+      s25.setAttribute('fill', highlightedFields.includes('S25') ? '#60A5FA' : '#16A34A');
+      s25.setAttribute('stroke', highlightedFields.includes('S25') ? '#2563EB' : '#C0C0C0');
+      s25.setAttribute('stroke-width', highlightedFields.includes('S25') ? '4' : '1');
+      s25.style.cursor = 'pointer';
+      s25.onclick = () => handleDartClick('S25');
+      svg.appendChild(s25);
+      
+      // Bull
+      const bull = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      bull.setAttribute('cx', '250');
+      bull.setAttribute('cy', '250');
+      bull.setAttribute('r', '16');
+      bull.setAttribute('fill', highlightedFields.includes('Bull') ? '#60A5FA' : '#DC2626');
+      bull.setAttribute('stroke', highlightedFields.includes('Bull') ? '#2563EB' : '#C0C0C0');
+      bull.setAttribute('stroke-width', highlightedFields.includes('Bull') ? '4' : '1');
+      bull.style.cursor = 'pointer';
+      bull.onclick = () => handleDartClick('Bull');
+      svg.appendChild(bull);
+    }
+    
+    function createSegment(svg, innerR, outerR, startA, endA, fill, stroke, strokeWidth, onClick) {
+      const cx = 250, cy = 250;
+      const x1 = cx + innerR * Math.cos(startA);
+      const y1 = cy + innerR * Math.sin(startA);
+      const x2 = cx + outerR * Math.cos(startA);
+      const y2 = cy + outerR * Math.sin(startA);
+      const x3 = cx + outerR * Math.cos(endA);
+      const y3 = cy + outerR * Math.sin(endA);
+      const x4 = cx + innerR * Math.cos(endA);
+      const y4 = cy + innerR * Math.sin(endA);
+      
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', `M ${x1} ${y1} L ${x2} ${y2} A ${outerR} ${outerR} 0 0 1 ${x3} ${y3} L ${x4} ${y4} A ${innerR} ${innerR} 0 0 0 ${x1} ${y1}`);
+      path.setAttribute('fill', fill);
+      path.setAttribute('stroke', stroke);
+      path.setAttribute('stroke-width', strokeWidth);
+      path.style.cursor = 'pointer';
+      path.onclick = onClick;
+      svg.appendChild(path);
+    }
+    
+    function toggleVisibility(elementId) {
+      const element = document.getElementById(elementId);
+      if (!element) return;
+      
+      visibleElements[elementId] = !visibleElements[elementId];
+      
+      // Toggle hidden class
+      if (visibleElements[elementId]) {
+        element.classList.remove('hidden');
+      } else {
+        element.classList.add('hidden');
+      }
+      
+      // Update checkbox in menu
+      const toggleMap = {
+        'userInputs': 'inputsToggle'
+      };
+      
+      const toggleId = toggleMap[elementId];
+      if (toggleId) {
+        const toggle = document.getElementById(toggleId);
+        if (toggle) {
+          toggle.textContent = visibleElements[elementId] ? '☑' : '☐';
+        }
+      }
+    }
+    
+    function setMode(mode, buttonElement) {
+      currentMode = mode;
+      
+      // Clear anti-repetition history when switching modes
+      clearAntiRepetitionHistory();
+      
+      // Reset sequential score when changing dart mode
+      currentSequentialScore = null;
+      
+      document.querySelectorAll('.mode-btn').forEach(btn => {
+        // Don't remove active from challenge button
+        if (!btn.classList.contains('mode-btn-challenge')) {
+          btn.classList.remove('active');
+        }
+      });
+      
+      if (buttonElement) {
+        buttonElement.classList.add('active');
+      }
+      
+      if (mode === '2darts') {
+        currentCheckouts = twoDartCheckouts;
+        updateRangeButtonsFor2Dart();
+        // Set to 2-170 and activate the button
+        currentRangeMin = 2;
+        currentRangeMax = 170;
+        const btn2_170 = document.querySelector('.range-btn.bg-blue-500');
+        if (btn2_170) {
+          document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active-range'));
+          btn2_170.classList.add('active-range');
+        }
+        generateScore(2, 170);
+        return;
+      } else if (mode === '3darts') {
+        currentCheckouts = defaultCheckouts;
+        updateRangeButtonsFor3Dart();
+        // Set to 2-170 and activate the button
+        currentRangeMin = 2;
+        currentRangeMax = 170;
+        const btn2_170 = document.querySelector('.range-btn.bg-blue-500');
+        if (btn2_170) {
+          document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active-range'));
+          btn2_170.classList.add('active-range');
+        }
+        generateScore(2, 170);
+        return;
+      } else if (mode === 'mixed') {
+        // In Mix-Modus alle Bereiche erlauben (da sowohl 2-Dart als auch 3-Dart)
+        document.querySelectorAll('.range-btn').forEach(btn => {
+          btn.classList.remove('disabled');
+        });
+        
+        // Set to 2-170 and activate the button
+        currentRangeMin = 2;
+        currentRangeMax = 170;
+        const btn2_170 = document.querySelector('.range-btn.bg-blue-500');
+        if (btn2_170) {
+          document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active-range'));
+          btn2_170.classList.add('active-range');
+        }
+        generateScore(2, 170);
+        return;
+      }
+      
+      updateScoreTitle();
+    }
+    
+    function cycleGenerationMode() {
+      // Cycle through modes: random -> ascending -> descending -> random
+      if (generationMode === 'random') {
+        generationMode = 'ascending';
+        const btn = document.getElementById('generationModeBtn');
+        btn.textContent = '⬆';
+        btn.style.fontWeight = '900';
+        btn.style.fontSize = '18px';
+        btn.style.lineHeight = '1';
+        // Set to null to trigger starting at first score in generateScore
+        currentSequentialScore = null;
+      } else if (generationMode === 'ascending') {
+        generationMode = 'descending';
+        const btn = document.getElementById('generationModeBtn');
+        btn.textContent = '⬇';
+        btn.style.fontWeight = '900';
+        btn.style.fontSize = '18px';
+        btn.style.lineHeight = '1';
+        // Set to null to trigger starting at last score in generateScore
+        currentSequentialScore = null;
+      } else {
+        generationMode = 'random';
+        const btn = document.getElementById('generationModeBtn');
+        btn.textContent = '?';
+        btn.style.fontWeight = '900';
+        btn.style.fontSize = '18px';
+        btn.style.lineHeight = '1';
+        currentSequentialScore = null;
+        clearAntiRepetitionHistory();
+      }
+      
+      console.log('Generation mode changed to:', generationMode, 'Starting score:', currentSequentialScore);
+      
+      // Generate new score with the new mode
+      generateScore(currentRangeMin, currentRangeMax);
+    }
+    
+    function updateRangeButtonsFor2Dart() {
+      // Dynamically check which ranges have 2-dart checkouts
+      const buttons = document.querySelectorAll('.range-btn[data-min]');
+      buttons.forEach(btn => {
+        const min = parseInt(btn.dataset.min);
+        const max = parseInt(btn.dataset.max);
+        
+        if (!isNaN(min) && !isNaN(max)) {
+          // Check if ANY score in this range has a 2-dart checkout
+          let hasCheckout = false;
+          for (let score = min; score <= max; score++) {
+            if (twoDartCheckouts[score] && twoDartCheckouts[score].length > 0) {
+              hasCheckout = true;
+              break;
+            }
+          }
+          
+          // If no checkout found in this range, disable the button
+          if (!hasCheckout) {
+            btn.classList.add('disabled');
+          } else {
+            btn.classList.remove('disabled');
+          }
+        }
+      });
+    }
+    
+    function updateRangeButtonsFor3Dart() {
+      // Enable all buttons for 3-dart mode
+      const buttons = document.querySelectorAll('.range-btn[data-min]');
+      buttons.forEach(btn => {
+        btn.classList.remove('disabled');
+      });
+    }
+    
+    function updateScoreTitle() {
+      let title = '';
+      if (currentMode === '3darts') {
+        title = '3 Darts:';
+      } else if (currentMode === '2darts') {
+        title = '2 Darts:';
+      } else if (currentMode === 'mixed') {
+        // Show current mode based on which database is being used
+        const is2Darts = currentCheckouts === twoDartCheckouts;
+        title = is2Darts ? 'Mix (2 Darts):' : 'Mix (3 Darts):';
+      }
+      document.getElementById('scoreTitle').textContent = title;
+    }
+    
+    const rangeHints = {
+      '2-170': {
+        title: 'Erstmal zu den wichtigsten Bereichsgrenzen:',
+        content: 'Du solltest am besten…<br><br>…unter <strong>61</strong> mit dem <em>ersten Dart</em> – dann ist ein Out über S – D möglich.<br><br>…unter <strong>71</strong> mit dem <em>ersten Dart</em> – so hast du gute Chancen auf ein Out!<br><br>…unter <strong>91</strong> mit dem <em>dritten Dart</em> – dann ist bei der nächsten Aufnahme ein Out ohne T mit <strong>BULL</strong> möglich. Bei unter <strong>81</strong> mit dem <em>dritten Dart</em> geht es sogar ohne T und <strong>BULL</strong>.<br><br>…unter <strong>111</strong> mit dem <em>ersten Dart</em> und ohne eine kleine Bogey Zahl zu treffen (109, 108, 106, 105, 103, 102, 99) – damit die Out-Chance erhalten bleibt.<br><br>…unter <strong>131</strong> mit dem <em>dritten Dart</em> – so wartet bei der nächsten Aufnahme ein leichteres High Finish auf dich.'
+      },
+      
+      '2-40': {
+        title: 'Gruppe 2 – 40',
+        content: 'Hier ist das Rechnen einfach, ein paar Grundregeln helfen dennoch:<br><br><strong>Doubles nutzen:</strong> Wenn ein Double verfügbar ist, zielt man meist direkt darauf. Umbauen (z. B. 14 → S6 – D4) kostet einen Dart mehr und lohnt sich nur bei starker Unsicherheit auf ein bestimmtes Double.<br><br><strong>Sichere Doubles:</strong> Manche Spieler bevorzugen D1 – nur wenn man sich dort sehr sicher fühlt, lohnt es sich. Andere Doubles sind meist besser.<br><br><strong>Überwerfen vermeiden:</strong> Wenn ein Risiko besteht, das Ziel zu überwerfen, sollte man das immer berücksichtigen.<br><br><strong>Ungerade Zahlen:</strong> Alle ungeraden Zahlen muss man sich erst stellen. Das Cluster S7 / S19 / S3 / S17 verzeiht oft einen Fehlwurf zur Seite, kann aber eventuell ein etwas kniffligeres Double zur Folge haben. Schönere Double können sich über S1, S5, S9, S11, S13 oder S15 erspielt werden.'
+      },
+      
+      '41-60': {
+        title: 'Gruppe 41 – 60',
+        content: 'In diesem Bereich muss jedes Double erst vorbereitet werden.<br><br><strong>Über Single zum Double:</strong> In der Regel stellen wir immer über ein Single aufs Double-Out. Sinnvolle Ausnahme: 52 über T12 – D4, da S12 auf D20 stellt.<br><br><strong>Bevorzugte Doubles:</strong> Hohe und gerade Doubles (D20, D18, D16, D12).<br><br><strong>Überwerfen vermeiden:</strong> Das gewählte Single sollte so liegen, dass auch ein Treffer ins Double oder Triple nicht zum Überwerfen führt.<br><br><strong>Sichere Cluster:</strong> S6 / S10 oder S8 / S16. Um auf Nummer sicher zu gehen, kann man hier den Draht zwischen den Feldern anvisieren.<br><br><strong>Ungerade Cluster:</strong> S7 / S19 / S3 / S17 werden hier seltener genutzt, da sie ungünstigere Doubles ergeben.<br><br><strong>Anzahl der Darts:</strong> Ob du für die Aufnahme noch 2 oder 3 Darts übrig hast, spielt unter 61 Punkten noch keine Rolle.<br><br><strong>BULL-Finish:</strong> Tut mir leid 😅 – eher nicht. Ein beliebiges Double zu treffen ist wahrscheinlicher.'
+      },
+      
+      '61-70': {
+        title: 'Gruppe 61 – 70',
+        content: 'In diesem Bereich ist es entscheidend, ob 2 oder 3-Darts zur Verfügung stehen. Mit 2-Darts braucht man entweder ein Triple oder ein BULL-Finish.<br><br><strong>Einfache Grundregel für 2-Dart-Finish (2DF) in dieser Gruppe:</strong><br>Der erste Dart geht auf das höchste Triple, das zur Einerstelle passt.<br><br><strong>Beispiele:</strong><br>7<strong>0</strong>&nbsp;&nbsp;&nbsp;T2<strong>0</strong> – D5&nbsp;&nbsp;&nbsp;&nbsp;(S20 → DB)<br>6<strong>9</strong>&nbsp;&nbsp;&nbsp;T1<strong>9</strong> – D6&nbsp;&nbsp;&nbsp;&nbsp;(S19 → DB)<br>6<strong>8</strong>&nbsp;&nbsp;&nbsp;T1<strong>8</strong> – D7&nbsp;&nbsp;&nbsp;&nbsp;(S18 → DB)<br>6<strong>7</strong>&nbsp;&nbsp;&nbsp;T1<strong>7</strong> – D8&nbsp;&nbsp;&nbsp;&nbsp;(S17 → DB)<br>6<strong>6</strong>&nbsp;&nbsp;&nbsp;T1<strong>6</strong> – D9&nbsp;&nbsp;&nbsp;&nbsp;(S16 → DB)<br>6<strong>5</strong>&nbsp;&nbsp;&nbsp;T1<strong>5</strong> – D10&nbsp;&nbsp;&nbsp;(S15 → DB)<br>6<strong>4</strong>&nbsp;&nbsp;&nbsp;T1<strong>4</strong> – D11&nbsp;&nbsp;&nbsp;(S14 → DB)<br>6<strong>3</strong>&nbsp;&nbsp;&nbsp;T1<strong>3</strong> – D12&nbsp;&nbsp;&nbsp;(S13 → DB)<br>6<strong>2</strong>&nbsp;&nbsp;&nbsp;T1<strong>2</strong> – D13&nbsp;&nbsp;&nbsp;(S12 → DB)<br>6<strong>1</strong>&nbsp;&nbsp;&nbsp;T1<strong>1</strong> – D14&nbsp;&nbsp;&nbsp;(S11 → DB)<br><br><strong>Vorteil:</strong> Trifft man statt des Triples nur das Single, bleibt immer ein Finish über BULL.<br><br><strong>Welches Double folgt auf´s Triple:</strong> Zahlen über Zahlen 🙈. Zum Glück muss man sich die Endziffern nur einmal merken, da spiegelbar:<br>T2<strong>0</strong> – D<strong>5</strong>&nbsp;&nbsp;&nbsp;&nbsp;T1<strong>5</strong> – D1<strong>0</strong><br>T1<strong>9</strong> – D<strong>6</strong>&nbsp;&nbsp;&nbsp;&nbsp;T1<strong>6</strong> – D<strong>9</strong><br>T1<strong>8</strong> – D<strong>7</strong>&nbsp;&nbsp;&nbsp;&nbsp;T1<strong>7</strong> – D<strong>8</strong><br><br>T1<strong>4</strong> – D1<strong>1</strong>&nbsp;&nbsp;&nbsp;&nbsp;T1<strong>1</strong> – D1<strong>4</strong><br>T1<strong>3</strong> – D1<strong>2</strong>&nbsp;&nbsp;&nbsp;&nbsp;T1<strong>2</strong> – D1<strong>3</strong><br><br><strong>3-Dart-Finish (3DF):</strong> Hier wählt man einen anderen Weg, um sowohl BULL als auch unangenehme Doubles zu vermeiden.<br><br><strong>Ziel beim 3DF:</strong> Trifft der erste Dart nur ein Single, muss anschließend ein Checkout aus dem Bereich 41–60 möglich sein. Deshalb wird zuerst ein Feld gewählt, das zuverlässig unter 61 Punkte führt. Da dieser Abstand klein ist, werden beim 3DF in dieser Gruppe auch niedrigere Triples bewusst angespielt.'
+      },
+      
+      '71-90': {
+        title: 'Gruppe 71 – 90',
+        content: '<strong>Erster Dart im 3DF:</strong> Der Einstieg muss sicher unter 71, idealerweise unter 61 führen. Dafür werden meist hohe Triples gespielt, was die Zahl sinnvoller Wege begrenzt.<br><br><strong>2DF vs. 3DF:</strong> In diesem Bereich unterscheiden sich beide Varianten weiterhin, fallen aber häufiger zusammen als in der Gruppe 61–70.<br><br><strong>3DF-Strategie:</strong> Jeder Dart sollte dich mindestens in den nächsten Checkout-Bereich bringen<br>(Bsp. 88 Rest über T20 à D14).<br><br><strong>2DF-Strategie:</strong> Das erste Triple darf niedriger gewählt werden, um ein angenehmeres Double zu erhalten; der direkte Sprung in den nächsten Bereich ist nicht zwingend nötig<br>(Bsp. 88 Rest über T16 à D20).<br><br><strong>Routine aufbauen:</strong> Durch das Training der vorherigen Gruppen landest du nach dem ersten Dart meist in einem vertrauten 2DF-Bereich. Mit zunehmender Sicherheit läuft das Rechnen automatisch und bremst nicht mehr.'
+      },
+      
+      '91-95': {
+        title: 'Gruppe 91 – 95',
+        content: '<strong>2DF:</strong> In diesem Bereich gibt es praktisch nur eine sinnvolle Variante, da alternative Wege meist zu ungünstigen Doubles führen.<br><br><strong>3DF:</strong> Die Zahlen dieser Gruppe werden bevorzugt mit einem Wurf auf BULL eröffnet. Grund: Selbst ein Treffer in S25 bringt dich sicher unter die magische 71.<br><br><strong>Hinweis:</strong> Einen Wurf auf BULL zur <em>Sicherheit</em> zu nutzen setzt ein gewisses Niveau voraus – Willkommen bei den Großen.'
+      },
+      
+      '96-100': {
+        title: 'Gruppe 96 – 100',
+        content: '<strong>2DF vs. 3DF:</strong> In diesem Bereich gibt es keinen Unterschied zwischen 2DF und 3DF.<br><br><strong>Singlewurf:</strong> Ein Treffer ins Single führt direkt in einen Checkout-Bereich der vorherigen Gruppe.<br><br><strong>Kleine Bogey-Zahl:</strong> Die 99 Punkte kann man mit 2 Darts nicht checken. Als erstes 3DF könnte man hier mit T20 starten; jedoch bei S19 bleiben 80 Punkte Rest <em>(Tops–Tops)</em>.<br><br><strong>100 Punkte:</strong> Üblicher Start ist T20, wobei die S1 zu treffen schon sehr, sehr ungünstig wäre.'
+      },
+      
+      '101-110': {
+        title: 'Gruppe 101 – 110',
+        content: 'Dieser Bereich ist sehr unterschiedlich aufgebaut. 2DF und 3DF überschneiden sich, zudem tauchen mehrere <em>kleine Bogey-Zahlen</em> auf.<br><br><strong>Kein 2DF möglich:</strong> 99, 102, 103, 105, 106, 108 und 109 lassen sich unter 110 nicht mit zwei Darts checken – vergleichbar mit den klassischen 3-Dart-Bogeys (z. B. 169, 168, 166 …).<br><br><strong>2DF über BULL:</strong> Die Werte 101, 104, 107 und 110 werden mit zwei Darts immer über BULL gecheckt.<br><br><strong>3DF-Spielraum:</strong> Diese kleineren High Finishes erlauben auch ein Single im 3DF.<br><br><strong>Bogey-Zahlen:</strong> Der erste Dart darf nicht auf eine kleine Bogey-Zahl führen. Beispiel: Start bei 104 über T20 und Treffer in S1 ergibt 103 – kein 2DF. Deshalb werden Sicherheitswege genutzt, um solche Restpunkte zu vermeiden.'
+      },
+      
+      '111-130': {
+        title: 'Gruppe 111 – 130',
+        content: '<strong>Nur 3DF:</strong> In diesem Bereich ist ein Checkout ausschließlich mit drei Darts möglich.<br><br><strong>Ein Triple genügt:</strong> Für das Finish reicht ein einziger Triple-Treffer aus.<br><br><strong>Anforderung an den ersten Dart:</strong><br>• Als Triple muss er in den Bereich unter 71 führen.<br>• Als Single darf er keine kleine Bogey-Zahl hinterlassen.'
+      },
+      
+      '131-158': {
+        title: 'Gruppe 131 – 158',
+        content: '<strong>Zwei Triples nötig:</strong> In diesem Bereich erfordert jedes 3DF zwei Triple. Die Ausnahmen 132 und 135 können auch über S25 eröffnet werden.<br><br><strong>Ziel nach erstem Dart:</strong> Um im Finish zu bleiben, muss der erste Wurf auf 110, 107, 104, 101, 100 oder unter 99 führen.<br><br><strong>Erster Dart:</strong> Auf gerades oder ungerades Feld ist nicht entscheidend.<br><br><strong>Start über T20:</strong> Alle Werte über 129 lassen sich grundsätzlich über T20 eröffnen.<br><br><strong>Grundprinzip:</strong> Vereinfacht besteht dieser Bereich aus T20 + einem bekannten 2DF.<br><br><strong>Alternative Triple-Wege:</strong> Von T20 abzuweichen ist sinnvoll, wenn der Rhythmus passt, z. B.:<br>T19 – T19 ≙ T20 – T18<br>T18 – T18 ≙ T20 – T16<br>T17 – T17 ≙ T20 – T14<br>T16 – T16 ≙ T20 – T12…'
+      },
+      
+      '159-170': {
+        title: 'Gruppe 159 – 170',
+        content: '<strong>Struktur:</strong> Dieser Bereich ist stark von Bogey-Zahlen durchzogen.<br><br><strong>Bogey-Zahlen:</strong> 159, 162, 163, 165, 166, 168 und 169 – sie entsprechen den kleinen Bogey-Zahlen plus 60.<br><br><strong>Ziel des ersten Darts:</strong> Der Einstieg sollte in einen 2DF-Bereich von 100–110 führen.<br><br><strong>T20 zum Start:</strong> Der erste Wurf auf T20 ist hier grundsätzlich immer eine solide Wahl.<br><br><strong>Alternative:</strong> T19 – T19 besitzt einen Rhythmusvorteil zu T20 – T18.'
+      }
+    };
+    
+    let currentHintRange = '2-170';
+    let hintVisible = false;
+    
+    // Tutorial System
+    const tutorialSteps = [
+      {
+        element: '.start-btn-tutorial',
+        title: 'Erwischt...',
+        content: 'Schon witzig: Hätte hier <strong>Bedienungsanleitung</strong> gestanden, hättest du sicher nicht getippt, oder? 😅<br><br>Na gut – wenn du schon da bist, erkläre ich dir kurz die wichtigsten Funktionen.',
+        position: 'top',
+        screen: 'start'
+      },
+      {
+        element: '.start-btn-primary',
+        title: '🎯 Training starten',
+        content: 'Diese App soll dir helfen, alle Checkout-wege im Schlaf zu beherrschen.<br><br>Worauf wartest du? Mach dich selbst zum echten <strong>Checkout-Champion</strong>.',
+        position: 'bottom',
+        screen: 'start'
+      },
+      {
+        element: '.start-btn-3darts',
+        title: '📊 Checkouts',
+        content: 'Hier findest du die Checkout-Datenbank, aufgeteilt in 3-Dart und 2-Dart-Finishes.<br><br>Du bevorzugst andere Wege? Kein Problem - Lege hier einfach deine eigenen Checkouts fest.',
+        position: 'bottom',
+        screen: 'start'
+      },
+      {
+        element: '.start-btn-leaderboard',
+        title: '🏆 Bestenliste',
+        content: 'Hier siehst du deine Rekorde aus dem Herausforderungsmodus. Wie gut bist du wirklich unter Druck? Finde es heraus!',
+        position: 'top',
+        screen: 'start'
+      },
+      {
+        element: '#scoreValue',
+        title: '🔓 Checkout-Zahl',
+        content: 'Hier siehst du die zu checkende Zahl. Tippe darauf, um sie manuell zu ändern.<br><br><strong style="color: #059669;">Grünes Feld:</strong> 3-Dart Finish<br><strong style="color: #1d4ed8;">Blaues Feld:</strong> 2-Dart Finish<br><strong style="color: #ca8a04;">Gelbes Feld:</strong> Bogey-Zahl',
+        position: 'bottom',
+        screen: 'training'
+      },
+      {
+        element: '#dartboard',
+        title: '🎯 Dartboard',
+        content: 'Du sollst 170 Punkte checken?! Kein Problem – hier ist es genauso leicht wie am echten Board! Triff (klick) <strong>T20 · T20 · BULL</strong> und angel dir den <strong>BIG FISH</strong> 🎣',
+        position: 'bottom',
+        screen: 'training'
+      },
+      {
+        element: '#userInputs',
+        title: '📝 Eingaben-Box',
+        content: 'Hier siehst du deine <em>getroffenen</em> Felder.',
+        position: 'top',
+        screen: 'training',
+        setup: () => {
+          // Set score to 170
+          currentScore = 170;
+          currentCheckout = ['T20', 'T20', 'Bull'];
+          document.getElementById('scoreValue').textContent = '170';
+          
+          // Simulate some inputs (not complete)
+          userInputs = ['T20', 'T20'];
+          const container = document.getElementById('userInputs');
+          container.innerHTML = userInputs.map(input => 
+            `<div class="user-input-chip">${input}</div>`
+          ).join('');
+          container.classList.remove('correct', 'wrong');
+          
+          // Make sure the box is visible
+          container.style.display = 'flex';
+          
+          feedback = null;
+        }
+      },
+      {
+        element: '#userInputs',
+        title: '✅ Richtige Lösung',
+        content: 'Wenn deine Eingabe <strong>korrekt</strong> ist, färbt sich die Box <strong style="color: #059669;">grün</strong> und es wird automatisch die nächste Zahl generiert.',
+        position: 'top',
+        screen: 'training',
+        setup: () => {
+          // Set score to 170
+          currentScore = 170;
+          currentCheckout = ['T20', 'T20', 'Bull'];
+          document.getElementById('scoreValue').textContent = '170';
+          
+          // Simulate correct answer
+          userInputs = ['T20', 'T20', 'Bull'];
+          const container = document.getElementById('userInputs');
+          container.innerHTML = userInputs.map(input => 
+            `<div class="user-input-chip">${input}</div>`
+          ).join('');
+          container.classList.remove('wrong');
+          container.classList.add('correct');
+          container.style.display = 'flex';
+          
+          feedback = 'correct';
+        }
+      },
+      {
+        element: '#userInputs',
+        title: '❌ Falsche Lösung',
+        content: 'Wenn deine Eingabe <strong>falsch</strong> ist, färbt sich die Box <strong style="color: #dc2626;">rot</strong> und die richtige Lösung wird darunter angezeigt.<br><br>Die falsche Zahl wird automatisch in deinen <strong>Lernbereich</strong> aufgenommen, damit du sie später gezielt üben kannst.',
+        position: 'top',
+        screen: 'training',
+        setup: () => {
+          // Set score to 170
+          currentScore = 170;
+          currentCheckout = ['T20', 'T20', 'Bull'];
+          document.getElementById('scoreValue').textContent = '170';
+          
+          // Simulate wrong answer
+          userInputs = ['T20', 'T20', 'S25'];
+          const container = document.getElementById('userInputs');
+          container.innerHTML = userInputs.map(input => 
+            `<div class="user-input-chip">${input}</div>`
+          ).join('');
+          
+          // Add solution text
+          const solutionDiv = document.createElement('div');
+          solutionDiv.className = 'solution-text';
+          solutionDiv.textContent = `Lösung: ${currentCheckout.join(' → ')}`;
+          container.appendChild(solutionDiv);
+          
+          container.classList.remove('correct');
+          container.classList.add('wrong');
+          container.style.display = 'flex';
+          
+          feedback = 'wrong';
+        }
+      },
+      {
+        element: '#learnBtn',
+        title: '📖 Lernen',
+        content: 'Beantwortest du eine Zahl dann dreimal hintereinander richtig, wird sie aus dem Lernbereich wieder entfernt.<br><br><strong>Taste antippen:</strong> Lernbereich betreten<br><strong>Taste gedrückt halten:</strong> Zahlen löschen',
+        position: 'top-right',
+        screen: 'training'
+      },
+      {
+        element: '.mode-selector',
+        title: '🎮 Modus-Tasten',
+        content: 'Mit den Modus-Tasten legst du deine Trainingseinstellungen fest.<br><br><strong>3 Darts:</strong> Nur 3-Dart Finishes (3DF)<br><strong>2 Darts:</strong> Nur 2-Dart Finishes (2DF)<br><strong>Mix:</strong> Zufällige Mischung aus 3DF / 2DF<br><strong>? / ⬆ / ⬇:</strong> Zufallszahl / Auf- / Absteigend<br><strong>🏆 Herausforderungsmodus:</strong><br>60 Sek. lang zufällige Zahlen von 2-170<br>im Mix-Modus. Wie viele schaffst du?',
+        position: 'top',
+        screen: 'training'
+      },
+      {
+        element: '.range-grid',
+        title: '📊 Schnellauswahl-Tasten',
+        content: 'Mit den Schnellauswahl-Tasten wechselst du einfach zwischen den Zahlengruppen. Neugierig, was diese Gruppen so besonders macht?<br><br><strong>Taste antippen:</strong> Bereich auswählen<br><strong>Taste gedrückt halten:</strong> Informationen anzeigen lassen<br><strong>Taste grau:</strong> Keine Einträge in Checkout-Datenbank hinterlegt',
+        position: 'top',
+        screen: 'training'
+      },
+      {
+        element: '#menuBtn',
+        title: '⚙️ Einstellungen',
+        content: '<strong>Taste antippen:</strong> Menü öffnen<br><strong>Taste gedrückt halten:</strong> Aktiviert / deaktiviert Vollbildmodus<br><br><strong>Zahlenring ein-/ ausblenden:</strong> Zahlenring ausblenden, zur Erhöhung des Schwierigkeitsgrads.<br><strong>Farben anpassen:</strong> Passe die Farben der Benutzeroberfläche individuell an.<br><strong>Zurück zum Startbildschirm:</strong> Taste drücken / nach rechts wischen.',
+        position: 'top-left',
+        screen: 'training'
+      },
+      {
+        element: '#dartboard',
+        title: '🏁 Das Ende der Fahnenstange',
+        content: 'Du hast alle wichtigen Funktionen kennengelernt. Jetzt bist du bereit! Viel Erfolg und vor allem: Viel Spaß beim Trainieren! 🎯',
+        position: 'center',
+        screen: 'training'
+      }
+    ];
+    
+    let currentTutorialStep = 0;
+    let tutorialActive = false;
+    let highlightedElement = null;
+    
+    function showHelp() {
+      startTutorial();
+    }
+    
+    function startTutorial() {
+      currentTutorialStep = 0;
+      tutorialActive = true;
+      
+      // Ensure we're on the start screen
+      const startScreen = document.getElementById('startScreen');
+      const mainApp = document.getElementById('mainApp');
+      if (startScreen && mainApp) {
+        startScreen.style.display = 'flex';
+        mainApp.style.display = 'none';
+      }
+      
+      document.getElementById('tutorialOverlay').classList.add('active');
+      showTutorialStep(0);
+      
+      // Enter fullscreen
+      enterFullscreen();
+    }
+    
+    function showTutorialStep(stepIndex) {
+      if (stepIndex < 0 || stepIndex >= tutorialSteps.length) {
+        endTutorial();
+        return;
+      }
+      
+      currentTutorialStep = stepIndex;
+      const step = tutorialSteps[stepIndex];
+      
+      // Handle screen switching - BOTH DIRECTIONS
+      const startScreen = document.getElementById('startScreen');
+      const mainApp = document.getElementById('mainApp');
+      
+      if (step.screen === 'training') {
+        // Switch to training if currently on start
+        if (startScreen && mainApp && startScreen.style.display !== 'none') {
+          startScreen.style.display = 'none';
+          mainApp.style.display = 'block';
+          
+          // Activate fullscreen when switching to training
+          const elem = document.documentElement;
+          if (elem.requestFullscreen) {
+            elem.requestFullscreen().catch(err => {
+              console.log('Fullscreen request failed:', err);
+            });
+          } else if (elem.webkitRequestFullscreen) { // Safari
+            elem.webkitRequestFullscreen();
+          } else if (elem.mozRequestFullScreen) { // Firefox
+            elem.mozRequestFullScreen();
+          } else if (elem.msRequestFullscreen) { // IE11
+            elem.msRequestFullscreen();
+          }
+        }
+      } else if (step.screen === 'start') {
+        // Switch to start if currently on training
+        if (startScreen && mainApp && mainApp.style.display !== 'none') {
+          startScreen.style.display = 'flex';
+          mainApp.style.display = 'none';
+        }
+      }
+      
+      // Wait a moment for screen switch to complete and elements to render
+      setTimeout(() => {
+        // Execute setup function if provided
+        if (step.setup && typeof step.setup === 'function') {
+          console.log('Executing tutorial setup for step', stepIndex);
+          step.setup();
+        }
+        
+        const element = document.querySelector(step.element);
+        
+        if (!element) {
+          console.error('Tutorial element not found:', step.element);
+          // Still show navigation buttons even if element not found
+          updateTutorialNavigation(stepIndex);
+          return;
+        }
+        
+        // Remove previous spotlight
+        if (highlightedElement) {
+          highlightedElement.classList.remove('tutorial-spotlight');
+        }
+        
+        // Add spotlight to current element
+        element.classList.add('tutorial-spotlight');
+        highlightedElement = element;
+        
+        // Scroll element into view
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Update tooltip content
+        document.getElementById('tutorialTitle').textContent = step.title;
+        document.getElementById('tutorialContent').innerHTML = step.content;
+        document.getElementById('tutorialProgress').textContent = `Schritt ${stepIndex + 1} von ${tutorialSteps.length}`;
+        
+        updateTutorialNavigation(stepIndex);
+        
+        // Position tooltip
+        setTimeout(() => {
+          positionTooltip(element, step.position);
+        }, 100);
+        
+        // Show tooltip
+        const tooltip = document.getElementById('tutorialTooltip');
+        tooltip.style.display = 'block';
+        tooltip.setAttribute('data-position', step.position);
+      }, 150);
+    }
+    
+    function updateTutorialNavigation(stepIndex) {
+      // Update dots
+      const dotsContainer = document.getElementById('tutorialDots');
+      dotsContainer.innerHTML = '';
+      for (let i = 0; i < tutorialSteps.length; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'tutorial-dot' + (i === stepIndex ? ' active' : '');
+        // Make dots clickable to jump to specific step
+        dot.addEventListener('click', function() {
+          showTutorialStep(i);
+        });
+        dotsContainer.appendChild(dot);
+      }
+      
+      // Update buttons
+      const backBtn = document.getElementById('tutorialBack');
+      const nextBtn = document.getElementById('tutorialNext');
+      
+      // Show/hide back button
+      if (stepIndex === 0) {
+        backBtn.style.display = 'none';
+      } else {
+        backBtn.style.display = 'block';
+      }
+      
+      // Update button texts
+      backBtn.textContent = '<';
+      nextBtn.textContent = '>';
+    }
+      
+    
+    function positionTooltip(element, position) {
+      const tooltip = document.getElementById('tutorialTooltip');
+      const rect = element.getBoundingClientRect();
+      const tooltipRect = tooltip.getBoundingClientRect();
+      
+      let top, left;
+      
+      switch (position) {
+        case 'center':
+          // Center the tooltip on the screen
+          top = (window.innerHeight / 2) - (tooltipRect.height / 2);
+          left = (window.innerWidth / 2) - (tooltipRect.width / 2);
+          break;
+        case 'bottom':
+          top = rect.bottom + 20;
+          left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+          break;
+        case 'bottom-right':
+          // Tooltip below element, arrow points to element from left
+          top = rect.bottom + 20;
+          left = rect.left - 30 + (rect.width / 2);
+          break;
+        case 'bottom-left':
+          // Tooltip below element, arrow points to element from right (mirrored to bottom-right)
+          top = rect.bottom + 20;
+          left = rect.right - tooltipRect.width + 30 - (rect.width / 2);
+          break;
+        case 'top':
+          top = rect.top - tooltipRect.height - 20;
+          left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+          break;
+        case 'top-right':
+          // Tooltip above element, arrow points to element from right
+          top = rect.top - tooltipRect.height - 20;
+          left = rect.right - tooltipRect.width + 30;
+          break;
+        case 'top-left':
+          // Tooltip above element, arrow points to element from left (mirrored to top-right)
+          top = rect.top - tooltipRect.height - 20;
+          left = rect.left - 30;
+          break;
+        case 'left':
+          top = rect.top + (rect.height / 2) - (tooltipRect.height / 2);
+          left = rect.left - tooltipRect.width - 20;
+          break;
+        case 'right':
+          top = rect.top + (rect.height / 2) - (tooltipRect.height / 2);
+          left = rect.right + 20;
+          break;
+      }
+      
+      // Keep tooltip in viewport
+      const margin = 10;
+      if (left < margin) left = margin;
+      if (left + tooltipRect.width > window.innerWidth - margin) {
+        left = window.innerWidth - tooltipRect.width - margin;
+      }
+      if (top < margin) top = margin;
+      if (top + tooltipRect.height > window.innerHeight - margin) {
+        top = window.innerHeight - tooltipRect.height - margin;
+      }
+      
+      tooltip.style.top = top + 'px';
+      tooltip.style.left = left + 'px';
+    }
+    
+    function nextTutorialStep() {
+      if (currentTutorialStep < tutorialSteps.length - 1) {
+        showTutorialStep(currentTutorialStep + 1);
+      } else {
+        endTutorial();
+      }
+    }
+    
+    function prevTutorialStep() {
+      if (currentTutorialStep > 0) {
+        showTutorialStep(currentTutorialStep - 1);
+      }
+    }
+    
+    function endTutorial() {
+      tutorialActive = false;
+      document.getElementById('tutorialOverlay').classList.remove('active');
+      document.getElementById('tutorialTooltip').style.display = 'none';
+      
+      if (highlightedElement) {
+        highlightedElement.classList.remove('tutorial-spotlight');
+        highlightedElement = null;
+      }
+      
+      // Reset any tutorial-specific state
+      userInputs = [];
+      feedback = null;
+      const container = document.getElementById('userInputs');
+      if (container) {
+        container.innerHTML = '';
+        container.classList.remove('correct', 'wrong');
+      }
+      
+      // Generate a fresh score for training
+      generateScore(currentRangeMin, currentRangeMax);
+    }
+    
+    // Tutorial event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('tutorialClose').addEventListener('click', endTutorial);
+      document.getElementById('tutorialNext').addEventListener('click', nextTutorialStep);
+      document.getElementById('tutorialBack').addEventListener('click', prevTutorialStep);
+      document.getElementById('tutorialOverlay').addEventListener('click', endTutorial);
+      
+      // Prevent tooltip clicks from closing tutorial
+      document.getElementById('tutorialTooltip').addEventListener('click', function(e) {
+        e.stopPropagation();
+      });
+      
+      // ESC key to close tutorial
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && tutorialActive) {
+          endTutorial();
+        }
+        if (e.key === 'ArrowRight' && tutorialActive) {
+          nextTutorialStep();
+        }
+        if (e.key === 'ArrowLeft' && tutorialActive) {
+          prevTutorialStep();
+        }
+      });
+    });
+    
+    function showRangeHint(hintKey) {
+      const modal = document.getElementById('hintsModal');
+      const content = document.getElementById('hintsContent');
+      const titleElement = modal.querySelector('.modal-title');
+      
+      // Get hint object
+      const hintObj = rangeHints[hintKey];
+      
+      if (hintObj) {
+        // Set title and content
+        titleElement.textContent = hintObj.title;
+        content.innerHTML = hintObj.content;
+      } else {
+        // Fallback
+        titleElement.textContent = '💡 Hinweise';
+        content.innerHTML = 'Keine Hinweise verfügbar.';
+      }
+      
+      // Reset scroll position
+      setTimeout(() => {
+        const modalBody = modal.querySelector('.modal-body');
+        if (modalBody) modalBody.scrollTop = 0;
+      }, 0);
+      
+      modal.style.display = 'flex';
+    }
+    
+    function closeHintsModal() {
+      document.getElementById('hintsModal').style.display = 'none';
+    }
+    
+    function showBackgroundModal() {
+      document.getElementById('backgroundModal').style.display = 'flex';
+    }
+    
+    function closeBackgroundModal() {
+      document.getElementById('backgroundModal').style.display = 'none';
+    }
+    
+    
+    // Color customization system
+    let colorTarget = 'background'; // 'background' or 'field'
+    
+    function setColorTarget(target) {
+      colorTarget = target;
+      
+      // Update toggle buttons
+      const bgBtn = document.getElementById('toggleBackground');
+      const fieldBtn = document.getElementById('toggleField');
+      const imageSection = document.getElementById('imageUploadSection');
+      
+      if (target === 'background') {
+        bgBtn.classList.add('active');
+        fieldBtn.classList.remove('active');
+        // Show image upload for background
+        if (imageSection) imageSection.style.display = 'block';
+      } else {
+        bgBtn.classList.remove('active');
+        fieldBtn.classList.add('active');
+        // Hide image upload for field colors
+        if (imageSection) imageSection.style.display = 'none';
+      }
+    }
+    
+    let selectedCustomColor = '#064e3b'; // Store selected color from canvas
+    
+    function applyCustomColor() {
+      const color = selectedCustomColor;
+      
+      // Create lighter version for gradient
+      const lighterColor = adjustBrightness(color, 20);
+      const gradient = `linear-gradient(135deg, ${color} 0%, ${lighterColor} 100%)`;
+      
+      if (colorTarget === 'background') {
+        document.body.style.background = gradient;
+        document.body.style.backgroundImage = 'none';
+        const startScreen = document.querySelector('.start-screen');
+        if (startScreen) {
+          startScreen.style.background = gradient;
+          startScreen.style.backgroundImage = 'none';
+        }
+        localStorage.setItem('dartTrainerBackgroundCustom', gradient);
+        localStorage.removeItem('dartTrainerBackgroundImage');
+      } else {
+        const rangeCard = document.querySelector('#rangeCard');
+        if (rangeCard) {
+          rangeCard.style.background = gradient;
+        }
+        localStorage.setItem('dartTrainerFieldCustom', gradient);
+      }
+    }
+    
+    function applyPresetColor(color1, color2) {
+      const gradient = `linear-gradient(135deg, ${color1} 0%, ${color2} 100%)`;
+      
+      if (colorTarget === 'background') {
+        document.body.style.background = gradient;
+        document.body.style.backgroundImage = 'none';
+        const startScreen = document.querySelector('.start-screen');
+        if (startScreen) {
+          startScreen.style.background = gradient;
+          startScreen.style.backgroundImage = 'none';
+        }
+        localStorage.setItem('dartTrainerBackgroundCustom', gradient);
+        // Remove background image when applying color
+        localStorage.removeItem('dartTrainerBackgroundImage');
+      } else {
+        const rangeCard = document.querySelector('#rangeCard');
+        if (rangeCard) {
+          rangeCard.style.background = gradient;
+        }
+        localStorage.setItem('dartTrainerFieldCustom', gradient);
+      }
+    }
+    
+    // Apply textured background patterns
+    function applyTexturedBackground(pattern) {
+      let background = '';
+      
+      switch(pattern) {
+        case 'carbon-dark':
+          // Carbon fiber pattern
+          background = `
+            radial-gradient(circle at 25% 25%, rgba(255,255,255,0.03) 0%, transparent 50%),
+            radial-gradient(circle at 75% 75%, rgba(255,255,255,0.03) 0%, transparent 50%),
+            linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)
+          `;
+          break;
+        case 'navy-texture':
+          // Navy with subtle grid
+          background = `
+            repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0px, transparent 1px, transparent 40px, rgba(255,255,255,0.02) 41px),
+            repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0px, transparent 1px, transparent 40px, rgba(255,255,255,0.02) 41px),
+            linear-gradient(135deg, #0a1929 0%, #1a2942 100%)
+          `;
+          break;
+        case 'forest-deep':
+          // Deep forest with texture
+          background = `
+            radial-gradient(circle at 30% 30%, rgba(255,255,255,0.05) 0%, transparent 70%),
+            linear-gradient(135deg, #0f3d2c 0%, #1a5c42 100%)
+          `;
+          break;
+        case 'wine-red':
+          // Wine red with subtle pattern
+          background = `
+            repeating-radial-gradient(circle at 50% 50%, transparent 0px, rgba(0,0,0,0.2) 1px, transparent 2px, transparent 50px),
+            linear-gradient(135deg, #4a1520 0%, #6b2332 100%)
+          `;
+          break;
+        case 'slate-gray':
+          // Slate gray with diagonal lines
+          background = `
+            repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,0.03) 35px, rgba(255,255,255,0.03) 70px),
+            linear-gradient(135deg, #334155 0%, #475569 100%)
+          `;
+          break;
+        case 'teal-depth':
+          // Deep teal with waves
+          background = `
+            radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.05) 0%, transparent 50%),
+            radial-gradient(ellipse at 50% 100%, rgba(255,255,255,0.03) 0%, transparent 50%),
+            linear-gradient(135deg, #0d4d4d 0%, #166666 100%)
+          `;
+          break;
+        case 'concrete':
+          // Concrete texture
+          background = `
+            repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0px, transparent 2px, transparent 80px, rgba(255,255,255,0.03) 82px),
+            repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0px, transparent 2px, transparent 80px, rgba(255,255,255,0.02) 82px),
+            linear-gradient(135deg, #52525b 0%, #71717a 100%)
+          `;
+          break;
+      }
+      
+      if (colorTarget === 'background') {
+        document.body.style.background = background;
+        const startScreen = document.querySelector('.start-screen');
+        if (startScreen) {
+          startScreen.style.background = background;
+        }
+        localStorage.setItem('dartTrainerBackgroundCustom', background);
+        localStorage.removeItem('dartTrainerBackgroundImage');
+      } else {
+        const rangeCard = document.querySelector('#rangeCard');
+        if (rangeCard) {
+          rangeCard.style.background = background;
+        }
+        localStorage.setItem('dartTrainerFieldCustom', background);
+      }
+    }
+    
+    // Handle background image upload (make it globally accessible)
+    window.handleBackgroundImage = function(event) {
+      console.log('handleBackgroundImage called');
+      const file = event.target.files[0];
+      console.log('File selected:', file);
+      
+      if (!file) {
+        console.log('No file selected');
+        return;
+      }
+      
+      console.log('File name:', file.name);
+      console.log('File size:', file.size, 'bytes');
+      console.log('File type:', file.type);
+      
+      // Check file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Datei ist zu groß! Maximal 5MB erlaubt.');
+        return;
+      }
+      
+      console.log('Starting to read file...');
+      const reader = new FileReader();
+      
+      reader.onerror = function(error) {
+        console.error('FileReader error:', error);
+        alert('Fehler beim Laden der Datei!');
+      };
+      
+      reader.onload = function(e) {
+        console.log('File loaded successfully');
+        const imageData = e.target.result;
+        console.log('Image data length:', imageData.length);
+        
+        // Show preview
+        const preview = document.getElementById('bgImagePreview');
+        if (preview) {
+          preview.style.backgroundImage = `url(${imageData})`;
+          preview.style.display = 'block';
+          console.log('Preview updated');
+        } else {
+          console.error('Preview element not found!');
+        }
+        
+        const removeBtn = document.getElementById('removeBgImageBtn');
+        if (removeBtn) {
+          removeBtn.style.display = 'block';
+        } else {
+          console.error('Remove button not found!');
+        }
+        
+        // Apply to background - use separate properties for better control
+        console.log('Applying background to body...');
+        document.body.style.backgroundImage = `url("${imageData}")`;
+        document.body.style.backgroundSize = 'cover';
+        document.body.style.backgroundPosition = 'center';
+        document.body.style.backgroundRepeat = 'no-repeat';
+        document.body.style.backgroundAttachment = 'fixed';
+        console.log('Body background set');
+        
+        const startScreen = document.querySelector('.start-screen');
+        if (startScreen) {
+          console.log('Applying background to start screen...');
+          startScreen.style.backgroundImage = `url("${imageData}")`;
+          startScreen.style.backgroundSize = 'cover';
+          startScreen.style.backgroundPosition = 'center';
+          startScreen.style.backgroundRepeat = 'no-repeat';
+          startScreen.style.backgroundAttachment = 'fixed';
+          console.log('Start screen background set');
+        } else {
+          console.log('Start screen not found (might be hidden)');
+        }
+        
+        // Save to localStorage
+        try {
+          localStorage.setItem('dartTrainerBackgroundImage', imageData);
+          localStorage.removeItem('dartTrainerBackgroundCustom');
+          console.log('Saved to localStorage');
+        } catch (error) {
+          console.error('Error saving to localStorage:', error);
+          alert('Fehler: Bild ist zu groß für den Speicher! Versuche ein kleineres Bild.');
+        }
+        
+        console.log('Background image applied successfully!');
+        alert('Hintergrundbild wurde erfolgreich angewendet!');
+      };
+      
+      reader.readAsDataURL(file);
+    }
+    
+    // Remove background image (make it globally accessible)
+    window.removeBackgroundImage = function() {
+      localStorage.removeItem('dartTrainerBackgroundImage');
+      document.getElementById('bgImagePreview').style.display = 'none';
+      document.getElementById('removeBgImageBtn').style.display = 'none';
+      document.getElementById('bgImageInput').value = '';
+      
+      // Reset to default gradient
+      const defaultGradient = 'linear-gradient(135deg, #004e7a 0%, #006399 100%)';
+      document.body.style.background = defaultGradient;
+      document.body.style.backgroundImage = 'none';
+      
+      const startScreen = document.querySelector('.start-screen');
+      if (startScreen) {
+        startScreen.style.background = defaultGradient;
+        startScreen.style.backgroundImage = 'none';
+      }
+      localStorage.setItem('dartTrainerBackgroundCustom', defaultGradient);
+    }
+    
+    // Helper function to adjust color brightness
+    function adjustBrightness(hex, percent) {
+      // Remove # if present
+      hex = hex.replace('#', '');
+      
+      // Convert to RGB
+      let r = parseInt(hex.substring(0, 2), 16);
+      let g = parseInt(hex.substring(2, 4), 16);
+      let b = parseInt(hex.substring(4, 6), 16);
+      
+      // Adjust brightness
+      r = Math.min(255, Math.floor(r * (100 + percent) / 100));
+      g = Math.min(255, Math.floor(g * (100 + percent) / 100));
+      b = Math.min(255, Math.floor(b * (100 + percent) / 100));
+      
+      // Convert back to hex
+      return '#' + 
+        r.toString(16).padStart(2, '0') + 
+        g.toString(16).padStart(2, '0') + 
+        b.toString(16).padStart(2, '0');
+    }
+    
+    // Initialize canvas-based color picker
+    function initColorPicker() {
+      const canvas = document.getElementById('colorCanvas');
+      if (!canvas) return;
+      
+      const ctx = canvas.getContext('2d');
+      const width = canvas.width;
+      const height = canvas.height;
+      
+      // Draw color spectrum
+      function drawColorSpectrum() {
+        // Create horizontal gradient for hue
+        for (let x = 0; x < width; x++) {
+          const hue = (x / width) * 360;
+          
+          // Create vertical gradient for saturation/value
+          const gradient = ctx.createLinearGradient(0, 0, 0, height);
+          gradient.addColorStop(0, `hsl(${hue}, 100%, 100%)`); // White at top
+          gradient.addColorStop(0.5, `hsl(${hue}, 100%, 50%)`); // Pure color in middle
+          gradient.addColorStop(1, `hsl(${hue}, 100%, 0%)`); // Black at bottom
+          
+          ctx.fillStyle = gradient;
+          ctx.fillRect(x, 0, 1, height);
+        }
+      }
+      
+      drawColorSpectrum();
+      
+      // Handle canvas click
+      canvas.addEventListener('click', function(e) {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        // Get pixel color at click position
+        const imageData = ctx.getImageData(x, y, 1, 1);
+        const data = imageData.data;
+        
+        // Convert RGB to hex
+        const r = data[0];
+        const g = data[1];
+        const b = data[2];
+        const hex = '#' + 
+          r.toString(16).padStart(2, '0') + 
+          g.toString(16).padStart(2, '0') + 
+          b.toString(16).padStart(2, '0');
+        
+        // Update selected color
+        selectedCustomColor = hex;
+        
+        // Update preview
+        const preview = document.getElementById('colorPreview');
+        if (preview) {
+          preview.style.background = hex;
+        }
+      });
+      
+      // Handle touch events for mobile
+      canvas.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        const rect = canvas.getBoundingClientRect();
+        const touch = e.touches[0];
+        const x = touch.clientX - rect.left;
+        const y = touch.clientY - rect.top;
+        
+        // Get pixel color at touch position
+        const imageData = ctx.getImageData(x, y, 1, 1);
+        const data = imageData.data;
+        
+        // Convert RGB to hex
+        const r = data[0];
+        const g = data[1];
+        const b = data[2];
+        const hex = '#' + 
+          r.toString(16).padStart(2, '0') + 
+          g.toString(16).padStart(2, '0') + 
+          b.toString(16).padStart(2, '0');
+        
+        // Update selected color
+        selectedCustomColor = hex;
+        
+        // Update preview
+        const preview = document.getElementById('colorPreview');
+        if (preview) {
+          preview.style.background = hex;
+        }
+      });
+    }
+    
+    function loadBackground() {
+      // Load custom background image (priority over color)
+      const savedImage = localStorage.getItem('dartTrainerBackgroundImage');
+      if (savedImage) {
+        document.body.style.backgroundImage = `url(${savedImage})`;
+        document.body.style.backgroundSize = 'cover';
+        document.body.style.backgroundPosition = 'center';
+        document.body.style.backgroundRepeat = 'no-repeat';
+        document.body.style.backgroundAttachment = 'fixed';
+        
+        const startScreen = document.querySelector('.start-screen');
+        if (startScreen) {
+          startScreen.style.backgroundImage = `url(${savedImage})`;
+          startScreen.style.backgroundSize = 'cover';
+          startScreen.style.backgroundPosition = 'center';
+          startScreen.style.backgroundRepeat = 'no-repeat';
+          startScreen.style.backgroundAttachment = 'fixed';
+        }
+        
+        // Show preview in modal
+        const preview = document.getElementById('bgImagePreview');
+        if (preview) {
+          preview.style.backgroundImage = `url(${savedImage})`;
+          preview.style.display = 'block';
+          const removeBtn = document.getElementById('removeBgImageBtn');
+          if (removeBtn) removeBtn.style.display = 'block';
+        }
+      } else {
+        // Load custom background color
+        const savedBg = localStorage.getItem('dartTrainerBackgroundCustom');
+        if (savedBg) {
+          document.body.style.background = savedBg;
+          document.body.style.backgroundImage = 'none';
+          const startScreen = document.querySelector('.start-screen');
+          if (startScreen) {
+            startScreen.style.background = savedBg;
+            startScreen.style.backgroundImage = 'none';
+          }
+        }
+      }
+      
+      // Load custom field color
+      const savedField = localStorage.getItem('dartTrainerFieldCustom');
+      if (savedField) {
+        const rangeCard = document.querySelector('#rangeCard');
+        if (rangeCard) {
+          rangeCard.style.background = savedField;
+        }
+      }
+    }
+    
+    // Close modals when clicking outside
+    window.addEventListener('click', function(event) {
+      const leaderboardModal = document.getElementById('leaderboardModal');
+      const hintsModal = document.getElementById('hintsModal');
+      const backgroundModal = document.getElementById('backgroundModal');
+      
+      if (event.target === leaderboardModal) {
+        closeLeaderboard();
+      }
+      if (event.target === hintsModal) {
+        closeHintsModal();
+      }
+      if (event.target === backgroundModal) {
+        closeBackgroundModal();
+      }
+    });
+    
+    function updateHintText() {
+      const hintText = document.getElementById('hintText');
+      const hint = rangeHints[currentHintRange] || 'Wähle einen Bereich aus.';
+      hintText.innerHTML = hint;
+    }
+    
+    function setRange(min, max, buttonElement) {
+      // Clear anti-repetition history when switching ranges
+      clearAntiRepetitionHistory();
+      
+      // Reset sequential score to null so generateScore starts at beginning/end
+      if (generationMode !== 'random') {
+        currentSequentialScore = null;
+      }
+      
+      window.learnModeActive = false;
+      currentRangeMin = min;
+      currentRangeMax = max;
+      
+      // Update hint range
+      currentHintRange = `${min}-${max}`;
+      if (hintVisible) {
+        updateHintText();
+      }
+      
+      // Remove active-range from all buttons
+      document.querySelectorAll('.range-btn').forEach(btn => {
+        btn.classList.remove('active-range');
+      });
+      
+      // Reset learn button border to red
+      const learnBtn = document.getElementById('learnBtn');
+      if (learnBtn) {
+        learnBtn.style.borderColor = '#b91c1c';
+      }
+      
+      // Add active-range to clicked button if provided
+      if (buttonElement) {
+        buttonElement.classList.add('active-range');
+      }
+      
+      // Only generate new score if NOT manual entry
+      if (!manualScoreActive) {
+        generateScore(min, max);
+      }
+    }
+    
+    function setManualScore() {
+      // Prevent manual score entry during challenge mode
+      if (window.challengeMode) {
+        console.log('Manual score entry blocked during challenge mode');
+        return;
+      }
+      
+      console.log('Opening inline edit for score - Current mode:', currentMode);
+      
+      const scoreValueEl = document.getElementById('scoreValue');
+      const currentValue = scoreValueEl.textContent;
+      
+      // Store current mode to maintain it after manual entry
+      const originalMode = currentMode;
+      const originalCheckouts = currentCheckouts;
+      
+      // Create contenteditable div instead of input to prevent autofill
+      const editableDiv = document.createElement('div');
+      editableDiv.contentEditable = 'true';
+      editableDiv.textContent = currentValue;
+      editableDiv.inputMode = 'numeric';
+      editableDiv.setAttribute('data-score-editor', 'true');
+      editableDiv.style.cssText = `
+        width: 100%;
+        height: 100%;
+        font-size: 52px;
+        font-weight: 800;
+        color: white;
+        background: transparent;
+        border: 2px solid white;
+        border-radius: 8px;
+        text-align: center;
+        padding: 0;
+        margin: 0;
+        outline: none;
+        cursor: text;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      `;
+      
+      // Function to apply the score
+      const applyScore = () => {
+        // Get text content and clean it (remove non-digits)
+        let value = editableDiv.textContent.trim().replace(/\D/g, '');
+        const score = parseInt(value);
+        
+        // Validate input
+        if (isNaN(score) || score < 2 || score > 170) {
+          alert('Bitte gib eine Zahl zwischen 2 und 170 ein!');
+          // Restore original value and mode
+          scoreValueEl.textContent = currentValue;
+          currentMode = originalMode;
+          currentCheckouts = originalCheckouts;
+          return;
+        }
+        
+        // Check if checkout exists for current mode
+        // IMPORTANT: Use originalMode to maintain consistency
+        let checkout = null;
+        let checkoutMode = originalMode; // Track which mode we actually use
+        
+        if (originalMode === '2darts') {
+          checkout = twoDartCheckouts[score];
+          if (!checkout) {
+            // No solution - restore original value and settings
+            scoreValueEl.textContent = currentValue;
+            currentMode = originalMode;
+            currentCheckouts = originalCheckouts;
+            return;
+          }
+          currentCheckouts = twoDartCheckouts;
+          currentMode = '2darts'; // Maintain mode consistency
+        } else if (originalMode === '3darts') {
+          checkout = defaultCheckouts[score];
+          if (!checkout) {
+            // No solution - restore original value and settings
+            scoreValueEl.textContent = currentValue;
+            currentMode = originalMode;
+            currentCheckouts = originalCheckouts;
+            return;
+          }
+          currentCheckouts = defaultCheckouts;
+          currentMode = '3darts'; // Maintain mode consistency
+        } else if (originalMode === 'mixed') {
+          // Try 2-dart first, then 3-dart
+          checkout = twoDartCheckouts[score];
+          if (checkout) {
+            currentCheckouts = twoDartCheckouts;
+            checkoutMode = '2darts';
+          } else {
+            checkout = defaultCheckouts[score];
+            currentCheckouts = defaultCheckouts;
+            checkoutMode = '3darts';
+          }
+          if (!checkout) {
+            // No solution - restore original value and settings
+            scoreValueEl.textContent = currentValue;
+            currentMode = originalMode;
+            currentCheckouts = originalCheckouts;
+            return;
+          }
+          currentMode = 'mixed'; // Maintain mixed mode
+        }
+        
+        console.log('Manual score validation passed - Mode:', currentMode, 'Checkout database:', currentCheckouts === twoDartCheckouts ? '2DF' : '3DF');
+        
+        // Set the score
+        currentScore = score;
+        currentCheckout = checkout;
+        userInputs = [];
+        highlightedFields = [];
+        feedback = null;
+        
+        // Update display
+        scoreValueEl.textContent = currentScore;
+        const userInputsBox = document.getElementById('userInputs');
+        userInputsBox.innerHTML = '';
+        userInputsBox.classList.remove('correct', 'wrong'); // Remove feedback classes
+        document.getElementById('feedbackCard').classList.add('hidden');
+        
+        // Update score card styling based on ACTUAL checkout used
+        const isStell = stellZahlen.includes(currentScore);
+        const scoreCard = document.getElementById('scoreCard');
+        scoreCard.classList.remove('stell', 'twodarts');
+        if (isStell) {
+          scoreCard.classList.add('stell');
+        } else if (currentCheckouts === twoDartCheckouts) {
+          scoreCard.classList.add('twodarts');
+        }
+        
+        updateScoreTitle();
+        createDartboard();
+        
+        // Find and activate the correct range button
+        const rangeButtons = document.querySelectorAll('.range-btn[data-min]');
+        let foundButton = null;
+        
+        rangeButtons.forEach(btn => {
+          const min = parseInt(btn.dataset.min);
+          const max = parseInt(btn.dataset.max);
+          if (score >= min && score <= max) {
+            foundButton = btn;
+          }
+        });
+        
+        // Set the range and activate button WITHOUT generating new score
+        if (foundButton) {
+          const min = parseInt(foundButton.dataset.min);
+          const max = parseInt(foundButton.dataset.max);
+          
+          // Set flag BEFORE calling setRange
+          manualScoreActive = true;
+          
+          // This will NOT generate a new score because of the flag
+          setRange(min, max, foundButton);
+        }
+        
+        console.log('Manual score set successfully:', score, 'Mode:', currentMode, 'Checkout:', checkout);
+      };
+      
+      // Prevent non-numeric input in real-time
+      editableDiv.addEventListener('input', (e) => {
+        // Get current cursor position
+        const selection = window.getSelection();
+        const range = selection.getRangeAt(0);
+        const cursorPos = range.startOffset;
+        
+        // Remove all non-digit characters
+        const text = editableDiv.textContent.replace(/\D/g, '');
+        
+        if (text !== editableDiv.textContent) {
+          editableDiv.textContent = text;
+          
+          // Restore cursor position
+          try {
+            const newRange = document.createRange();
+            const textNode = editableDiv.firstChild;
+            if (textNode) {
+              newRange.setStart(textNode, Math.min(cursorPos, text.length));
+              newRange.collapse(true);
+              selection.removeAllRanges();
+              selection.addRange(newRange);
+            }
+          } catch (e) {
+            // Cursor positioning failed, ignore
+          }
+        }
+      });
+      
+      // Handle Enter key
+      editableDiv.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          editableDiv.blur(); // Trigger blur event
+        } else if (e.key === 'Escape') {
+          scoreValueEl.textContent = currentValue;
+          currentMode = originalMode;
+          currentCheckouts = originalCheckouts;
+        }
+      });
+      
+      // Handle blur (focus lost)
+      editableDiv.addEventListener('blur', () => {
+        applyScore();
+      });
+      
+      // Replace text with editable div
+      scoreValueEl.textContent = '';
+      scoreValueEl.appendChild(editableDiv);
+      
+      // Focus and select all text (opens keyboard on mobile)
+      setTimeout(() => {
+        editableDiv.focus();
+        
+        // Select all text in contenteditable
+        const range = document.createRange();
+        range.selectNodeContents(editableDiv);
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }, 100);
+    }
+    
+    function generateScore(min, max) {
+      // For mixed mode, randomly choose 2 or 3 darts
+      if (currentMode === 'mixed') {
+        const useTwoDarts = Math.random() > 0.5;
+        currentCheckouts = useTwoDarts ? twoDartCheckouts : defaultCheckouts;
+      }
+      
+      // Determine current mode for tracking
+      let trackingMode = currentMode;
+      if (currentMode === 'mixed') {
+        trackingMode = currentCheckouts === twoDartCheckouts ? '2darts' : '3darts';
+      }
+      
+      // Get all available scores in range
+      let availableScores = Object.keys(currentCheckouts).map(Number).filter(s => s >= min && s <= max);
+      
+      if (availableScores.length === 0) {
+        alert('Keine Checkouts verfügbar!');
+        return;
+      }
+      
+      // SEQUENTIAL MODE LOGIC (ascending or descending)
+      if (generationMode === 'ascending' || generationMode === 'descending') {
+        availableScores.sort((a, b) => generationMode === 'ascending' ? a - b : b - a);
+        
+        // If no current sequential score, set a dummy value to trigger proper start
+        if (currentSequentialScore === null) {
+          // Set to a value that doesn't exist in the list so indexOf returns -1
+          // This will trigger the "start fresh" logic in the else branch
+          if (generationMode === 'ascending') {
+            currentSequentialScore = Math.min(...availableScores) - 1; // One before first
+          } else {
+            currentSequentialScore = Math.max(...availableScores) + 1; // One after first (which is highest in descending)
+          }
+        }
+        
+        // Find next score in sequence
+        const currentIndex = availableScores.indexOf(currentSequentialScore);
+        
+        if (currentIndex === -1) {
+          // Not found in current range - start at beginning
+          currentScore = availableScores[0];
+          currentSequentialScore = currentScore;
+        } else if (currentIndex === availableScores.length - 1) {
+          // Reached end of current range - switch to next range
+          console.log('[Sequential] End of range reached, switching to next range');
+          
+          if (generationMode === 'ascending') {
+            // Find next range button
+            const rangeButtons = Array.from(document.querySelectorAll('.range-btn[data-min]'));
+            const currentBtn = rangeButtons.find(btn => 
+              parseInt(btn.dataset.min) === min && parseInt(btn.dataset.max) === max
+            );
+            const currentBtnIndex = rangeButtons.indexOf(currentBtn);
+            
+            // Go to next range (or wrap to first)
+            let nextBtn = rangeButtons[currentBtnIndex + 1];
+            if (!nextBtn || currentBtnIndex === rangeButtons.length - 1) {
+              // Wrap to first range (2-40 typically, or first available)
+              nextBtn = rangeButtons[1]; // Index 1 is 2-40 (index 0 is 2-170)
+            }
+            
+            if (nextBtn) {
+              const nextMin = parseInt(nextBtn.dataset.min);
+              const nextMax = parseInt(nextBtn.dataset.max);
+              console.log('[Sequential] Switching to range:', nextMin, '-', nextMax);
+              
+              // Update range
+              currentRangeMin = nextMin;
+              currentRangeMax = nextMax;
+              
+              // Update active button
+              rangeButtons.forEach(b => b.classList.remove('active-range'));
+              nextBtn.classList.add('active-range');
+              
+              // Get scores from new range and start at beginning
+              const nextRangeScores = Object.keys(currentCheckouts).map(Number)
+                .filter(s => s >= nextMin && s <= nextMax)
+                .sort((a, b) => a - b);
+              
+              if (nextRangeScores.length > 0) {
+                currentScore = nextRangeScores[0];
+                currentSequentialScore = currentScore;
+              }
+            }
+          } else { // descending
+            // Find previous range button
+            const rangeButtons = Array.from(document.querySelectorAll('.range-btn[data-min]'));
+            const currentBtn = rangeButtons.find(btn => 
+              parseInt(btn.dataset.min) === min && parseInt(btn.dataset.max) === max
+            );
+            const currentBtnIndex = rangeButtons.indexOf(currentBtn);
+            
+            // Go to previous range (or wrap to last)
+            let prevBtn = rangeButtons[currentBtnIndex - 1];
+            if (!prevBtn || currentBtnIndex <= 1) {
+              // Wrap to last range (159-170 typically)
+              prevBtn = rangeButtons[rangeButtons.length - 2]; // -2 to skip "Lernen" button
+            }
+            
+            if (prevBtn && prevBtn.id !== 'learnBtn') {
+              const prevMin = parseInt(prevBtn.dataset.min);
+              const prevMax = parseInt(prevBtn.dataset.max);
+              console.log('[Sequential] Switching to range:', prevMin, '-', prevMax);
+              
+              // Update range
+              currentRangeMin = prevMin;
+              currentRangeMax = prevMax;
+              
+              // Update active button
+              rangeButtons.forEach(b => b.classList.remove('active-range'));
+              prevBtn.classList.add('active-range');
+              
+              // Get scores from new range and start at end
+              const prevRangeScores = Object.keys(currentCheckouts).map(Number)
+                .filter(s => s >= prevMin && s <= prevMax)
+                .sort((a, b) => b - a);
+              
+              if (prevRangeScores.length > 0) {
+                currentScore = prevRangeScores[0];
+                currentSequentialScore = currentScore;
+              }
+            }
+          }
+        } else {
+          // Go to next score in current range
+          currentScore = availableScores[currentIndex + 1];
+          currentSequentialScore = currentScore;
+        }
+        
+        console.log(`[Sequential ${generationMode}] Selected score: ${currentScore} (${trackingMode})`);
+      } 
+      // RANDOM MODE LOGIC (with anti-repetition)
+      else {
+        // Calculate dynamic blacklist size
+        // For ranges >20 scores: blacklist max 10
+        // For smaller ranges: blacklist max 40% (but always leave at least 1 available)
+        const maxBlacklistSize = availableScores.length > 20 
+          ? Math.min(10, availableScores.length - 1) 
+          : Math.max(1, Math.floor(availableScores.length * 0.4));
+        
+        console.log(`[Anti-Repetition] Available scores: ${availableScores.length}, Max blacklist: ${maxBlacklistSize}, Mode: ${trackingMode}`);
+        
+        // Filter out recently generated scores with same mode
+        const blacklistedScores = recentlyGenerated
+          .filter(entry => entry.mode === trackingMode)
+          .map(entry => entry.score);
+        
+        console.log(`[Anti-Repetition] Blacklisted scores (${trackingMode}):`, blacklistedScores);
+        
+        let filteredScores = availableScores.filter(s => !blacklistedScores.includes(s));
+        
+        // If all scores are blacklisted, clear the blacklist and use all available scores
+        if (filteredScores.length === 0) {
+          console.log('[Anti-Repetition] All scores blacklisted - clearing history for this mode');
+          recentlyGenerated = recentlyGenerated.filter(entry => entry.mode !== trackingMode);
+          filteredScores = availableScores;
+        }
+        
+        // Select random score from filtered list
+        currentScore = filteredScores[Math.floor(Math.random() * filteredScores.length)];
+        
+        console.log(`[Anti-Repetition] Selected score: ${currentScore} (${trackingMode})`);
+        
+        // Add to recently generated list
+        recentlyGenerated.push({ score: currentScore, mode: trackingMode });
+        
+        // Trim the list to max blacklist size (keep only most recent)
+        if (recentlyGenerated.length > maxBlacklistSize * 2) { // *2 because we track both 2DF and 3DF
+          recentlyGenerated = recentlyGenerated.slice(-maxBlacklistSize * 2);
+        }
+      }
+      
+      currentCheckout = currentCheckouts[currentScore] || [];
+      userInputs = [];
+      highlightedFields = [];
+      feedback = null;
+      
+      document.getElementById('scoreValue').textContent = currentScore;
+      
+      // Reset user-inputs
+      const userInputsEl = document.getElementById('userInputs');
+      userInputsEl.innerHTML = '';
+      userInputsEl.classList.remove('correct', 'wrong');
+      
+      // Remove glow from outer ring when generating new score
+      const outerRing = document.getElementById('dartboard-outer-ring');
+      if (outerRing) {
+        outerRing.classList.remove('flash-correct', 'flash-wrong');
+      }
+      
+      const isStell = stellZahlen.includes(currentScore);
+      const scoreCard = document.getElementById('scoreCard');
+      
+      // Remove all classes
+      scoreCard.classList.remove('stell', 'twodarts');
+      
+      // Add appropriate class
+      if (isStell) {
+        scoreCard.classList.add('stell');
+      } else if (currentMode === '2darts' || (currentMode === 'mixed' && currentCheckouts === twoDartCheckouts)) {
+        scoreCard.classList.add('twodarts');
+      }
+      
+      updateScoreTitle();
+      createDartboard();
+    }
+    
+    function handleDartClick(dartValue) {
+      // Wenn Feedback für falsche Antwort angezeigt wird, nächste Aufgabe bei Klick auf Dartscheibe
+      // (Richtige Antworten gehen automatisch weiter)
+      if (feedback === 'wrong') {
+        // Reset manual score flag - generate random score now
+        manualScoreActive = false;
+        
+        if (window.challengeMode) {
+          generateScore(currentRangeMin, currentRangeMax);
+        } else if (window.learnModeActive) {
+          generateLearnScore();
+        } else {
+          generateScore(currentRangeMin, currentRangeMax);
+        }
+        return;
+      }
+      
+      // Ignore clicks when correct feedback is showing (auto-continue active)
+      if (feedback === 'correct') {
+        return;
+      }
+      
+      userInputs.push(dartValue);
+      updateUserInputs();
+      
+      const expectedDart = currentCheckout[userInputs.length - 1];
+      
+      if (dartValue !== expectedDart) {
+        showFeedback(false);
+        if (window.challengeMode) {
+          challengeStats.wrong++;
+          updateChallengeStats();
+        } else {
+          // Save the ACTUAL mode (2darts or 3darts), not 'mixed'
+          const actualMode = currentCheckouts === twoDartCheckouts ? '2darts' : '3darts';
+          problemScores[currentScore] = { count: 0, mode: actualMode };
+          localStorage.setItem('problemScores', JSON.stringify(problemScores));
+          updateProblemBadge();
+        }
+        return;
+      }
+      
+      highlightedFields.push(dartValue);
+      createDartboard();
+      
+      if (userInputs.length === currentCheckout.length) {
+        showFeedback(true);
+        if (window.challengeMode) {
+          challengeStats.correct++;
+          updateChallengeStats();
+        } else {
+          // Handle problem scores
+          if (problemScores[currentScore] !== undefined) {
+            const problem = problemScores[currentScore];
+            const count = (typeof problem === 'object' ? problem.count : problem) + 1;
+            console.log('Problem score for', currentScore, '- count:', count);
+            
+            if (count >= 3) {
+              // Delete after 3 correct answers
+              delete problemScores[currentScore];
+              console.log('Deleted problem score. Remaining:', Object.keys(problemScores));
+            } else {
+              // Increment counter while preserving the ORIGINAL mode (don't overwrite with current mode)
+              const originalMode = typeof problem === 'object' ? problem.mode : '3darts';
+              problemScores[currentScore] = { count: count, mode: originalMode };
+            }
+            
+            // Save to localStorage after any modification
+            localStorage.setItem('problemScores', JSON.stringify(problemScores));
+            
+            // Always update badge after modifying problemScores
+            updateProblemBadge();
+            
+            // Check if all problems are solved while in learn mode
+            if (window.learnModeActive && Object.keys(problemScores).length === 0) {
+              console.log('All problems solved! Switching to 2-170.');
+              setTimeout(() => {
+                window.learnModeActive = false;
+                
+                // Reset to 3-Dart mode
+                currentMode = '3darts';
+                currentCheckouts = defaultCheckouts;
+                
+                // Update mode buttons
+                const mode3DartsBtn = document.getElementById('mode3DartsBtn');
+                const mode2DartsBtn = document.getElementById('mode2DartsBtn');
+                const modeMixBtn = document.getElementById('modeMixBtn');
+                
+                if (mode3DartsBtn) mode3DartsBtn.classList.add('active');
+                if (mode2DartsBtn) mode2DartsBtn.classList.remove('active');
+                if (modeMixBtn) modeMixBtn.classList.remove('active');
+                
+                // Update range buttons for 3-Dart
+                updateRangeButtonsFor3Dart();
+                
+                // Switch to 2-170
+                currentRangeMin = 2;
+                currentRangeMax = 170;
+                
+                // Activate 2-170 button
+                const btn2_170 = document.querySelector('.range-btn.bg-blue-500');
+                if (btn2_170) {
+                  document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active-range'));
+                  btn2_170.classList.add('active-range');
+                }
+                
+                // Update hint text
+                currentHintRange = '2-170';
+                updateHintText();
+                
+                updateProblemBadge();
+                generateScore(2, 170);
+              }, 500);
+            }
+          }
+        }
+      }
+    }
+    
+    function updateUserInputs() {
+      const container = document.getElementById('userInputs');
+      
+      if (userInputs.length === 0) {
+        container.innerHTML = '';
+      } else {
+        container.innerHTML = userInputs.map(input => 
+          `<div class="user-input-chip">${input}</div>`
+        ).join('');
+      }
+    }
+    
+    function showFeedback(isCorrect) {
+      feedback = isCorrect ? 'correct' : 'wrong';
+      const userInputs = document.getElementById('userInputs');
+      
+      // Remove previous states
+      userInputs.classList.remove('correct', 'wrong');
+      
+      // Remove previous solution text
+      const existingSolution = userInputs.querySelector('.solution-text');
+      if (existingSolution) {
+        existingSolution.remove();
+      }
+      
+      // Flash dartboard outer ring
+      const outerRing = document.getElementById('dartboard-outer-ring');
+      if (outerRing) {
+        // Remove any existing flash classes
+        outerRing.classList.remove('flash-correct', 'flash-wrong');
+        
+        // Trigger reflow to restart animation
+        void outerRing.offsetWidth;
+        
+        // Add appropriate flash class - will stay until next generateScore()
+        if (isCorrect) {
+          outerRing.classList.add('flash-correct');
+        } else {
+          outerRing.classList.add('flash-wrong');
+        }
+      }
+      
+      if (isCorrect) {
+        // Bei richtig: Nur grün färben, kein Text
+        userInputs.classList.add('correct');
+        
+        // Automatisch zur nächsten Zahl nach 1000ms (in allen Modi)
+        setTimeout(() => {
+          if (window.challengeMode) {
+            generateScore(currentRangeMin, currentRangeMax);
+          } else if (window.learnModeActive) {
+            generateLearnScore();
+          } else {
+            generateScore(currentRangeMin, currentRangeMax);
+          }
+        }, 1000);
+      } else {
+        // Bei falsch: Rot färben + Lösung anzeigen
+        userInputs.classList.add('wrong');
+        
+        // Lösung unter den Eingabefeldern anzeigen
+        const solutionDiv = document.createElement('div');
+        solutionDiv.className = 'solution-text';
+        solutionDiv.textContent = `Lösung: ${currentCheckout.join(' → ')}`;
+        userInputs.appendChild(solutionDiv);
+      }
+    }
+    
+    function handleNext() {
+      if (window.learnModeActive) {
+        generateLearnScore();
+      } else {
+        generateScore(currentRangeMin, currentRangeMax);
+      }
+    }
+    
+    function updateChallengeStats() {
+      document.getElementById('challengeStats').textContent = 
+        `✓ ${challengeStats.correct} | ✗ ${challengeStats.wrong}`;
+    }
+    
+    function updateProblemBadge() {
+      const badge = document.getElementById('problemBadge');
+      const count = Object.keys(problemScores).length;
+      if (count > 0) {
+        badge.classList.remove('hidden');
+        badge.textContent = count;
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+    
+    function showCountdown(callback) {
+      // Create countdown overlay
+      const overlay = document.createElement('div');
+      overlay.className = 'countdown-overlay';
+      overlay.id = 'countdownOverlay';
+      
+      const numberElement = document.createElement('div');
+      numberElement.className = 'countdown-number';
+      overlay.appendChild(numberElement);
+      
+      document.body.appendChild(overlay);
+      
+      let count = 3;
+      numberElement.textContent = count;
+      
+      const countdownInterval = setInterval(() => {
+        count--;
+        if (count > 0) {
+          // Reset animation
+          numberElement.style.animation = 'none';
+          setTimeout(() => {
+            numberElement.style.animation = 'countdownPulse 0.8s ease';
+            numberElement.textContent = count;
+          }, 10);
+        } else {
+          clearInterval(countdownInterval);
+          // Remove overlay
+          overlay.remove();
+          // Start the actual challenge
+          if (callback) callback();
+        }
+      }, 1000);
+    }
+    
+    function startChallenge() {
+      if (window.challengeMode) return;
+      
+      // Show countdown first, then start challenge
+      showCountdown(() => {
+        // Clear anti-repetition history when starting challenge mode
+        clearAntiRepetitionHistory();
+        
+        // FORCE: Always use random mode in challenge
+        generationMode = 'random';
+        currentSequentialScore = null;
+        document.getElementById('generationModeBtn').textContent = '?';
+        
+        // FORCE: Set to Mix mode and 2-170 range
+        currentMode = 'mixed';
+        currentRangeMin = 2;
+        currentRangeMax = 170;
+        
+        // Update mode buttons
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+          if (!btn.classList.contains('mode-btn-challenge')) {
+            btn.classList.remove('active');
+          }
+        });
+        const mixBtn = document.getElementById('modeMixBtn');
+        if (mixBtn) {
+          mixBtn.classList.add('active');
+        }
+        
+        // Update range buttons
+        document.querySelectorAll('.range-btn').forEach(btn => {
+          btn.classList.remove('active-range');
+          btn.classList.remove('disabled'); // Enable all ranges for mixed mode
+        });
+        const btn2_170 = document.querySelector('.range-btn.bg-blue-500');
+        if (btn2_170) {
+          btn2_170.classList.add('active-range');
+        }
+        
+        // Reset learn button
+        const learnBtn = document.getElementById('learnBtn');
+        if (learnBtn) {
+          learnBtn.style.borderColor = '#b91c1c';
+        }
+        window.learnModeActive = false;
+        
+        // Update hint range
+        currentHintRange = '2-170';
+        if (hintVisible) {
+          updateHintText();
+        }
+        
+        // Start challenge
+        window.challengeMode = true;
+        challengeStats = { correct: 0, wrong: 0 };
+        let timeLeft = 60;
+        
+        // Hide range card during challenge
+        document.getElementById('rangeCard').style.display = 'none';
+        
+        document.getElementById('challengeCard').classList.remove('hidden');
+        document.getElementById('challengeTime').textContent = `⏱️ ${timeLeft}s`;
+        updateChallengeStats();
+        
+        // Generate first score with 2-170 range
+        generateScore(2, 170);
+        
+        window.challengeTimer = setInterval(() => {
+          timeLeft--;
+          document.getElementById('challengeTime').textContent = `⏱️ ${timeLeft}s`;
+          
+          if (timeLeft <= 0) {
+            endChallenge();
+          }
+        }, 1000);
+      });
+    }
+    
+    function endChallenge() {
+      clearInterval(window.challengeTimer);
+      window.challengeMode = false;
+      
+      document.getElementById('challengeCard').classList.add('hidden');
+      document.getElementById('rangeCard').style.display = 'block';
+      
+      // Add to leaderboard
+      const entry = {
+        correct: challengeStats.correct,
+        wrong: challengeStats.wrong,
+        total: challengeStats.correct + challengeStats.wrong,
+        date: new Date().toLocaleString('de-DE', { 
+          day: '2-digit', 
+          month: '2-digit', 
+          year: 'numeric', 
+          hour: '2-digit', 
+          minute: '2-digit'
+        })
+      };
+      
+      leaderboard.push(entry);
+      
+      // 3-tier sorting logic:
+      // 1. More correct answers = better
+      // 2. If tied: Less wrong answers = better
+      // 3. If still tied: Older entry wins (stays in position)
+      leaderboard.sort((a, b) => {
+        // Priority 1: More correct answers wins
+        if (b.correct !== a.correct) {
+          return b.correct - a.correct;
+        }
+        
+        // Priority 2: Less wrong answers wins
+        if (a.wrong !== b.wrong) {
+          return a.wrong - b.wrong;
+        }
+        
+        // Priority 3: Tie - keep original order (older entry wins)
+        return 0;
+      });
+      
+      leaderboard = leaderboard.slice(0, 3); // Keep only top 3
+      
+      // Save to localStorage
+      try {
+        localStorage.setItem('dartTrainerLeaderboard', JSON.stringify(leaderboard));
+      } catch (e) {
+        console.error('Could not save leaderboard:', e);
+      }
+      
+      // Reset to 3-Dart mode after challenge
+      currentMode = '3darts';
+      currentCheckouts = defaultCheckouts;
+      
+      // Update range buttons for 3-Dart
+      updateRangeButtonsFor3Dart();
+      
+      // Set to 2-170 range
+      currentRangeMin = 2;
+      currentRangeMax = 170;
+      const btn2_170 = document.querySelector('.range-btn.bg-blue-500');
+      if (btn2_170) {
+        document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active-range'));
+        btn2_170.classList.add('active-range');
+      }
+      
+      // Reset learn button
+      const learnBtn = document.getElementById('learnBtn');
+      if (learnBtn) {
+        learnBtn.style.borderColor = '#b91c1c';
+      }
+      window.learnModeActive = false;
+      
+      // Update hint range
+      currentHintRange = '2-170';
+      if (hintVisible) {
+        updateHintText();
+      }
+      
+      // Generate new score
+      generateScore(2, 170);
+      
+      // Update mode buttons AFTER everything else - explicitly remove active from all buttons
+      const mode3DartsBtn = document.getElementById('mode3DartsBtn');
+      const mode2DartsBtn = document.getElementById('mode2DartsBtn');
+      const modeMixBtn = document.getElementById('modeMixBtn');
+      const modeChallengeBtn = document.getElementById('modeChallengeBtn');
+      
+      // Remove active from all mode buttons
+      if (mode3DartsBtn) mode3DartsBtn.classList.remove('active');
+      if (mode2DartsBtn) mode2DartsBtn.classList.remove('active');
+      if (modeMixBtn) modeMixBtn.classList.remove('active');
+      if (modeChallengeBtn) modeChallengeBtn.classList.remove('active');
+      
+      // Add active only to 3-Darts button
+      if (mode3DartsBtn) {
+        mode3DartsBtn.classList.add('active');
+      }
+      
+      // Show leaderboard with current entry
+      openLeaderboard(entry);
+    }
+    
+    function cancelChallenge() {
+      // Stop timer and disable challenge mode
+      clearInterval(window.challengeTimer);
+      window.challengeMode = false;
+      
+      // Hide challenge card, show range card
+      document.getElementById('challengeCard').classList.add('hidden');
+      document.getElementById('rangeCard').style.display = 'block';
+      
+      // Reset to 3-Dart mode
+      currentMode = '3darts';
+      currentCheckouts = defaultCheckouts;
+      
+      // Update range buttons for 3-Dart
+      updateRangeButtonsFor3Dart();
+      
+      // Set to 2-170 range
+      currentRangeMin = 2;
+      currentRangeMax = 170;
+      const btn2_170 = document.querySelector('.range-btn.bg-blue-500');
+      if (btn2_170) {
+        document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active-range'));
+        btn2_170.classList.add('active-range');
+      }
+      
+      // Reset learn button
+      const learnBtn = document.getElementById('learnBtn');
+      if (learnBtn) {
+        learnBtn.style.borderColor = '#b91c1c';
+      }
+      window.learnModeActive = false;
+      
+      // Update hint range
+      currentHintRange = '2-170';
+      if (hintVisible) {
+        updateHintText();
+      }
+      
+      // Generate new score
+      generateScore(2, 170);
+      
+      // Update mode buttons - explicitly remove active from all buttons
+      const mode3DartsBtn = document.getElementById('mode3DartsBtn');
+      const mode2DartsBtn = document.getElementById('mode2DartsBtn');
+      const modeMixBtn = document.getElementById('modeMixBtn');
+      const modeChallengeBtn = document.getElementById('modeChallengeBtn');
+      
+      // Remove active from all mode buttons
+      if (mode3DartsBtn) mode3DartsBtn.classList.remove('active');
+      if (mode2DartsBtn) mode2DartsBtn.classList.remove('active');
+      if (modeMixBtn) modeMixBtn.classList.remove('active');
+      if (modeChallengeBtn) modeChallengeBtn.classList.remove('active');
+      
+      // Add active only to 3-Darts button
+      if (mode3DartsBtn) {
+        mode3DartsBtn.classList.add('active');
+      }
+    }
+    
+    function startLearnMode() {
+      const count = Object.keys(problemScores).length;
+      if (count === 0) {
+        return;
+      }
+      
+      // Switch to Mix mode for learn mode
+      currentMode = 'mixed';
+      
+      // Update mode buttons
+      const mode3DartsBtn = document.getElementById('mode3DartsBtn');
+      const mode2DartsBtn = document.getElementById('mode2DartsBtn');
+      const modeMixBtn = document.getElementById('modeMixBtn');
+      const modeChallengeBtn = document.getElementById('modeChallengeBtn');
+      
+      if (mode3DartsBtn) mode3DartsBtn.classList.remove('active');
+      if (mode2DartsBtn) mode2DartsBtn.classList.remove('active');
+      if (modeMixBtn) modeMixBtn.classList.add('active');
+      if (modeChallengeBtn) modeChallengeBtn.classList.remove('active');
+      
+      // Enable all range buttons for mixed mode
+      document.querySelectorAll('.range-btn').forEach(btn => {
+        btn.classList.remove('disabled');
+      });
+      
+      // Remove active-range from all range buttons
+      document.querySelectorAll('.range-btn').forEach(btn => {
+        btn.classList.remove('active-range');
+      });
+      
+      // Add active-range to learn button
+      const learnBtn = document.getElementById('learnBtn');
+      if (learnBtn) {
+        learnBtn.classList.add('active-range');
+      }
+      
+      // Enable learn mode
+      window.learnModeActive = true;
+      
+      // Generate a score from problem list
+      generateLearnScore();
+    }
+    
+    function generateLearnScore() {
+      const scores = Object.keys(problemScores).map(Number);
+      
+      if (scores.length === 0) {
+        // This shouldn't happen anymore since we handle it in handleDartClick
+        window.learnModeActive = false;
+        updateProblemBadge();
+        generateScore(currentRangeMin, currentRangeMax);
+        return;
+      }
+      
+      // Try to avoid the last generated score if there are alternatives
+      let availableScores = scores;
+      if (scores.length > 1 && recentlyGenerated.length > 0) {
+        const lastEntry = recentlyGenerated[recentlyGenerated.length - 1];
+        const filtered = scores.filter(s => {
+          const problem = problemScores[s];
+          const storedMode = typeof problem === 'object' ? problem.mode : '3darts';
+          const actualMode = (storedMode === 'mixed') ? '3darts' : storedMode;
+          // Different score OR same score but different mode
+          return s !== lastEntry.score || actualMode !== lastEntry.mode;
+        });
+        
+        // Only use filtered list if it's not empty
+        if (filtered.length > 0) {
+          availableScores = filtered;
+        }
+      }
+      
+      const randomScore = availableScores[Math.floor(Math.random() * availableScores.length)];
+      
+      currentScore = randomScore;
+      
+      // Use the mode that was stored with the problem
+      const problem = problemScores[randomScore];
+      const storedMode = typeof problem === 'object' ? problem.mode : '3darts';
+      
+      // If stored mode is 'mixed' (shouldn't happen with new code, but handle legacy data)
+      // default to 3darts
+      const actualMode = (storedMode === 'mixed') ? '3darts' : storedMode;
+      
+      // Add to recently generated list (for consistency with regular generation)
+      recentlyGenerated.push({ score: currentScore, mode: actualMode });
+      if (recentlyGenerated.length > 20) {
+        recentlyGenerated = recentlyGenerated.slice(-20);
+      }
+      
+      // Get checkout from the correct database based on stored mode
+      if (actualMode === '2darts') {
+        currentCheckout = twoDartCheckouts[randomScore] || [];
+        currentCheckouts = twoDartCheckouts; // Set the current database
+      } else {
+        currentCheckout = defaultCheckouts[randomScore] || [];
+        currentCheckouts = defaultCheckouts; // Set the current database
+      }
+      
+      userInputs = [];
+      highlightedFields = [];
+      feedback = null;
+      
+      // Update score card styling based on stored mode
+      const scoreCard = document.querySelector('.score-card');
+      scoreCard.classList.remove('twodarts', 'stell');
+      if (actualMode === '2darts') {
+        scoreCard.classList.add('twodarts');
+      }
+      if (stellZahlen.includes(randomScore)) {
+        scoreCard.classList.add('stell');
+      }
+      
+      // Update title based on stored mode
+      const title = actualMode === '2darts' ? '2 Darts:' : '3 Darts:';
+      document.getElementById('scoreTitle').textContent = title;
+      
+      document.getElementById('scoreValue').textContent = currentScore;
+      
+      // Reset user-inputs
+      const userInputsEl = document.getElementById('userInputs');
+      userInputsEl.innerHTML = '';
+      userInputsEl.classList.remove('correct', 'wrong');
+      
+      // Remove glow from outer ring when generating new score
+      const outerRing = document.getElementById('dartboard-outer-ring');
+      if (outerRing) {
+        outerRing.classList.remove('flash-correct', 'flash-wrong');
+      }
+      
+      createDartboard();
+    }
+    
+    function toggleFullscreen() {
+      console.log('Fullscreen button clicked');
+      
+      if (!document.fullscreenElement && 
+          !document.webkitFullscreenElement && 
+          !document.mozFullScreenElement && 
+          !document.msFullscreenElement) {
+        // Enter fullscreen
+        const elem = document.documentElement;
+        
+        if (elem.requestFullscreen) {
+          elem.requestFullscreen();
+        } else if (elem.webkitRequestFullscreen) { // Safari
+          elem.webkitRequestFullscreen();
+        } else if (elem.mozRequestFullScreen) { // Firefox
+          elem.mozRequestFullScreen();
+        } else if (elem.msRequestFullscreen) { // IE11
+          elem.msRequestFullscreen();
+        }
+        
+        console.log('Entered fullscreen mode');
+        updateFullscreenButton(true);
+      } else {
+        // Exit fullscreen
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+        
+        console.log('Exited fullscreen mode');
+        updateFullscreenButton(false);
+      }
+    }
+    
+    function updateFullscreenButton(isFullscreen) {
+      const btn = document.getElementById('fullscreenBtn');
+      if (btn) {
+        btn.textContent = isFullscreen ? '⛶' : '⛶'; // Same icon for now
+        btn.title = isFullscreen ? 'Vollbild beenden' : 'Vollbildmodus';
+      }
+    }
+    
+    // Listen for fullscreen changes (user can exit with ESC)
+    document.addEventListener('fullscreenchange', () => {
+      updateFullscreenButton(!!document.fullscreenElement);
+    });
+    document.addEventListener('webkitfullscreenchange', () => {
+      updateFullscreenButton(!!document.webkitFullscreenElement);
+    });
+    document.addEventListener('mozfullscreenchange', () => {
+      updateFullscreenButton(!!document.mozFullScreenElement);
+    });
+    document.addEventListener('MSFullscreenChange', () => {
+      updateFullscreenButton(!!document.msFullscreenElement);
+    });
+    
+    function switchDatabaseMode(mode) {
+      window.databaseEditMode = mode;
+      
+      // Update toggle buttons
+      const btn3Dart = document.getElementById('db3DartToggle');
+      const btn2Dart = document.getElementById('db2DartToggle');
+      
+      if (mode === '3darts') {
+        btn3Dart.classList.add('active');
+        btn2Dart.classList.remove('active');
+      } else {
+        btn3Dart.classList.remove('active');
+        btn2Dart.classList.add('active');
+      }
+      
+      // Reload the checkout list
+      const list = document.getElementById('checkoutList');
+      let html = '';
+      const allCheckouts = mode === '2darts' ? twoDartCheckouts : defaultCheckouts;
+      
+      // Set maximum score based on mode (2-dart max: 110, 3-dart max: 170)
+      const maxScore = mode === '2darts' ? 110 : 170;
+      console.log('Switching database mode to:', mode, 'Max Score:', maxScore);
+      
+      for (let score = 2; score <= maxScore; score++) {
+        const checkout = allCheckouts[score] || [];
+        
+        html += `
+          <div class="checkout-edit-row">
+            <div class="checkout-score">${score}</div>
+            <input type="text" class="checkout-input" data-score="${score}" data-dart="0" value="${checkout[0] || ''}" placeholder="">
+            <input type="text" class="checkout-input" data-score="${score}" data-dart="1" value="${checkout[1] || ''}" placeholder="">
+            <input type="text" class="checkout-input" data-score="${score}" data-dart="2" value="${checkout[2] || ''}" placeholder="">
+          </div>
+        `;
+      }
+      
+      list.innerHTML = html;
+    }
+    
+    function openSettings() {
+      const modal = document.getElementById('settingsModal');
+      const list = document.getElementById('checkoutList');
+      
+      // Initialize databaseEditMode if not set
+      if (!window.databaseEditMode) {
+        window.databaseEditMode = '3darts';
+      }
+      
+      // Update toggle buttons
+      const btn3Dart = document.getElementById('db3DartToggle');
+      const btn2Dart = document.getElementById('db2DartToggle');
+      if (window.databaseEditMode === '3darts') {
+        btn3Dart.classList.add('active');
+        btn2Dart.classList.remove('active');
+      } else {
+        btn3Dart.classList.remove('active');
+        btn2Dart.classList.add('active');
+      }
+      
+      // Generate editable checkout list
+      let html = '';
+      const allCheckouts = window.databaseEditMode === '2darts' ? twoDartCheckouts : defaultCheckouts;
+      
+      // Set maximum score based on mode (2-dart max: 110, 3-dart max: 170)
+      const maxScore = window.databaseEditMode === '2darts' ? 110 : 170;
+      
+      for (let score = 2; score <= maxScore; score++) {
+        const checkout = allCheckouts[score] || [];
+        
+        html += `
+          <div class="checkout-edit-row">
+            <div class="checkout-score">${score}</div>
+            <input type="text" class="checkout-input" data-score="${score}" data-dart="0" value="${checkout[0] || ''}" placeholder="">
+            <input type="text" class="checkout-input" data-score="${score}" data-dart="1" value="${checkout[1] || ''}" placeholder="">
+            <input type="text" class="checkout-input" data-score="${score}" data-dart="2" value="${checkout[2] || ''}" placeholder="">
+          </div>
+        `;
+      }
+      
+      list.innerHTML = html;
+      modal.style.display = 'flex';
+    }
+    
+    function saveSettings() {
+      const inputs = document.querySelectorAll('.checkout-input');
+      const newDatabase = {};
+      
+      inputs.forEach(input => {
+        const score = input.dataset.score;
+        const dartIndex = parseInt(input.dataset.dart);
+        const value = input.value.trim().toUpperCase();
+        
+        if (!newDatabase[score]) {
+          newDatabase[score] = [];
+        }
+        
+        if (value) {
+          newDatabase[score][dartIndex] = value;
+        }
+      });
+      
+      // Clean up empty arrays
+      for (let score in newDatabase) {
+        newDatabase[score] = newDatabase[score].filter(d => d);
+        if (newDatabase[score].length === 0) {
+          delete newDatabase[score];
+        }
+      }
+      
+      // VALIDATION & CLEANUP: For 2-dart database, remove all scores > 110
+      if (window.databaseEditMode === '2darts') {
+        // First check if there are any invalid scores with data
+        const invalidScoresWithData = Object.keys(newDatabase).filter(score => parseInt(score) > 110);
+        if (invalidScoresWithData.length > 0) {
+          alert('Fehler: 2-Dart-Finishes sind nur bis Score 110 möglich!\n\nFolgende ungültige Einträge wurden entfernt: ' + invalidScoresWithData.join(', '));
+        }
+        
+        // Remove all scores > 110 from the database
+        for (let score in newDatabase) {
+          if (parseInt(score) > 110) {
+            delete newDatabase[score];
+          }
+        }
+      }
+      
+      // Update the appropriate database
+      if (window.databaseEditMode === '2darts') {
+        twoDartCheckouts = newDatabase;
+        // Only update currentCheckouts if we're currently in 2dart mode
+        if (currentMode === '2darts') {
+          currentCheckouts = twoDartCheckouts;
+        }
+        // Update which range buttons are available after editing database
+        updateRangeButtonsFor2Dart();
+      } else {
+        defaultCheckouts = newDatabase;
+        // Only update currentCheckouts if we're currently in 3dart mode
+        if (currentMode === '3darts' || currentMode === 'mixed') {
+          currentCheckouts = defaultCheckouts;
+        }
+      }
+      
+      closeSettings();
+      
+      // Regenerate current score if it exists in new database
+      if (newDatabase[currentScore]) {
+        currentCheckout = newDatabase[currentScore];
+      }
+    }
+    
+    function closeSettings() {
+      document.getElementById('settingsModal').style.display = 'none';
+      
+      // If we came from the database editor on start screen, go back to start
+      if (window.cameFromStartScreen) {
+        goToStart();
+        window.cameFromStartScreen = false;
+      }
+    }
+    
+    // Navigation functions
+    function enterFullscreen() {
+      const elem = document.documentElement;
+      
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen().catch(err => {
+          console.log('Fullscreen request failed:', err);
+        });
+      } else if (elem.webkitRequestFullscreen) { // Safari
+        elem.webkitRequestFullscreen();
+      } else if (elem.mozRequestFullScreen) { // Firefox
+        elem.mozRequestFullScreen();
+      } else if (elem.msRequestFullscreen) { // IE11
+        elem.msRequestFullscreen();
+      }
+    }
+    
+    function goToTrainer() {
+      document.getElementById('startScreen').style.display = 'none';
+      document.getElementById('mainApp').style.display = 'block';
+      
+      // Restore correct mode and regenerate score to prevent mode mismatch
+      if (currentMode === '3darts') {
+        currentCheckouts = defaultCheckouts;
+      } else if (currentMode === '2darts') {
+        currentCheckouts = twoDartCheckouts;
+      }
+      // For mixed mode, currentCheckouts will be set in generateScore
+      
+      // Generate new score with current range to ensure consistency
+      generateScore(currentRangeMin, currentRangeMax);
+      
+      // Automatically enter fullscreen
+      enterFullscreen();
+    }
+    
+    function goToStart() {
+      document.getElementById('mainApp').style.display = 'none';
+      document.getElementById('startScreen').style.display = 'flex';
+    }
+    
+    function toggleMenu() {
+      const menu = document.getElementById('menuDropdown');
+      if (menu.style.display === 'none') {
+        // Opening menu - update toggle states
+        updateNumbersToggle();
+        menu.style.display = 'block';
+      } else {
+        menu.style.display = 'none';
+      }
+    }
+    
+    function toggleBlackRing() {
+      numbersVisible = !numbersVisible;
+      createDartboard();
+    }
+    
+    function updateNumbersToggle() {
+      const toggle = document.getElementById('numbersToggle');
+      if (toggle) {
+        toggle.textContent = numbersVisible ? '☑' : '☐';
+      }
+    }
+    
+    function closeMenu() {
+      document.getElementById('menuDropdown').style.display = 'none';
+    }
+    
+    function openDatabaseEditor() {
+      // Mark that we came from start screen
+      window.cameFromStartScreen = true;
+      
+      // Default to 3darts mode
+      window.databaseEditMode = '3darts';
+      
+      // Go to trainer
+      goToTrainer();
+      
+      // Open settings
+      setTimeout(() => {
+        openSettings();
+      }, 100);
+    }
+    
+    function openLeaderboard(currentEntry = null) {
+      const modal = document.getElementById('leaderboardModal');
+      const list = document.getElementById('leaderboardList');
+      
+      // Always reload from localStorage to get fresh data
+      try {
+        const saved = localStorage.getItem('dartTrainerLeaderboard');
+        if (saved) {
+          leaderboard = JSON.parse(saved);
+          console.log('Loaded leaderboard from localStorage:', leaderboard);
+        } else {
+          console.log('No leaderboard in localStorage');
+        }
+      } catch (e) {
+        console.error('Could not load leaderboard:', e);
+      }
+      
+      const medals = ['🥇', '🥈', '🥉'];
+      const ranks = ['first', 'second', 'third'];
+      
+      let html = '';
+      
+      // Always show 3 spots (filled or placeholder)
+      for (let i = 0; i < 3; i++) {
+        const entry = leaderboard[i];
+        
+        if (entry) {
+          // Filled spot
+          html += `
+            <div class="leaderboard-entry ${ranks[i]}">
+              <div class="leaderboard-rank">${medals[i]}</div>
+              <div class="leaderboard-stats">
+                <span class="leaderboard-correct">✓ ${entry.correct}</span>
+                <span class="leaderboard-wrong">✗ ${entry.wrong}</span>
+                <span>(${entry.total})</span>
+              </div>
+              <div class="leaderboard-date">${entry.date}</div>
+            </div>
+          `;
+        } else {
+          // Empty placeholder
+          html += `
+            <div class="leaderboard-entry leaderboard-placeholder">
+              <div class="leaderboard-rank">${medals[i]}</div>
+              <div class="leaderboard-stats">
+                <span style="color: #9ca3af;">---</span>
+              </div>
+              <div class="leaderboard-date" style="color: #d1d5db;">Noch kein Eintrag</div>
+            </div>
+          `;
+        }
+      }
+      
+      // Always show current entry as 4th field if provided
+      if (currentEntry) {
+        html += `
+          <div style="margin-top: 16px; padding-top: 16px; border-top: 2px solid #e5e7eb;">
+            <div style="font-size: 13px; font-weight: 600; color: #6b7280; margin-bottom: 8px;">Dein Ergebnis:</div>
+            <div class="leaderboard-entry" style="background: #dbeafe; border: 2px solid #3b82f6;">
+              <div class="leaderboard-rank">🎯</div>
+              <div class="leaderboard-stats">
+                <span class="leaderboard-correct">✓ ${currentEntry.correct}</span>
+                <span class="leaderboard-wrong">✗ ${currentEntry.wrong}</span>
+                <span>(${currentEntry.total})</span>
+              </div>
+              <div class="leaderboard-date">${currentEntry.date}</div>
+            </div>
+          </div>
+        `;
+      }
+      
+      list.innerHTML = html;
+      modal.style.display = 'flex';
+      
+      // Enter fullscreen
+      enterFullscreen();
+    }
+    
+    function closeLeaderboard() {
+      document.getElementById('leaderboardModal').style.display = 'none';
+    }
+    
+    window.resetLeaderboard = function() {
+      console.log('resetLeaderboard called - showing custom confirm modal');
+      
+      // Close leaderboard modal
+      document.getElementById('leaderboardModal').style.display = 'none';
+      
+      // Show custom confirm modal
+      document.getElementById('confirmDeleteModal').style.display = 'flex';
+    };
+    
+    window.confirmDeleteLeaderboard = function() {
+      console.log('User confirmed delete');
+      
+      // Hide confirm modal
+      document.getElementById('confirmDeleteModal').style.display = 'none';
+      
+      // Delete leaderboard
+      leaderboard = [];
+      localStorage.removeItem('dartTrainerLeaderboard');
+      console.log('Leaderboard deleted');
+      
+      // Reopen leaderboard modal with empty list
+      document.getElementById('leaderboardList').innerHTML = '<div class="leaderboard-empty">Noch keine Einträge! Starte eine Challenge, um die Bestenliste zu füllen.</div>';
+      document.getElementById('leaderboardModal').style.display = 'flex';
+    };
+    
+    window.cancelDeleteLeaderboard = function() {
+      console.log('User cancelled delete');
+      
+      // Hide confirm modal
+      document.getElementById('confirmDeleteModal').style.display = 'none';
+      
+      // Reopen leaderboard modal without changes
+      document.getElementById('leaderboardModal').style.display = 'flex';
+    };
+    
+    // Database Reset Functions
+    window.resetDatabase = function() {
+      console.log('resetDatabase called - showing custom confirm modal');
+      
+      // Close settings modal
+      document.getElementById('settingsModal').style.display = 'none';
+      
+      // Show custom confirm modal
+      document.getElementById('confirmResetDatabaseModal').style.display = 'flex';
+    };
+    
+    window.confirmResetDatabase = function() {
+      console.log('User confirmed database reset');
+      
+      // Hide confirm modal
+      document.getElementById('confirmResetDatabaseModal').style.display = 'none';
+      
+      // Reset checkouts to original values
+      defaultCheckouts = JSON.parse(JSON.stringify(originalDefaultCheckouts));
+      twoDartCheckouts = JSON.parse(JSON.stringify(originalTwoDartCheckouts));
+      
+      // Update currentCheckouts if needed
+      if (currentMode === '3darts') {
+        currentCheckouts = defaultCheckouts;
+      } else if (currentMode === '2darts') {
+        currentCheckouts = twoDartCheckouts;
+      }
+      
+      // Remove from localStorage
+      localStorage.removeItem('dartTrainerCheckouts');
+      localStorage.removeItem('dartTrainerTwoDartCheckouts');
+      console.log('Database reset to defaults');
+      
+      // Reopen settings modal with updated values
+      openSettings();
+    };
+    
+    window.cancelResetDatabase = function() {
+      console.log('User cancelled database reset');
+      
+      // Hide confirm modal
+      document.getElementById('confirmResetDatabaseModal').style.display = 'none';
+      
+      // Reopen settings modal without changes
+      document.getElementById('settingsModal').style.display = 'flex';
+    };
+    
+    // Color Reset Functions
+    window.resetColors = function() {
+      console.log('resetColors called - showing custom confirm modal');
+      
+      // Close background modal
+      document.getElementById('backgroundModal').style.display = 'none';
+      
+      // Show custom confirm modal
+      document.getElementById('confirmResetColorsModal').style.display = 'flex';
+    };
+    
+    window.confirmResetColors = function() {
+      console.log('User confirmed color reset');
+      
+      // Hide confirm modal
+      document.getElementById('confirmResetColorsModal').style.display = 'none';
+      
+      // Remove custom colors from localStorage
+      localStorage.removeItem('dartTrainerBackgroundCustom');
+      localStorage.removeItem('dartTrainerFieldCustom');
+      console.log('Colors reset to defaults');
+      
+      // Reload page to apply default colors
+      location.reload();
+    };
+    
+    window.cancelResetColors = function() {
+      console.log('User cancelled color reset');
+      
+      // Hide confirm modal
+      document.getElementById('confirmResetColorsModal').style.display = 'none';
+      
+      // Reopen background modal without changes
+      document.getElementById('backgroundModal').style.display = 'flex';
+    };
+    
+    // Long-press functionality for menu button (fullscreen toggle)
+    let menuBtnPressTimer = null;
+    let menuBtnLongPressTriggered = false;
+    
+    function startMenuBtnPress(e) {
+      e.preventDefault();
+      menuBtnLongPressTriggered = false;
+      
+      menuBtnPressTimer = setTimeout(() => {
+        menuBtnLongPressTriggered = true;
+        
+        // Visual feedback - change button appearance
+        const btn = document.getElementById('menuBtn');
+        if (btn) {
+          btn.style.transform = 'scale(1.1)';
+          btn.style.background = 'rgba(5, 150, 105, 0.2)';
+        }
+        
+        // Immediately toggle fullscreen after 700ms
+        toggleFullscreen();
+      }, 700);
+    }
+    
+    function handleMenuBtnRelease(e) {
+      e.preventDefault();
+      
+      // Reset button style
+      const btn = document.getElementById('menuBtn');
+      if (btn) {
+        btn.style.transform = '';
+        btn.style.background = '';
+      }
+      
+      if (menuBtnPressTimer) {
+        clearTimeout(menuBtnPressTimer);
+        menuBtnPressTimer = null;
+      }
+      
+      // Check if long-press was triggered
+      if (menuBtnLongPressTriggered) {
+        // Long press already handled in setTimeout - do nothing
+      } else {
+        // Short click - open menu
+        toggleMenu();
+      }
+      
+      menuBtnLongPressTriggered = false;
+    }
+    
+    function cancelMenuBtnPress(e) {
+      if (menuBtnPressTimer) {
+        clearTimeout(menuBtnPressTimer);
+        menuBtnPressTimer = null;
+      }
+      menuBtnLongPressTriggered = false;
+      
+      // Reset button style
+      const btn = document.getElementById('menuBtn');
+      if (btn) {
+        btn.style.transform = '';
+        btn.style.background = '';
+      }
+    }
+    
+    // Long-press functionality for learn button
+    let learnBtnPressTimer = null;
+    let learnBtnLongPressTriggered = false;
+    
+    function clearLearningArea() {
+      console.log('clearLearningArea called');
+      const count = Object.keys(problemScores).length;
+      console.log('Problem scores count:', count);
+      
+      if (count === 0) {
+        console.log('Learning area is empty');
+        return;
+      }
+      
+      // Delete directly without confirmation
+      console.log('Deleting learning area');
+      problemScores = {};
+      localStorage.setItem('problemScores', JSON.stringify(problemScores));
+      updateProblemBadge();
+      console.log('Learning area cleared');
+      
+      if (window.learnModeActive) {
+        console.log('Exiting learn mode');
+        window.learnModeActive = false;
+        
+        // Reset to 3-Dart mode
+        currentMode = '3darts';
+        currentCheckouts = defaultCheckouts;
+        
+        // Update mode buttons
+        const mode3DartsBtn = document.getElementById('mode3DartsBtn');
+        const mode2DartsBtn = document.getElementById('mode2DartsBtn');
+        const modeMixBtn = document.getElementById('modeMixBtn');
+        
+        if (mode3DartsBtn) mode3DartsBtn.classList.add('active');
+        if (mode2DartsBtn) mode2DartsBtn.classList.remove('active');
+        if (modeMixBtn) modeMixBtn.classList.remove('active');
+        
+        // Update range buttons for 3-Dart
+        updateRangeButtonsFor3Dart();
+        
+        currentRangeMin = 2;
+        currentRangeMax = 170;
+        
+        const btn2_170 = document.querySelector('.range-btn.bg-blue-500');
+        if (btn2_170) {
+          document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active-range'));
+          btn2_170.classList.add('active-range');
+        }
+        
+        currentHintRange = '2-170';
+        updateHintText();
+        generateScore(2, 170);
+      }
+    }
+    
+    function startLearnBtnPress(e) {
+      e.preventDefault();
+      console.log('Long-press started');
+      learnBtnLongPressTriggered = false;
+      
+      learnBtnPressTimer = setTimeout(() => {
+        console.log('Long-press detected (1.0 seconds)');
+        learnBtnLongPressTriggered = true;
+        
+        // Visual feedback - change button color
+        const btn = document.getElementById('learnBtn');
+        if (btn) {
+          btn.style.background = '#fca5a5'; // Light red
+          btn.style.borderColor = '#991b1b'; // Dark red
+        }
+      }, 1000);
+    }
+    
+    function handleLearnBtnRelease(e) {
+      e.preventDefault();
+      console.log('Button released, longPress:', learnBtnLongPressTriggered);
+      
+      // Reset button style
+      const btn = document.getElementById('learnBtn');
+      if (btn) {
+        btn.style.background = 'white';
+        btn.style.borderColor = '#b91c1c';
+      }
+      
+      if (learnBtnPressTimer) {
+        clearTimeout(learnBtnPressTimer);
+        learnBtnPressTimer = null;
+      }
+      
+      // Check if long-press was triggered
+      if (learnBtnLongPressTriggered) {
+        console.log('Long press - showing delete dialog');
+        // Wait 500ms to ensure mouseup event is finished
+        setTimeout(() => {
+          clearLearningArea();
+        }, 500);
+      } else {
+        console.log('Short click - starting learn mode');
+        startLearnMode();
+      }
+      
+      learnBtnLongPressTriggered = false;
+    }
+    
+    function cancelLearnBtnPress(e) {
+      if (learnBtnPressTimer) {
+        clearTimeout(learnBtnPressTimer);
+        learnBtnPressTimer = null;
+      }
+      learnBtnLongPressTriggered = false;
+    }
+    
+    // Setup learn button
+    const learnBtn = document.getElementById('learnBtn');
+    if (learnBtn) {
+      console.log('Learn button found, setting up long-press');
+      // Remove any existing onclick
+      learnBtn.onclick = null;
+      
+      // Mouse events
+      learnBtn.addEventListener('mousedown', startLearnBtnPress);
+      learnBtn.addEventListener('mouseup', handleLearnBtnRelease);
+      learnBtn.addEventListener('mouseleave', cancelLearnBtnPress);
+      
+      // Touch events for mobile
+      learnBtn.addEventListener('touchstart', startLearnBtnPress);
+      learnBtn.addEventListener('touchend', handleLearnBtnRelease);
+      learnBtn.addEventListener('touchcancel', cancelLearnBtnPress);
+    } else {
+      console.error('Learn button not found!');
+    }
+    
+    // Setup menu button (short click: menu, long press: fullscreen)
+    const menuBtn = document.getElementById('menuBtn');
+    if (menuBtn) {
+      console.log('Menu button found, setting up long-press');
+      // Remove any existing onclick
+      menuBtn.onclick = null;
+      
+      // Mouse events
+      menuBtn.addEventListener('mousedown', startMenuBtnPress);
+      menuBtn.addEventListener('mouseup', handleMenuBtnRelease);
+      menuBtn.addEventListener('mouseleave', cancelMenuBtnPress);
+      
+      // Touch events for mobile
+      menuBtn.addEventListener('touchstart', startMenuBtnPress);
+      menuBtn.addEventListener('touchend', handleMenuBtnRelease);
+      menuBtn.addEventListener('touchcancel', cancelMenuBtnPress);
+    } else {
+      console.error('Menu button not found!');
+    }
+    
+    // Setup range buttons with long-press
+    let rangeBtnPressTimer = null;
+    let rangeBtnLongPressTriggered = false;
+    let rangeBtnCurrentTarget = null;
+    
+    function startRangeBtnPress(e) {
+      e.preventDefault();
+      const btn = e.currentTarget;
+      
+      // Prevent multiple buttons from being pressed simultaneously
+      if (rangeBtnPressTimer !== null || rangeBtnCurrentTarget !== null) {
+        console.log('Another button is already being pressed - ignoring');
+        return;
+      }
+      
+      rangeBtnCurrentTarget = btn;
+      rangeBtnLongPressTriggered = false;
+      
+      rangeBtnPressTimer = setTimeout(() => {
+        // After 0.7 seconds - long press detected
+        rangeBtnLongPressTriggered = true;
+        
+        // Show hint for this range
+        const hintKey = btn.dataset.hint;
+        if (hintKey) {
+          showRangeHint(hintKey);
+        }
+      }, 700); // 0.7 seconds for range buttons
+    }
+    
+    function handleRangeBtnRelease(e) {
+      e.preventDefault();
+      const btn = e.currentTarget;
+      
+      // Only handle release for the button that was actually pressed
+      if (rangeBtnCurrentTarget !== btn) {
+        console.log('Release on different button - ignoring');
+        return;
+      }
+      
+      if (rangeBtnPressTimer) {
+        clearTimeout(rangeBtnPressTimer);
+        rangeBtnPressTimer = null;
+      }
+      
+      // Check if long-press was triggered
+      if (!rangeBtnLongPressTriggered) {
+        // Short click - select range
+        const min = parseInt(btn.dataset.min);
+        const max = parseInt(btn.dataset.max);
+        setRange(min, max, btn);
+      }
+      
+      rangeBtnLongPressTriggered = false;
+      rangeBtnCurrentTarget = null;
+    }
+    
+    function cancelRangeBtnPress(e) {
+      if (rangeBtnPressTimer) {
+        clearTimeout(rangeBtnPressTimer);
+        rangeBtnPressTimer = null;
+      }
+      rangeBtnLongPressTriggered = false;
+      rangeBtnCurrentTarget = null;
+    }
+    
+    // Attach handlers to all range buttons (except learn button)
+    const rangeButtons = document.querySelectorAll('.range-btn[data-min]');
+    rangeButtons.forEach(btn => {
+      // Mouse events
+      btn.addEventListener('mousedown', startRangeBtnPress);
+      btn.addEventListener('mouseup', handleRangeBtnRelease);
+      btn.addEventListener('mouseleave', cancelRangeBtnPress);
+      
+      // Touch events for mobile
+      btn.addEventListener('touchstart', startRangeBtnPress);
+      btn.addEventListener('touchend', handleRangeBtnRelease);
+      btn.addEventListener('touchcancel', cancelRangeBtnPress);
+    });
+    
+    // Initialize
+    generateScore(2, 170);
+    loadBackground();
+    initColorPicker();
+    
+    // Setup background image upload event listeners
+    const bgImageInput = document.getElementById('bgImageInput');
+    const bgImageSelectBtn = document.getElementById('bgImageSelectBtn');
+    const removeBgImageBtn = document.getElementById('removeBgImageBtn');
+    
+    if (bgImageSelectBtn) {
+      bgImageSelectBtn.addEventListener('click', function() {
+        console.log('Select image button clicked');
+        if (bgImageInput) {
+          bgImageInput.click();
+        }
+      });
+    }
+    
+    if (bgImageInput) {
+      bgImageInput.addEventListener('change', function(event) {
+        console.log('File input changed');
+        if (window.handleBackgroundImage) {
+          window.handleBackgroundImage(event);
+        } else {
+          console.error('handleBackgroundImage function not found!');
+        }
+      });
+    }
+    
+    if (removeBgImageBtn) {
+      removeBgImageBtn.addEventListener('click', function() {
+        console.log('Remove image button clicked');
+        if (window.removeBackgroundImage) {
+          window.removeBackgroundImage();
+        } else {
+          console.error('removeBackgroundImage function not found!');
+        }
+      });
+    }
+    
+    // Mark first range button (2-170) as active
+    const firstRangeBtn = document.querySelector('.range-btn.bg-blue-500');
+    if (firstRangeBtn) {
+      firstRangeBtn.classList.add('active-range');
+    }
+    
+    // Load problemScores from localStorage FIRST, then update badge
+    // RESET: Clear problemScores for fresh start (can be removed after first use)
+    localStorage.removeItem('problemScores');
+    
+    try {
+      const savedProblems = localStorage.getItem('problemScores');
+      if (savedProblems) {
+        problemScores = JSON.parse(savedProblems);
+        console.log('Loaded problemScores from localStorage:', problemScores);
+      }
+    } catch (e) {
+      console.error('Could not load problemScores:', e);
+    }
+    
+    // Update badge AFTER loading (important!)
+    updateProblemBadge();
+    
+    // Load leaderboard from localStorage
+    try {
+      const saved = localStorage.getItem('dartTrainerLeaderboard');
+      if (saved) {
+        leaderboard = JSON.parse(saved);
+      }
+    } catch (e) {
+      console.error('Could not load leaderboard:', e);
+    }
+    
+    // Setup reset leaderboard button event listener
+    const resetBtn = document.getElementById('resetLeaderboardBtn');
+    if (resetBtn) {
+      resetBtn.addEventListener('click', function() {
+        console.log('Reset button clicked');
+        window.resetLeaderboard();
+      });
+      console.log('Reset button event listener attached');
+    } else {
+      console.error('Reset button not found!');
+    }
+    
+    // Setup manual score entry on click
+    const scoreValue = document.getElementById('scoreValue');
+    if (scoreValue) {
+      scoreValue.addEventListener('click', function() {
+        console.log('Score value clicked - opening manual entry');
+        setManualScore();
+      });
+      console.log('Score value click listener attached');
+    }
+    
+    // Setup click on user-inputs box to go to next score when feedback is shown
+    const userInputsBox = document.getElementById('userInputs');
+    if (userInputsBox) {
+      userInputsBox.addEventListener('click', function() {
+        // Only proceed if feedback is shown
+        if (feedback) {
+          console.log('User inputs box clicked - generating next score');
+          // Reset manual score flag - generate random score now
+          manualScoreActive = false;
+          
+          if (window.challengeMode) {
+            generateScore(currentRangeMin, currentRangeMax);
+          } else if (window.learnModeActive) {
+            generateLearnScore();
+          } else {
+            generateScore(currentRangeMin, currentRangeMax);
+          }
+        }
+      });
+      console.log('User inputs box click listener attached');
+    }
+    
+    // Swipe gesture: Left to right swipe to go back to start screen
+    let touchStartX = 0;
+    let touchEndX = 0;
+    let touchStartY = 0;
+    let touchEndY = 0;
+    
+    const mainApp = document.getElementById('mainApp');
+    
+    mainApp.addEventListener('touchstart', function(e) {
+      touchStartX = e.changedTouches[0].screenX;
+      touchStartY = e.changedTouches[0].screenY;
+    }, false);
+    
+    mainApp.addEventListener('touchend', function(e) {
+      touchEndX = e.changedTouches[0].screenX;
+      touchEndY = e.changedTouches[0].screenY;
+      handleSwipe();
+    }, false);
+    
+    function handleSwipe() {
+      const diffX = touchEndX - touchStartX;
+      const diffY = touchEndY - touchStartY;
+      
+      // Check if horizontal swipe is dominant (not vertical scroll)
+      if (Math.abs(diffX) > Math.abs(diffY)) {
+        // Swipe from left to right (at least 100px)
+        if (diffX > 100) {
+          console.log('Swipe right detected - going to start screen');
+          goToStart();
+        }
+      }
+    }
