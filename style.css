@@ -183,18 +183,18 @@
       padding: 16px;
       border-radius: 12px;
       text-align: center;
-      border: 4px solid #065f46;
+      border: 2px solid #000;
       margin-bottom: 12px;
     }
     
     .score-card.twodarts {
       background: #93c5fd;
-      border-color: #1d4ed8;
+      border-color: #000;
     }
     
     .score-card.stell {
       background: #eab308;
-      border-color: #a16207;
+      border-color: #000;
     }
     
     .score-title {
