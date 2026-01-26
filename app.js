@@ -1941,12 +1941,16 @@
         let timeLeft = 60;
         
         // Start challenge music
+        console.log('Attempting to play challenge music...');
         if (!window.challengeMusic) {
           window.challengeMusic = new Audio('Quiz.mp3');
           window.challengeMusic.loop = true;
-          window.challengeMusic.volume = 0.5; // 50% volume
+          window.challengeMusic.volume = 1.0; // 100% volume
+          console.log('Challenge music created');
         }
-        window.challengeMusic.play().catch(e => console.log('Audio play failed:', e));
+        window.challengeMusic.play()
+          .then(() => console.log('Challenge music playing'))
+          .catch(e => console.error('Audio play failed:', e));
         
         // Hide range card during challenge
         document.getElementById('rangeCard').style.display = 'none';
