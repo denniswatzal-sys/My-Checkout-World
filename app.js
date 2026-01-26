@@ -476,14 +476,14 @@
         element: '.start-btn:nth-child(1)',
         title: '🎯 Training starten',
         content: 'Diese App soll dir helfen, alle Checkout-wege im Schlaf zu beherrschen.<br><br>Worauf wartest du? Mach dich selbst zum echten <strong>Checkout-Champion</strong>.',
-        position: 'bottom',
+        position: 'top',
         screen: 'start'
       },
       {
         element: '.start-btn:nth-child(2)',
         title: '📊 Checkouts',
         content: 'Hier findest du die Checkout-Datenbank, aufgeteilt in 3-Dart und 2-Dart-Finishes.<br><br>Du bevorzugst andere Wege? Kein Problem - Lege hier einfach deine eigenen Checkouts fest.',
-        position: 'bottom',
+        position: 'top',
         screen: 'start'
       },
       {
@@ -504,7 +504,7 @@
         element: '#dartboard',
         title: '🎯 Dartboard',
         content: 'Du sollst 170 Punkte checken?! Kein Problem – hier ist es genauso leicht wie am echten Board! Triff (klick) <strong>T20 · T20 · BULL</strong> und angel dir den <strong>BIG FISH</strong> 🎣',
-        position: 'bottom',
+        position: 'center',
         screen: 'training'
       },
       {
