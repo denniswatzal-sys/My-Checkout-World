@@ -1,4 +1,4 @@
-const CACHE_NAME = 'checkout-world-v1';
+const CACHE_NAME = 'checkout-world-v2-TEST5SEC';
 const urlsToCache = [
   './',
   './index.html',
