@@ -1,8 +1,14 @@
 // Haptic feedback function for mobile devices
 function vibrateOnClick() {
+  // Try multiple methods for better compatibility
   if (navigator.vibrate) {
-    navigator.vibrate(10); // 10ms short vibration
+    navigator.vibrate(30); // Increased to 30ms for better feel
+  } else if (navigator.webkitVibrate) {
+    navigator.webkitVibrate(30);
+  } else if (navigator.mozVibrate) {
+    navigator.mozVibrate(30);
   }
+  console.log('Vibration triggered');
 }
 
 // Vollständige Checkout-Datenbank
@@ -3203,8 +3209,17 @@ function vibrateOnClick() {
     }
     
     // Add haptic feedback to all buttons
-    document.addEventListener('click', function(e) {
-      if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
-        vibrateOnClick();
-      }
+    document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener('click', function(e) {
+        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+          vibrateOnClick();
+        }
+      });
+      
+      // Also add touchstart for better mobile responsiveness
+      document.addEventListener('touchstart', function(e) {
+        if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+          vibrateOnClick();
+        }
+      }, { passive: true });
     });
