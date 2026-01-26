@@ -1248,7 +1248,6 @@
         
         // Validate input
         if (isNaN(score) || score < 2 || score > 170) {
-          alert('Bitte gib eine Zahl zwischen 2 und 170 ein!');
           // Restore original value and mode
           scoreValueEl.textContent = currentValue;
           currentMode = originalMode;
@@ -1440,7 +1439,6 @@
       let availableScores = Object.keys(currentCheckouts).map(Number).filter(s => s >= min && s <= max);
       
       if (availableScores.length === 0) {
-        alert('Keine Checkouts verfügbar!');
         return;
       }
       
@@ -2439,9 +2437,6 @@
       if (window.databaseEditMode === '2darts') {
         // First check if there are any invalid scores with data
         const invalidScoresWithData = Object.keys(newDatabase).filter(score => parseInt(score) > 110);
-        if (invalidScoresWithData.length > 0) {
-          alert('Fehler: 2-Dart-Finishes sind nur bis Score 110 möglich!\n\nFolgende ungültige Einträge wurden entfernt: ' + invalidScoresWithData.join(', '));
-        }
         
         // Remove all scores > 110 from the database
         for (let score in newDatabase) {
