@@ -1975,12 +1975,14 @@
         // Hide range card during challenge
         document.getElementById('rangeCard').style.display = 'none';
         
-        // Select random GIF for challenge mode
-        const gifs = ['THE-MENACE.gif', 'Flugzeug.gif', 'Waschmachine.gif', 'Schlafen.gif', 'Angler.gif'];
-        const randomGif = gifs[Math.floor(Math.random() * gifs.length)];
-        const gifElement = document.querySelector('.challenge-gif img');
-        if (gifElement) {
-          gifElement.src = randomGif;
+        // Select random MP4 for challenge mode
+        const videos = ['THE-MENACE.mp4', 'Flugzeug.mp4', 'Waschmachine.mp4', 'Schlafen.mp4', 'Angler.mp4'];
+        const randomVideo = videos[Math.floor(Math.random() * videos.length)];
+        const videoElement = document.querySelector('.challenge-gif video source');
+        if (videoElement) {
+          videoElement.src = randomVideo;
+          // Reload video to apply new source
+          videoElement.parentElement.load();
         }
         
         document.getElementById('challengeCard').classList.remove('hidden');

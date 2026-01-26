@@ -343,7 +343,8 @@
       justify-content: center;
     }
     
-    .challenge-gif img {
+    .challenge-gif img,
+    .challenge-gif video {
       width: 100%;
       height: 100%;
       object-fit: contain;
