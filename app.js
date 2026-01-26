@@ -466,28 +466,28 @@
     // Tutorial System
     const tutorialSteps = [
       {
-        element: '.start-btn:nth-child(4)',
+        element: '#btn-tutorial',
         title: 'Erwischt...',
         content: 'Schon witzig: Hätte hier <strong>Bedienungsanleitung</strong> gestanden, hättest du sicher nicht getippt, oder? 😅<br><br>Na gut – wenn du schon da bist, erkläre ich dir kurz die wichtigsten Funktionen.',
         position: 'top',
         screen: 'start'
       },
       {
-        element: '.start-btn:nth-child(1)',
+        element: '#btn-training',
         title: '🎯 Training starten',
         content: 'Diese App soll dir helfen, alle Checkout-wege im Schlaf zu beherrschen.<br><br>Worauf wartest du? Mach dich selbst zum echten <strong>Checkout-Champion</strong>.',
         position: 'top',
         screen: 'start'
       },
       {
-        element: '.start-btn:nth-child(2)',
+        element: '#btn-checkouts',
         title: '📊 Checkouts',
         content: 'Hier findest du die Checkout-Datenbank, aufgeteilt in 3-Dart und 2-Dart-Finishes.<br><br>Du bevorzugst andere Wege? Kein Problem - Lege hier einfach deine eigenen Checkouts fest.',
         position: 'top',
         screen: 'start'
       },
       {
-        element: '.start-btn:nth-child(3)',
+        element: '#btn-leaderboard',
         title: '🏆 Bestenliste',
         content: 'Hier siehst du deine Rekorde aus dem Herausforderungsmodus. Wie gut bist du wirklich unter Druck? Finde es heraus!',
         position: 'top',

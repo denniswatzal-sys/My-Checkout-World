@@ -33,22 +33,24 @@
           </div>
         
           <div class="start-buttons">
-            <button class="start-btn start-btn-primary" onclick="goToTrainer()">
+            <button id="btn-training" class="start-btn start-btn-primary" onclick="goToTrainer()">
               <span class="start-btn-icon">🎯</span>
               <span class="start-btn-text">Training starten</span>
             </button>
             
-            <button class="start-btn start-btn-3darts" onclick="openDatabaseEditor()">
+            <button id="btn-checkouts" class="start-btn start-btn-3darts" onclick="openDatabaseEditor()">
               <span class="start-btn-icon">📊</span>
               <span class="start-btn-text">Checkouts</span>
             </button>
             
-            <button class="start-btn start-btn-leaderboard" onclick="openLeaderboard()">
+            <button id="btn-leaderboard" class="start-btn start-btn-leaderboard" onclick="openLeaderboard()">
               <span class="start-btn-icon">🏆</span>
               <span class="start-btn-text">Bestenliste</span>
             </button>
             
-            <button class="start-btn start-btn-tutorial" onclick="startTutorial()">
+            <div class="start-section-divider">-------- Weitere Optionen --------</div>
+            
+            <button id="btn-tutorial" class="start-btn start-btn-tutorial" onclick="startTutorial()">
               <span class="start-btn-icon">🤯</span>
               <span class="start-btn-text">Bloß nicht drücken!</span>
             </button>
