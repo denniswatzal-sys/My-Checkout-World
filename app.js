@@ -1940,6 +1940,14 @@
         challengeStats = { correct: 0, wrong: 0 };
         let timeLeft = 60;
         
+        // Start challenge music
+        if (!window.challengeMusic) {
+          window.challengeMusic = new Audio('Quiz.mp3');
+          window.challengeMusic.loop = true;
+          window.challengeMusic.volume = 0.5; // 50% volume
+        }
+        window.challengeMusic.play().catch(e => console.log('Audio play failed:', e));
+        
         // Hide range card during challenge
         document.getElementById('rangeCard').style.display = 'none';
         
@@ -1972,6 +1980,12 @@
     function endChallenge() {
       clearInterval(window.challengeTimer);
       window.challengeMode = false;
+      
+      // Stop challenge music
+      if (window.challengeMusic) {
+        window.challengeMusic.pause();
+        window.challengeMusic.currentTime = 0; // Reset to beginning
+      }
       
       document.getElementById('challengeCard').classList.add('hidden');
       document.getElementById('rangeCard').style.display = 'block';
@@ -2077,6 +2091,12 @@
       // Stop timer and disable challenge mode
       clearInterval(window.challengeTimer);
       window.challengeMode = false;
+      
+      // Stop challenge music
+      if (window.challengeMusic) {
+        window.challengeMusic.pause();
+        window.challengeMusic.currentTime = 0; // Reset to beginning
+      }
       
       // Hide challenge card, show range card
       document.getElementById('challengeCard').classList.add('hidden');
