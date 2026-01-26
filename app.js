@@ -1779,10 +1779,15 @@
       const outerRing = document.getElementById('dartboard-outer-ring');
       if (outerRing) {
         // Remove any existing flash classes
-        outerRing.classList.remove('flash-correct', 'flash-wrong');
+        outerRing.classList.remove('flash-correct', 'flash-wrong', 'challenge-mode');
         
         // Trigger reflow to restart animation
         void outerRing.offsetWidth;
+        
+        // Add challenge-mode class if in challenge mode
+        if (window.challengeMode) {
+          outerRing.classList.add('challenge-mode');
+        }
         
         // Add appropriate flash class - will stay until next generateScore()
         if (isCorrect) {
@@ -1796,7 +1801,8 @@
         // Bei richtig: Nur grün färben, kein Text
         userInputs.classList.add('correct');
         
-        // Automatisch zur nächsten Zahl nach 5000ms (in allen Modi)
+        // Automatisch zur nächsten Zahl - Challenge: 300ms, Training: 1100ms
+        const delay = window.challengeMode ? 300 : 1100;
         setTimeout(() => {
           if (window.challengeMode) {
             generateScore(currentRangeMin, currentRangeMax);
@@ -1805,7 +1811,7 @@
           } else {
             generateScore(currentRangeMin, currentRangeMax);
           }
-        }, 5000);
+        }, delay);
       } else {
         // Bei falsch: Rot färben + Lösung anzeigen
         userInputs.classList.add('wrong');
