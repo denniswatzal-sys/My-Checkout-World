@@ -658,7 +658,7 @@
       width: 256px;
       max-width: 100%;
       margin: -15px auto 0 auto;
-      align-items: stretch;
+      align-items: center;
     }
     
     .start-section-divider {
@@ -692,6 +692,7 @@
       cursor: pointer;
       transition: all 0.2s;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      width: 230px;
     }
     
     .start-btn:active {
