@@ -731,6 +731,24 @@
       text-align: center;
     }
     
+    /* Additional Options Section */
+    .additional-options-section {
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .additional-options-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.6);
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: -4px;
+    }
+    
     /* Mobile adjustments for start screen - MUST be after all other start-screen rules! */
     @media (max-width: 480px) {
       .start-container {
