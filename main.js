@@ -1,3 +1,9 @@
+// ============================================
+// VERSION: GELB-v3-FINAL-2025-01-25
+// Tutorial Fix: Verwendet .start-btn-tutorial
+// ============================================
+console.log('✅ SCRIPT LOADED: GELB-v3-FINAL-2025-01-25');
+
 // Vollständige Checkout-Datenbank
     let defaultCheckouts = {
       2: ['D1'], 3: ['S1', 'D1'], 4: ['D2'], 5: ['S1', 'D2'], 6: ['D3'], 7: ['S3', 'D2'], 8: ['D4'], 
@@ -327,7 +333,8 @@
         const btn = document.getElementById('generationModeBtn');
         btn.textContent = '⬆';
         btn.style.fontWeight = '900';
-        btn.style.fontSize = '20px';
+        btn.style.fontSize = '18px';
+        btn.style.lineHeight = '1';
         // Set to null to trigger starting at first score in generateScore
         currentSequentialScore = null;
       } else if (generationMode === 'ascending') {
@@ -335,7 +342,8 @@
         const btn = document.getElementById('generationModeBtn');
         btn.textContent = '⬇';
         btn.style.fontWeight = '900';
-        btn.style.fontSize = '20px';
+        btn.style.fontSize = '18px';
+        btn.style.lineHeight = '1';
         // Set to null to trigger starting at last score in generateScore
         currentSequentialScore = null;
       } else {
@@ -343,7 +351,8 @@
         const btn = document.getElementById('generationModeBtn');
         btn.textContent = '?';
         btn.style.fontWeight = '900';
-        btn.style.fontSize = '20px';
+        btn.style.fontSize = '18px';
+        btn.style.lineHeight = '1';
         currentSequentialScore = null;
         clearAntiRepetitionHistory();
       }
@@ -466,28 +475,28 @@
     // Tutorial System
     const tutorialSteps = [
       {
-        element: '.start-btn:nth-child(4)',
+        element: '.start-btn-tutorial',
         title: 'Erwischt...',
         content: 'Schon witzig: Hätte hier <strong>Bedienungsanleitung</strong> gestanden, hättest du sicher nicht getippt, oder? 😅<br><br>Na gut – wenn du schon da bist, erkläre ich dir kurz die wichtigsten Funktionen.',
         position: 'top',
         screen: 'start'
       },
       {
-        element: '.start-btn:nth-child(1)',
+        element: '.start-btn-primary',
         title: '🎯 Training starten',
         content: 'Diese App soll dir helfen, alle Checkout-wege im Schlaf zu beherrschen.<br><br>Worauf wartest du? Mach dich selbst zum echten <strong>Checkout-Champion</strong>.',
         position: 'bottom',
         screen: 'start'
       },
       {
-        element: '.start-btn:nth-child(2)',
+        element: '.start-btn-3darts',
         title: '📊 Checkouts',
         content: 'Hier findest du die Checkout-Datenbank, aufgeteilt in 3-Dart und 2-Dart-Finishes.<br><br>Du bevorzugst andere Wege? Kein Problem - Lege hier einfach deine eigenen Checkouts fest.',
         position: 'bottom',
         screen: 'start'
       },
       {
-        element: '.start-btn:nth-child(3)',
+        element: '.start-btn-leaderboard',
         title: '🏆 Bestenliste',
         content: 'Hier siehst du deine Rekorde aus dem Herausforderungsmodus. Wie gut bist du wirklich unter Druck? Finde es heraus!',
         position: 'top',
@@ -952,13 +961,18 @@
       // Update toggle buttons
       const bgBtn = document.getElementById('toggleBackground');
       const fieldBtn = document.getElementById('toggleField');
+      const imageSection = document.getElementById('imageUploadSection');
       
       if (target === 'background') {
         bgBtn.classList.add('active');
         fieldBtn.classList.remove('active');
+        // Show image upload for background
+        if (imageSection) imageSection.style.display = 'block';
       } else {
         bgBtn.classList.remove('active');
         fieldBtn.classList.add('active');
+        // Hide image upload for field colors
+        if (imageSection) imageSection.style.display = 'none';
       }
     }
     
@@ -973,11 +987,14 @@
       
       if (colorTarget === 'background') {
         document.body.style.background = gradient;
+        document.body.style.backgroundImage = 'none';
         const startScreen = document.querySelector('.start-screen');
         if (startScreen) {
           startScreen.style.background = gradient;
+          startScreen.style.backgroundImage = 'none';
         }
         localStorage.setItem('dartTrainerBackgroundCustom', gradient);
+        localStorage.removeItem('dartTrainerBackgroundImage');
       } else {
         const rangeCard = document.querySelector('#rangeCard');
         if (rangeCard) {
@@ -992,11 +1009,15 @@
       
       if (colorTarget === 'background') {
         document.body.style.background = gradient;
+        document.body.style.backgroundImage = 'none';
         const startScreen = document.querySelector('.start-screen');
         if (startScreen) {
           startScreen.style.background = gradient;
+          startScreen.style.backgroundImage = 'none';
         }
         localStorage.setItem('dartTrainerBackgroundCustom', gradient);
+        // Remove background image when applying color
+        localStorage.removeItem('dartTrainerBackgroundImage');
       } else {
         const rangeCard = document.querySelector('#rangeCard');
         if (rangeCard) {
@@ -1004,6 +1025,193 @@
         }
         localStorage.setItem('dartTrainerFieldCustom', gradient);
       }
+    }
+    
+    // Apply textured background patterns
+    function applyTexturedBackground(pattern) {
+      let background = '';
+      
+      switch(pattern) {
+        case 'carbon-dark':
+          // Carbon fiber pattern
+          background = `
+            radial-gradient(circle at 25% 25%, rgba(255,255,255,0.03) 0%, transparent 50%),
+            radial-gradient(circle at 75% 75%, rgba(255,255,255,0.03) 0%, transparent 50%),
+            linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)
+          `;
+          break;
+        case 'navy-texture':
+          // Navy with subtle grid
+          background = `
+            repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0px, transparent 1px, transparent 40px, rgba(255,255,255,0.02) 41px),
+            repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0px, transparent 1px, transparent 40px, rgba(255,255,255,0.02) 41px),
+            linear-gradient(135deg, #0a1929 0%, #1a2942 100%)
+          `;
+          break;
+        case 'forest-deep':
+          // Deep forest with texture
+          background = `
+            radial-gradient(circle at 30% 30%, rgba(255,255,255,0.05) 0%, transparent 70%),
+            linear-gradient(135deg, #0f3d2c 0%, #1a5c42 100%)
+          `;
+          break;
+        case 'wine-red':
+          // Wine red with subtle pattern
+          background = `
+            repeating-radial-gradient(circle at 50% 50%, transparent 0px, rgba(0,0,0,0.2) 1px, transparent 2px, transparent 50px),
+            linear-gradient(135deg, #4a1520 0%, #6b2332 100%)
+          `;
+          break;
+        case 'slate-gray':
+          // Slate gray with diagonal lines
+          background = `
+            repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,0.03) 35px, rgba(255,255,255,0.03) 70px),
+            linear-gradient(135deg, #334155 0%, #475569 100%)
+          `;
+          break;
+        case 'teal-depth':
+          // Deep teal with waves
+          background = `
+            radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.05) 0%, transparent 50%),
+            radial-gradient(ellipse at 50% 100%, rgba(255,255,255,0.03) 0%, transparent 50%),
+            linear-gradient(135deg, #0d4d4d 0%, #166666 100%)
+          `;
+          break;
+        case 'concrete':
+          // Concrete texture
+          background = `
+            repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0px, transparent 2px, transparent 80px, rgba(255,255,255,0.03) 82px),
+            repeating-linear-gradient(0deg, rgba(255,255,255,0.02) 0px, transparent 2px, transparent 80px, rgba(255,255,255,0.02) 82px),
+            linear-gradient(135deg, #52525b 0%, #71717a 100%)
+          `;
+          break;
+      }
+      
+      if (colorTarget === 'background') {
+        document.body.style.background = background;
+        const startScreen = document.querySelector('.start-screen');
+        if (startScreen) {
+          startScreen.style.background = background;
+        }
+        localStorage.setItem('dartTrainerBackgroundCustom', background);
+        localStorage.removeItem('dartTrainerBackgroundImage');
+      } else {
+        const rangeCard = document.querySelector('#rangeCard');
+        if (rangeCard) {
+          rangeCard.style.background = background;
+        }
+        localStorage.setItem('dartTrainerFieldCustom', background);
+      }
+    }
+    
+    // Handle background image upload (make it globally accessible)
+    window.handleBackgroundImage = function(event) {
+      console.log('handleBackgroundImage called');
+      const file = event.target.files[0];
+      console.log('File selected:', file);
+      
+      if (!file) {
+        console.log('No file selected');
+        return;
+      }
+      
+      console.log('File name:', file.name);
+      console.log('File size:', file.size, 'bytes');
+      console.log('File type:', file.type);
+      
+      // Check file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Datei ist zu groß! Maximal 5MB erlaubt.');
+        return;
+      }
+      
+      console.log('Starting to read file...');
+      const reader = new FileReader();
+      
+      reader.onerror = function(error) {
+        console.error('FileReader error:', error);
+        alert('Fehler beim Laden der Datei!');
+      };
+      
+      reader.onload = function(e) {
+        console.log('File loaded successfully');
+        const imageData = e.target.result;
+        console.log('Image data length:', imageData.length);
+        
+        // Show preview
+        const preview = document.getElementById('bgImagePreview');
+        if (preview) {
+          preview.style.backgroundImage = `url(${imageData})`;
+          preview.style.display = 'block';
+          console.log('Preview updated');
+        } else {
+          console.error('Preview element not found!');
+        }
+        
+        const removeBtn = document.getElementById('removeBgImageBtn');
+        if (removeBtn) {
+          removeBtn.style.display = 'block';
+        } else {
+          console.error('Remove button not found!');
+        }
+        
+        // Apply to background - use separate properties for better control
+        console.log('Applying background to body...');
+        document.body.style.backgroundImage = `url("${imageData}")`;
+        document.body.style.backgroundSize = 'cover';
+        document.body.style.backgroundPosition = 'center';
+        document.body.style.backgroundRepeat = 'no-repeat';
+        document.body.style.backgroundAttachment = 'fixed';
+        console.log('Body background set');
+        
+        const startScreen = document.querySelector('.start-screen');
+        if (startScreen) {
+          console.log('Applying background to start screen...');
+          startScreen.style.backgroundImage = `url("${imageData}")`;
+          startScreen.style.backgroundSize = 'cover';
+          startScreen.style.backgroundPosition = 'center';
+          startScreen.style.backgroundRepeat = 'no-repeat';
+          startScreen.style.backgroundAttachment = 'fixed';
+          console.log('Start screen background set');
+        } else {
+          console.log('Start screen not found (might be hidden)');
+        }
+        
+        // Save to localStorage
+        try {
+          localStorage.setItem('dartTrainerBackgroundImage', imageData);
+          localStorage.removeItem('dartTrainerBackgroundCustom');
+          console.log('Saved to localStorage');
+        } catch (error) {
+          console.error('Error saving to localStorage:', error);
+          alert('Fehler: Bild ist zu groß für den Speicher! Versuche ein kleineres Bild.');
+        }
+        
+        console.log('Background image applied successfully!');
+        alert('Hintergrundbild wurde erfolgreich angewendet!');
+      };
+      
+      reader.readAsDataURL(file);
+    }
+    
+    // Remove background image (make it globally accessible)
+    window.removeBackgroundImage = function() {
+      localStorage.removeItem('dartTrainerBackgroundImage');
+      document.getElementById('bgImagePreview').style.display = 'none';
+      document.getElementById('removeBgImageBtn').style.display = 'none';
+      document.getElementById('bgImageInput').value = '';
+      
+      // Reset to default gradient
+      const defaultGradient = 'linear-gradient(135deg, #004e7a 0%, #006399 100%)';
+      document.body.style.background = defaultGradient;
+      document.body.style.backgroundImage = 'none';
+      
+      const startScreen = document.querySelector('.start-screen');
+      if (startScreen) {
+        startScreen.style.background = defaultGradient;
+        startScreen.style.backgroundImage = 'none';
+      }
+      localStorage.setItem('dartTrainerBackgroundCustom', defaultGradient);
     }
     
     // Helper function to adjust color brightness
@@ -1118,13 +1326,43 @@
     }
     
     function loadBackground() {
-      // Load custom background
-      const savedBg = localStorage.getItem('dartTrainerBackgroundCustom');
-      if (savedBg) {
-        document.body.style.background = savedBg;
+      // Load custom background image (priority over color)
+      const savedImage = localStorage.getItem('dartTrainerBackgroundImage');
+      if (savedImage) {
+        document.body.style.backgroundImage = `url(${savedImage})`;
+        document.body.style.backgroundSize = 'cover';
+        document.body.style.backgroundPosition = 'center';
+        document.body.style.backgroundRepeat = 'no-repeat';
+        document.body.style.backgroundAttachment = 'fixed';
+        
         const startScreen = document.querySelector('.start-screen');
         if (startScreen) {
-          startScreen.style.background = savedBg;
+          startScreen.style.backgroundImage = `url(${savedImage})`;
+          startScreen.style.backgroundSize = 'cover';
+          startScreen.style.backgroundPosition = 'center';
+          startScreen.style.backgroundRepeat = 'no-repeat';
+          startScreen.style.backgroundAttachment = 'fixed';
+        }
+        
+        // Show preview in modal
+        const preview = document.getElementById('bgImagePreview');
+        if (preview) {
+          preview.style.backgroundImage = `url(${savedImage})`;
+          preview.style.display = 'block';
+          const removeBtn = document.getElementById('removeBgImageBtn');
+          if (removeBtn) removeBtn.style.display = 'block';
+        }
+      } else {
+        // Load custom background color
+        const savedBg = localStorage.getItem('dartTrainerBackgroundCustom');
+        if (savedBg) {
+          document.body.style.background = savedBg;
+          document.body.style.backgroundImage = 'none';
+          const startScreen = document.querySelector('.start-screen');
+          if (startScreen) {
+            startScreen.style.background = savedBg;
+            startScreen.style.backgroundImage = 'none';
+          }
         }
       }
       
@@ -1251,6 +1489,7 @@
         
         // Validate input
         if (isNaN(score) || score < 2 || score > 170) {
+          alert('Bitte gib eine Zahl zwischen 2 und 170 ein!');
           // Restore original value and mode
           scoreValueEl.textContent = currentValue;
           currentMode = originalMode;
@@ -1442,6 +1681,7 @@
       let availableScores = Object.keys(currentCheckouts).map(Number).filter(s => s >= min && s <= max);
       
       if (availableScores.length === 0) {
+        alert('Keine Checkouts verfügbar!');
         return;
       }
       
@@ -1780,15 +2020,10 @@
       const outerRing = document.getElementById('dartboard-outer-ring');
       if (outerRing) {
         // Remove any existing flash classes
-        outerRing.classList.remove('flash-correct', 'flash-wrong', 'challenge-mode');
+        outerRing.classList.remove('flash-correct', 'flash-wrong');
         
         // Trigger reflow to restart animation
         void outerRing.offsetWidth;
-        
-        // Add challenge-mode class if in challenge mode
-        if (window.challengeMode) {
-          outerRing.classList.add('challenge-mode');
-        }
         
         // Add appropriate flash class - will stay until next generateScore()
         if (isCorrect) {
@@ -1802,8 +2037,7 @@
         // Bei richtig: Nur grün färben, kein Text
         userInputs.classList.add('correct');
         
-        // Automatisch zur nächsten Zahl - Challenge: 500ms, Training: 1100ms
-        const delay = window.challengeMode ? 500 : 1100;
+        // Automatisch zur nächsten Zahl nach 1000ms (in allen Modi)
         setTimeout(() => {
           if (window.challengeMode) {
             generateScore(currentRangeMin, currentRangeMax);
@@ -1812,7 +2046,7 @@
           } else {
             generateScore(currentRangeMin, currentRangeMax);
           }
-        }, delay);
+        }, 1000);
       } else {
         // Bei falsch: Rot färben + Lösung anzeigen
         userInputs.classList.add('wrong');
@@ -1940,28 +2174,8 @@
         challengeStats = { correct: 0, wrong: 0 };
         let timeLeft = 60;
         
-        // Start challenge music
-        console.log('Attempting to play challenge music...');
-        if (!window.challengeMusic) {
-          window.challengeMusic = new Audio('Quiz.mp3');
-          window.challengeMusic.loop = true;
-          window.challengeMusic.volume = 1.0; // 100% volume
-          console.log('Challenge music created');
-        }
-        window.challengeMusic.play()
-          .then(() => console.log('Challenge music playing'))
-          .catch(e => console.error('Audio play failed:', e));
-        
         // Hide range card during challenge
         document.getElementById('rangeCard').style.display = 'none';
-        
-        // Select random GIF for challenge mode
-        const gifs = ['THE-MENACE.gif', 'Flugzeug.gif', 'Waschmachine.gif', 'Schlafen.gif', 'Angler.gif'];
-        const randomGif = gifs[Math.floor(Math.random() * gifs.length)];
-        const gifElement = document.querySelector('.challenge-gif img');
-        if (gifElement) {
-          gifElement.src = randomGif;
-        }
         
         document.getElementById('challengeCard').classList.remove('hidden');
         document.getElementById('challengeTime').textContent = `⏱️ ${timeLeft}s`;
@@ -1984,12 +2198,6 @@
     function endChallenge() {
       clearInterval(window.challengeTimer);
       window.challengeMode = false;
-      
-      // Stop challenge music
-      if (window.challengeMusic) {
-        window.challengeMusic.pause();
-        window.challengeMusic.currentTime = 0; // Reset to beginning
-      }
       
       document.getElementById('challengeCard').classList.add('hidden');
       document.getElementById('rangeCard').style.display = 'block';
@@ -2095,12 +2303,6 @@
       // Stop timer and disable challenge mode
       clearInterval(window.challengeTimer);
       window.challengeMode = false;
-      
-      // Stop challenge music
-      if (window.challengeMusic) {
-        window.challengeMusic.pause();
-        window.challengeMusic.currentTime = 0; // Reset to beginning
-      }
       
       // Hide challenge card, show range card
       document.getElementById('challengeCard').classList.add('hidden');
@@ -2464,6 +2666,9 @@
       if (window.databaseEditMode === '2darts') {
         // First check if there are any invalid scores with data
         const invalidScoresWithData = Object.keys(newDatabase).filter(score => parseInt(score) > 110);
+        if (invalidScoresWithData.length > 0) {
+          alert('Fehler: 2-Dart-Finishes sind nur bis Score 110 möglich!\n\nFolgende ungültige Einträge wurden entfernt: ' + invalidScoresWithData.join(', '));
+        }
         
         // Remove all scores > 110 from the database
         for (let score in newDatabase) {
@@ -3018,6 +3223,13 @@
     function startRangeBtnPress(e) {
       e.preventDefault();
       const btn = e.currentTarget;
+      
+      // Prevent multiple buttons from being pressed simultaneously
+      if (rangeBtnPressTimer !== null || rangeBtnCurrentTarget !== null) {
+        console.log('Another button is already being pressed - ignoring');
+        return;
+      }
+      
       rangeBtnCurrentTarget = btn;
       rangeBtnLongPressTriggered = false;
       
@@ -3036,6 +3248,12 @@
     function handleRangeBtnRelease(e) {
       e.preventDefault();
       const btn = e.currentTarget;
+      
+      // Only handle release for the button that was actually pressed
+      if (rangeBtnCurrentTarget !== btn) {
+        console.log('Release on different button - ignoring');
+        return;
+      }
       
       if (rangeBtnPressTimer) {
         clearTimeout(rangeBtnPressTimer);
@@ -3081,6 +3299,42 @@
     generateScore(2, 170);
     loadBackground();
     initColorPicker();
+    
+    // Setup background image upload event listeners
+    const bgImageInput = document.getElementById('bgImageInput');
+    const bgImageSelectBtn = document.getElementById('bgImageSelectBtn');
+    const removeBgImageBtn = document.getElementById('removeBgImageBtn');
+    
+    if (bgImageSelectBtn) {
+      bgImageSelectBtn.addEventListener('click', function() {
+        console.log('Select image button clicked');
+        if (bgImageInput) {
+          bgImageInput.click();
+        }
+      });
+    }
+    
+    if (bgImageInput) {
+      bgImageInput.addEventListener('change', function(event) {
+        console.log('File input changed');
+        if (window.handleBackgroundImage) {
+          window.handleBackgroundImage(event);
+        } else {
+          console.error('handleBackgroundImage function not found!');
+        }
+      });
+    }
+    
+    if (removeBgImageBtn) {
+      removeBgImageBtn.addEventListener('click', function() {
+        console.log('Remove image button clicked');
+        if (window.removeBackgroundImage) {
+          window.removeBackgroundImage();
+        } else {
+          console.error('removeBackgroundImage function not found!');
+        }
+      });
+    }
     
     // Mark first range button (2-170) as active
     const firstRangeBtn = document.querySelector('.range-btn.bg-blue-500');
