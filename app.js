@@ -614,7 +614,7 @@
       {
         element: '#menuBtn',
         title: '⚙️ Einstellungen',
-        content: '<strong>Taste antippen:</strong> Menü öffnen<br><strong>Taste gedrückt halten:</strong> Aktiviert / deaktiviert Vollbildmodus<br><br><strong>Zahlenring ein-/ ausblenden:</strong> Zahlenring ausblenden, zur Erhöhung des Schwierigkeitsgrads.<br><strong>Farben anpassen:</strong> Passe die Farben der Benutzeroberfläche individuell an.<br><strong>Zurück zum Startbildschirm:</strong> Taste drücken / nach rechts wischen.',
+        content: '<strong>Taste antippen:</strong> Menü öffnen<br><strong>Taste gedrückt halten:</strong> Aktiviert / deaktiviert Vollbildmodus<br><br><strong>Zahlenring ein-/ ausblenden:</strong> Zahlenring ausblenden, zur Erhöhung des Schwierigkeitsgrads.<br><strong>Hintergrund anpassen:</strong> Passe den Hintergrund der Benutzeroberfläche individuell an.<br><strong>Zurück zum Startbildschirm:</strong> Taste drücken / nach rechts wischen.',
         position: 'top-left',
         screen: 'training'
       },
@@ -1013,9 +1013,9 @@
       }
     }
     
-    function applyImageBackground() {
+    function applyImageBackground(imageName) {
       if (colorTarget === 'background') {
-        const imageStyle = "url('Hintergrund1.jpg') center/cover no-repeat fixed";
+        const imageStyle = `url('${imageName}') center/cover no-repeat fixed`;
         document.body.style.background = imageStyle;
         const startScreen = document.querySelector('.start-screen');
         if (startScreen) {
