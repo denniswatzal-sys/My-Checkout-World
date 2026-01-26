@@ -327,6 +327,7 @@
         const btn = document.getElementById('generationModeBtn');
         btn.textContent = '⬆';
         btn.style.fontWeight = '900';
+        btn.style.fontSize = '20px';
         // Set to null to trigger starting at first score in generateScore
         currentSequentialScore = null;
       } else if (generationMode === 'ascending') {
@@ -334,6 +335,7 @@
         const btn = document.getElementById('generationModeBtn');
         btn.textContent = '⬇';
         btn.style.fontWeight = '900';
+        btn.style.fontSize = '20px';
         // Set to null to trigger starting at last score in generateScore
         currentSequentialScore = null;
       } else {
@@ -341,6 +343,7 @@
         const btn = document.getElementById('generationModeBtn');
         btn.textContent = '?';
         btn.style.fontWeight = '900';
+        btn.style.fontSize = '24px';
         currentSequentialScore = null;
         clearAntiRepetitionHistory();
       }
