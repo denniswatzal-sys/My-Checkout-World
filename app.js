@@ -592,7 +592,7 @@
       },
       {
         element: '#learnBtn',
-        title: '📖 Lernen',
+        title: '📖 Lernbereich',
         content: 'Beantwortest du eine Zahl dann dreimal hintereinander richtig, wird sie aus dem Lernbereich wieder entfernt.<br><br><strong>Taste antippen:</strong> Lernbereich betreten<br><strong>Taste gedrückt halten:</strong> Zahlen löschen',
         position: 'top-right',
         screen: 'training'
