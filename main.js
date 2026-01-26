@@ -2037,7 +2037,7 @@ console.log('✅ SCRIPT LOADED: GELB-v3-FINAL-2025-01-25');
         // Bei richtig: Nur grün färben, kein Text
         userInputs.classList.add('correct');
         
-        // Automatisch zur nächsten Zahl nach 800ms (in allen Modi)
+        // Automatisch zur nächsten Zahl nach 1100ms (in allen Modi)
         setTimeout(() => {
           if (window.challengeMode) {
             generateScore(currentRangeMin, currentRangeMax);
@@ -2046,7 +2046,7 @@ console.log('✅ SCRIPT LOADED: GELB-v3-FINAL-2025-01-25');
           } else {
             generateScore(currentRangeMin, currentRangeMax);
           }
-        }, 800);
+        }, 1100);
       } else {
         // Bei falsch: Rot färben + Lösung anzeigen
         userInputs.classList.add('wrong');
