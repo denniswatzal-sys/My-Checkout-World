@@ -670,7 +670,7 @@
       font-weight: 600;
       margin-top: 12px;
       margin-bottom: 4px;
-      width: 230px;
+      width: 242px;
       gap: 12px;
     }
     
@@ -692,7 +692,7 @@
       cursor: pointer;
       transition: all 0.2s;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      width: 230px;
+      width: 242px;
     }
     
     .start-btn:active {
