@@ -3018,19 +3018,29 @@
     }
     
     // Setup range buttons with long-press
-    let rangeBtnPressTimer = null;
-    let rangeBtnLongPressTriggered = false;
-    let rangeBtnCurrentTarget = null;
+    // Use WeakMap to store timer and state per button (avoids multi-touch conflicts)
+    const rangeBtnTimers = new WeakMap();
+    const rangeBtnStates = new WeakMap();
     
     function startRangeBtnPress(e) {
       e.preventDefault();
       const btn = e.currentTarget;
-      rangeBtnCurrentTarget = btn;
-      rangeBtnLongPressTriggered = false;
       
-      rangeBtnPressTimer = setTimeout(() => {
+      // Cancel any existing timer for this button
+      if (rangeBtnTimers.has(btn)) {
+        clearTimeout(rangeBtnTimers.get(btn));
+      }
+      
+      // Initialize state for this button
+      rangeBtnStates.set(btn, { longPressTriggered: false });
+      
+      // Set timer for this specific button
+      const timer = setTimeout(() => {
         // After 0.7 seconds - long press detected
-        rangeBtnLongPressTriggered = true;
+        const state = rangeBtnStates.get(btn);
+        if (state) {
+          state.longPressTriggered = true;
+        }
         
         // Show hint for this range
         const hintKey = btn.dataset.hint;
@@ -3038,36 +3048,44 @@
           showRangeHint(hintKey);
         }
       }, 700); // 0.7 seconds for range buttons
+      
+      rangeBtnTimers.set(btn, timer);
     }
     
     function handleRangeBtnRelease(e) {
       e.preventDefault();
       const btn = e.currentTarget;
       
-      if (rangeBtnPressTimer) {
-        clearTimeout(rangeBtnPressTimer);
-        rangeBtnPressTimer = null;
+      // Clear timer for this button
+      if (rangeBtnTimers.has(btn)) {
+        clearTimeout(rangeBtnTimers.get(btn));
+        rangeBtnTimers.delete(btn);
       }
       
-      // Check if long-press was triggered
-      if (!rangeBtnLongPressTriggered) {
+      // Check if long-press was triggered for this button
+      const state = rangeBtnStates.get(btn);
+      if (state && !state.longPressTriggered) {
         // Short click - select range
         const min = parseInt(btn.dataset.min);
         const max = parseInt(btn.dataset.max);
         setRange(min, max, btn);
       }
       
-      rangeBtnLongPressTriggered = false;
-      rangeBtnCurrentTarget = null;
+      // Clean up state
+      rangeBtnStates.delete(btn);
     }
     
     function cancelRangeBtnPress(e) {
-      if (rangeBtnPressTimer) {
-        clearTimeout(rangeBtnPressTimer);
-        rangeBtnPressTimer = null;
+      const btn = e.currentTarget;
+      
+      // Clear timer for this button
+      if (rangeBtnTimers.has(btn)) {
+        clearTimeout(rangeBtnTimers.get(btn));
+        rangeBtnTimers.delete(btn);
       }
-      rangeBtnLongPressTriggered = false;
-      rangeBtnCurrentTarget = null;
+      
+      // Clean up state
+      rangeBtnStates.delete(btn);
     }
     
     // Attach handlers to all range buttons (except learn button)
