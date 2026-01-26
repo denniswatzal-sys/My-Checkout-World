@@ -33,24 +33,22 @@
           </div>
         
           <div class="start-buttons">
-            <button id="btn-training" class="start-btn start-btn-primary" onclick="goToTrainer()">
+            <button class="start-btn start-btn-primary" onclick="goToTrainer()">
               <span class="start-btn-icon">🎯</span>
               <span class="start-btn-text">Training starten</span>
             </button>
             
-            <button id="btn-checkouts" class="start-btn start-btn-3darts" onclick="openDatabaseEditor()">
+            <button class="start-btn start-btn-3darts" onclick="openDatabaseEditor()">
               <span class="start-btn-icon">📊</span>
               <span class="start-btn-text">Checkouts</span>
             </button>
             
-            <button id="btn-leaderboard" class="start-btn start-btn-leaderboard" onclick="openLeaderboard()">
+            <button class="start-btn start-btn-leaderboard" onclick="openLeaderboard()">
               <span class="start-btn-icon">🏆</span>
               <span class="start-btn-text">Bestenliste</span>
             </button>
             
-            <div class="start-section-divider">Weitere Optionen</div>
-            
-            <button id="btn-tutorial" class="start-btn start-btn-tutorial" onclick="startTutorial()">
+            <button class="start-btn start-btn-tutorial" onclick="startTutorial()">
               <span class="start-btn-icon">🤯</span>
               <span class="start-btn-text">Bloß nicht drücken!</span>
             </button>
@@ -270,6 +268,9 @@
             Beliebte Farben
           </div>
           <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+            <button class="bg-option" onclick="applyImageBackground()" style="background: url('Hintergrund1.jpg'); background-size: cover; background-position: center; border: 2px solid #000;">
+              <span style="color: white; font-weight: 600; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">Bild</span>
+            </button>
             <button class="bg-option" onclick="applyPresetColor('#064e3b', '#065f46')" style="background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);">
               <span style="color: white; font-weight: 600;">Grün</span>
             </button>

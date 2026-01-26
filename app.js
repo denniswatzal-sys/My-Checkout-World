@@ -1013,6 +1013,19 @@
       }
     }
     
+    function applyImageBackground() {
+      if (colorTarget === 'background') {
+        const imageStyle = "url('Hintergrund1.jpg') center/cover no-repeat fixed";
+        document.body.style.background = imageStyle;
+        const startScreen = document.querySelector('.start-screen');
+        if (startScreen) {
+          startScreen.style.background = imageStyle;
+        }
+        localStorage.setItem('dartTrainerBackgroundCustom', imageStyle);
+      }
+      // Image background only works for body background, not for field
+    }
+    
     // Helper function to adjust color brightness
     function adjustBrightness(hex, percent) {
       // Remove # if present
