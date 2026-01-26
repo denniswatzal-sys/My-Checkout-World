@@ -1,3 +1,10 @@
+// Haptic feedback function for mobile devices
+function vibrateOnClick() {
+  if (navigator.vibrate) {
+    navigator.vibrate(10); // 10ms short vibration
+  }
+}
+
 // Vollständige Checkout-Datenbank
     let defaultCheckouts = {
       2: ['D1'], 3: ['S1', 'D1'], 4: ['D2'], 5: ['S1', 'D2'], 6: ['D3'], 7: ['S3', 'D2'], 8: ['D4'], 
@@ -1633,6 +1640,9 @@
     }
     
     function handleDartClick(dartValue) {
+      // Haptic feedback on click
+      vibrateOnClick();
+      
       // Wenn Feedback für falsche Antwort angezeigt wird, nächste Aufgabe bei Klick auf Dartscheibe
       // (Richtige Antworten gehen automatisch weiter)
       if (feedback === 'wrong') {
@@ -3191,3 +3201,10 @@
         }
       }
     }
+    
+    // Add haptic feedback to all buttons
+    document.addEventListener('click', function(e) {
+      if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+        vibrateOnClick();
+      }
+    });
