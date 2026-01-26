@@ -3122,6 +3122,20 @@
     loadBackground();
     initColorPicker();
     
+    // Preload challenge videos in background for smooth playback
+    function preloadVideos() {
+      const videos = ['THE-MENACE.mp4', 'Flugzeug.mp4', 'Waschmachine.mp4', 'Schlafen.mp4', 'Angler.mp4'];
+      videos.forEach(videoSrc => {
+        const video = document.createElement('video');
+        video.src = videoSrc;
+        video.preload = 'auto';
+        video.load();
+      });
+    }
+    
+    // Start preloading videos after a short delay (so app loads fast first)
+    setTimeout(preloadVideos, 1000);
+    
     // Mark first range button (2-170) as active
     const firstRangeBtn = document.querySelector('.range-btn.bg-blue-500');
     if (firstRangeBtn) {
