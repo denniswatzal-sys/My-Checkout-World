@@ -504,7 +504,7 @@
         element: '#dartboard',
         title: '🎯 Dartboard',
         content: 'Du sollst 170 Punkte checken?! Kein Problem – hier ist es genauso leicht wie am echten Board! Triff (klick) <strong>T20 · T20 · BULL</strong> und angel dir den <strong>BIG FISH</strong> 🎣',
-        position: 'center',
+        position: 'bottom',
         screen: 'training'
       },
       {
