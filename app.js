@@ -667,9 +667,13 @@
       const startScreen = document.getElementById('startScreen');
       const mainApp = document.getElementById('mainApp');
       
+      // Check if we need to switch screens
+      let needsScreenSwitch = false;
+      
       if (step.screen === 'training') {
         // Switch to training if currently on start
         if (startScreen && mainApp && startScreen.style.display !== 'none') {
+          needsScreenSwitch = true;
           startScreen.style.display = 'none';
           mainApp.style.display = 'block';
           
@@ -690,12 +694,15 @@
       } else if (step.screen === 'start') {
         // Switch to start if currently on training
         if (startScreen && mainApp && mainApp.style.display !== 'none') {
+          needsScreenSwitch = true;
           startScreen.style.display = 'flex';
           mainApp.style.display = 'none';
         }
       }
       
-      // Wait a moment for screen switch to complete and elements to render
+      // Only wait if we actually switched screens, otherwise continue immediately
+      const delay = needsScreenSwitch ? 100 : 0;
+      
       setTimeout(() => {
         // Execute setup function if provided
         if (step.setup && typeof step.setup === 'function') {
@@ -731,16 +738,16 @@
         
         updateTutorialNavigation(stepIndex);
         
-        // Position tooltip
+        // Position tooltip with minimal delay
         setTimeout(() => {
           positionTooltip(element, step.position);
-        }, 100);
+        }, 30);
         
         // Show tooltip
         const tooltip = document.getElementById('tutorialTooltip');
         tooltip.style.display = 'block';
         tooltip.setAttribute('data-position', step.position);
-      }, 150);
+      }, delay);
     }
     
     function updateTutorialNavigation(stepIndex) {
