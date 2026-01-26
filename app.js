@@ -1942,6 +1942,14 @@
         // Hide range card during challenge
         document.getElementById('rangeCard').style.display = 'none';
         
+        // Select random GIF for challenge mode
+        const gifs = ['THE-MENACE.gif', 'Flugzeug.gif', 'Waschmachine.gif', 'Schlafen.gif', 'Angler.gif'];
+        const randomGif = gifs[Math.floor(Math.random() * gifs.length)];
+        const gifElement = document.querySelector('.challenge-gif img');
+        if (gifElement) {
+          gifElement.src = randomGif;
+        }
+        
         document.getElementById('challengeCard').classList.remove('hidden');
         document.getElementById('challengeTime').textContent = `⏱️ ${timeLeft}s`;
         updateChallengeStats();
