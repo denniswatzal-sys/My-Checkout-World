@@ -1796,7 +1796,7 @@
         // Bei richtig: Nur grün färben, kein Text
         userInputs.classList.add('correct');
         
-        // Automatisch zur nächsten Zahl nach 700ms (in allen Modi)
+        // Automatisch zur nächsten Zahl nach 1100ms (in allen Modi)
         setTimeout(() => {
           if (window.challengeMode) {
             generateScore(currentRangeMin, currentRangeMax);
@@ -1805,7 +1805,7 @@
           } else {
             generateScore(currentRangeMin, currentRangeMax);
           }
-        }, 700);
+        }, 1100);
       } else {
         // Bei falsch: Rot färben + Lösung anzeigen
         userInputs.classList.add('wrong');
