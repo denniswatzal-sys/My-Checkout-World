@@ -343,7 +343,7 @@
         const btn = document.getElementById('generationModeBtn');
         btn.textContent = '?';
         btn.style.fontWeight = '900';
-        btn.style.fontSize = '24px';
+        btn.style.fontSize = '20px';
         currentSequentialScore = null;
         clearAntiRepetitionHistory();
       }
