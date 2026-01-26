@@ -1801,8 +1801,8 @@
         // Bei richtig: Nur grün färben, kein Text
         userInputs.classList.add('correct');
         
-        // Automatisch zur nächsten Zahl - Challenge: 300ms, Training: 1100ms
-        const delay = window.challengeMode ? 300 : 1100;
+        // Automatisch zur nächsten Zahl - Challenge: 500ms, Training: 1100ms
+        const delay = window.challengeMode ? 500 : 1100;
         setTimeout(() => {
           if (window.challengeMode) {
             generateScore(currentRangeMin, currentRangeMax);
