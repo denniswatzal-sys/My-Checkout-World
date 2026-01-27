@@ -176,8 +176,21 @@ function enterFullscreen() {
 // ========================================
 // HAPTIC FEEDBACK SYSTEM
 // ========================================
+// Global vibration enabled state (loaded from localStorage)
+let vibrationEnabled = true;
+
+// Load vibration setting from localStorage
+try {
+  const savedSetting = localStorage.getItem('dartTrainerVibrationEnabled');
+  if (savedSetting !== null) {
+    vibrationEnabled = savedSetting === 'true';
+  }
+} catch (e) {
+  console.error('Could not load vibration setting:', e);
+}
+
 function vibrate(duration) {
-  if ('vibrate' in navigator) {
+  if (vibrationEnabled && 'vibrate' in navigator) {
     navigator.vibrate(duration);
   }
 }
@@ -196,9 +209,21 @@ function vibrateHeavy() {
 }
 
 function vibratePattern(pattern) {
-  if ('vibrate' in navigator) {
+  if (vibrationEnabled && 'vibrate' in navigator) {
     navigator.vibrate(pattern);
   }
+}
+
+function toggleVibration() {
+  vibrationEnabled = !vibrationEnabled;
+  localStorage.setItem('dartTrainerVibrationEnabled', vibrationEnabled.toString());
+  
+  // Give haptic feedback if turning ON
+  if (vibrationEnabled) {
+    vibrateMedium();
+  }
+  
+  console.log('Vibration', vibrationEnabled ? 'enabled' : 'disabled');
 }
 
 // Start loading when DOM is ready
