@@ -13,6 +13,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Checkout World">
   <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="transparent">
   <meta name="theme-color" content="#004e7a">
   
   <!-- App Icons -->
@@ -33,26 +34,24 @@
           </div>
         
           <div class="start-buttons">
-            <button id="btn-training" class="start-btn start-btn-primary" onclick="goToTrainer()">
+            <button class="start-btn start-btn-primary" onclick="goToTrainer()">
               <span class="start-btn-icon">🎯</span>
               <span class="start-btn-text">Training starten</span>
             </button>
             
-            <button id="btn-checkouts" class="start-btn start-btn-3darts" onclick="openDatabaseEditor()">
+            <button class="start-btn start-btn-3darts" onclick="openDatabaseEditor()">
               <span class="start-btn-icon">📊</span>
               <span class="start-btn-text">Checkouts</span>
             </button>
             
-            <button id="btn-leaderboard" class="start-btn start-btn-leaderboard" onclick="openLeaderboard()">
+            <button class="start-btn start-btn-leaderboard" onclick="openLeaderboard()">
               <span class="start-btn-icon">🏆</span>
               <span class="start-btn-text">Bestenliste</span>
             </button>
             
-            <div class="start-section-divider">Weitere Optionen</div>
-            
-            <button id="btn-tutorial" class="start-btn start-btn-tutorial" onclick="startTutorial()">
+            <button class="start-btn start-btn-tutorial" onclick="startTutorial()">
               <span class="start-btn-icon">🤯</span>
-              <span class="start-btn-text">Nicht drücken!</span>
+              <span class="start-btn-text">Bloß nicht drücken!</span>
             </button>
           </div>
         </div>
@@ -67,7 +66,7 @@
           <button class="menu-close-btn" onclick="closeMenu()">×</button>
         </div>
         <button class="menu-item" onclick="toggleBlackRing(); closeMenu();">Zahlenring ein-/ ausblenden</button>
-        <button class="menu-item" onclick="showBackgroundModal(); closeMenu();">Hintergrund anpassen</button>
+        <button class="menu-item" onclick="showBackgroundModal(); closeMenu();">Farben anpassen</button>
         <button class="menu-item" onclick="goToStart(); closeMenu();">Zurück zum Startbildschirm</button>
       </div>
       
@@ -90,9 +89,7 @@
           <div class="challenge-stats" id="challengeStats">✓ 0 | ✗ 0</div>
           <button class="challenge-cancel-btn" onclick="cancelChallenge()">✖ Abbrechen</button>
           <div class="challenge-gif">
-            <video autoplay loop muted playsinline>
-              <source src="THE-MENACE.mp4" type="video/mp4">
-            </video>
+            <img src="THE-MENACE.gif" alt="The Menace">
           </div>
         </div>
 
@@ -250,7 +247,7 @@
   <div id="backgroundModal" class="modal" style="display: none;">
     <div class="modal-content">
       <div class="modal-header">
-        <div class="modal-title">🎨 Hintergrund anpassen</div>
+        <div class="modal-title">🎨 Farben anpassen</div>
         <button class="close-btn" onclick="closeBackgroundModal()">×</button>
       </div>
       <div class="modal-body">
@@ -266,29 +263,10 @@
           </div>
         </div>
         
-        <!-- Bilder Sektion -->
+        <!-- Beliebte Farben (8 Vorschläge) -->
         <div style="margin-bottom: 24px;">
           <div style="font-weight: 600; font-size: 16px; margin-bottom: 12px; color: #1f2937; text-align: center;">
-            Bilder
-          </div>
-          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
-            <button class="bg-option" onclick="applyImageBackground('Hintergrund1.jpg')" style="background: url('Hintergrund1.jpg'); background-size: cover; background-position: center; border: 2px solid #000; min-height: 60px;"></button>
-            <button class="bg-option" onclick="applyImageBackground('Hintergrund2.jpg')" style="background: url('Hintergrund2.jpg'); background-size: cover; background-position: center; border: 2px solid #000; min-height: 60px;"></button>
-            <button class="bg-option" onclick="applyImageBackground('Hintergrund3.jpg')" style="background: url('Hintergrund3.jpg'); background-size: cover; background-position: center; border: 2px solid #000; min-height: 60px;"></button>
-            <button class="bg-option" onclick="applyImageBackground('Hintergrund4.jpg')" style="background: url('Hintergrund4.jpg'); background-size: cover; background-position: center; border: 2px solid #000; min-height: 60px;"></button>
-            <button class="bg-option" onclick="applyImageBackground('Hintergrund5.jpg')" style="background: url('Hintergrund5.jpg'); background-size: cover; background-position: center; border: 2px solid #000; min-height: 60px;"></button>
-            <button class="bg-option" onclick="applyImageBackground('Hintergrund6.jpg')" style="background: url('Hintergrund6.jpg'); background-size: cover; background-position: center; border: 2px solid #000; min-height: 60px;"></button>
-            <button class="bg-option" onclick="applyImageBackground('Hintergrund7.jpg')" style="background: url('Hintergrund7.jpg'); background-size: cover; background-position: center; border: 2px solid #000; min-height: 60px;"></button>
-            <button class="bg-option" onclick="applyImageBackground('Hintergrund8.jpg')" style="background: url('Hintergrund8.jpg'); background-size: cover; background-position: center; border: 2px solid #000; min-height: 60px;"></button>
-            <button class="bg-option" onclick="applyImageBackground('Hintergrund9.jpg')" style="background: url('Hintergrund9.jpg'); background-size: cover; background-position: center; border: 2px solid #000; min-height: 60px;"></button>
-            <button class="bg-option" onclick="applyImageBackground('Hintergrund10.jpg')" style="background: url('Hintergrund10.jpg'); background-size: cover; background-position: center; border: 2px solid #000; min-height: 60px;"></button>
-          </div>
-        </div>
-        
-        <!-- Beliebte Farben -->
-        <div style="margin-bottom: 24px;">
-          <div style="font-weight: 600; font-size: 16px; margin-bottom: 12px; color: #1f2937; text-align: center;">
-            Farben
+            Beliebte Farben
           </div>
           <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
             <button class="bg-option" onclick="applyPresetColor('#064e3b', '#065f46')" style="background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);">
