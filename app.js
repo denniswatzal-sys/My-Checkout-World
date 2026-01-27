@@ -354,6 +354,7 @@ if (document.readyState === 'loading') {
     let totalDartsThrown = 0; // Track total darts thrown in current turn (max 3)
     let realisticModeActive = false; // Track if we're in a realistic mode turn (after wrong dart)
     let allDartsThrown = []; // Track ALL darts thrown for display (always show all 3)
+    let originalCheckout = null; // Store original checkout path for solution display
     
     // Load realistic mode setting from localStorage
     try {
@@ -1998,6 +1999,7 @@ if (document.readyState === 'loading') {
       totalDartsThrown = 0;
       realisticModeActive = false;
       allDartsThrown = [];
+      originalCheckout = null;
       scoreCard.style.background = ''; // Reset red color
       
       // Add appropriate class
@@ -2111,6 +2113,11 @@ if (document.readyState === 'loading') {
         }
         
         // CHECKABLE - continue with new path
+        // Store original checkout for solution display
+        if (originalCheckout === null) {
+          originalCheckout = [...currentCheckout]; // Clone array
+        }
+        
         currentCheckout = newPath;
         currentRemainingScore = newRemainingScore;
         realisticModeActive = true;
@@ -2155,6 +2162,7 @@ if (document.readyState === 'loading') {
         // Reset realistic mode variables
         currentRemainingScore = null;
         originalScore = null;
+        originalCheckout = null;
         realisticModeActive = false;
         
         if (window.challengeMode) {
@@ -2300,16 +2308,23 @@ if (document.readyState === 'loading') {
         // Bei falsch: Rot färben + Lösung/Hinweis anzeigen
         userInputs.classList.add('wrong');
         
-        // Lösung oder custom message unter den Eingabefeldern anzeigen
+        // Immer ursprünglichen Checkout-Weg anzeigen
         const solutionDiv = document.createElement('div');
         solutionDiv.className = 'solution-text';
         
-        if (customMessage) {
-          solutionDiv.textContent = customMessage;
-        } else {
-          solutionDiv.textContent = `Lösung: ${currentCheckout.join(' → ')}`;
-        }
+        // Use original checkout if available (realistic mode), otherwise current checkout
+        const checkoutToShow = originalCheckout || currentCheckout;
+        solutionDiv.textContent = `Lösung: ${checkoutToShow.join(' → ')}`;
         userInputs.appendChild(solutionDiv);
+        
+        // If custom message (e.g. "Nicht mehr checkbar"), add it as additional line
+        if (customMessage) {
+          const extraDiv = document.createElement('div');
+          extraDiv.className = 'solution-text';
+          extraDiv.style.marginTop = '4px';
+          extraDiv.textContent = customMessage;
+          userInputs.appendChild(extraDiv);
+        }
       }
     }
     
