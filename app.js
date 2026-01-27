@@ -326,24 +326,18 @@
         generationMode = 'ascending';
         const btn = document.getElementById('generationModeBtn');
         btn.textContent = '⬆';
-        btn.style.fontWeight = '900';
-        btn.style.fontSize = '20px';
         // Set to null to trigger starting at first score in generateScore
         currentSequentialScore = null;
       } else if (generationMode === 'ascending') {
         generationMode = 'descending';
         const btn = document.getElementById('generationModeBtn');
         btn.textContent = '⬇';
-        btn.style.fontWeight = '900';
-        btn.style.fontSize = '20px';
         // Set to null to trigger starting at last score in generateScore
         currentSequentialScore = null;
       } else {
         generationMode = 'random';
         const btn = document.getElementById('generationModeBtn');
         btn.textContent = '?';
-        btn.style.fontWeight = '900';
-        btn.style.fontSize = '20px';
         currentSequentialScore = null;
         clearAntiRepetitionHistory();
       }
