@@ -1982,7 +1982,7 @@
           console.log('Challenge music created');
         }
         // Always set volume (in case it was changed elsewhere)
-        window.challengeMusic.volume = 0.3; // 30% volume
+        window.challengeMusic.volume = 0.01; // 1% volume
         
         window.challengeMusic.play()
           .then(() => console.log('Challenge music playing'))
