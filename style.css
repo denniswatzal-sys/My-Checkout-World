@@ -46,7 +46,8 @@
     }
     
     #rangeCard {
-      border: 1px solid #000;
+      background: transparent;
+      border: none;
       position: relative;
     }
     
