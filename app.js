@@ -1,3 +1,171 @@
+// ========================================
+// ASSET LOADING CONFIGURATION
+// ========================================
+// Hier kannst du neue Dateien hinzufügen, die beim Start geladen werden sollen
+const ASSETS_TO_LOAD = {
+  backgrounds: [
+    'Hintergrund1.jpg', 'Hintergrund2.jpg', 'Hintergrund3.jpg',
+    'Hintergrund4.jpg', 'Hintergrund5.jpg', 'Hintergrund6.jpg',
+    'Hintergrund7.jpg', 'Hintergrund8.jpg', 'Hintergrund9.jpg',
+    'Hintergrund10.jpg'
+  ],
+  videos: [
+    'THE-MENACE.mp4', 'Flugzeug.mp4', 'Waschmachine.mp4',
+    'Schlafen.mp4', 'Angler.mp4'
+  ],
+  audio: ['Heartbeat.mp3', 'Quiz.mp3'],
+  images: ['Logo.png']
+};
+
+// ========================================
+// LOADING SCREEN SYSTEM
+// ========================================
+let assetsLoaded = 0;
+let totalAssets = 0;
+
+function initLoadingScreen() {
+  // Count total assets
+  totalAssets = ASSETS_TO_LOAD.backgrounds.length + 
+                ASSETS_TO_LOAD.videos.length + 
+                ASSETS_TO_LOAD.audio.length + 
+                ASSETS_TO_LOAD.images.length;
+  
+  console.log(`Starting to load ${totalAssets} assets...`);
+  
+  // Load all assets
+  loadAssets();
+}
+
+function loadAssets() {
+  const promises = [];
+  
+  // Load backgrounds
+  ASSETS_TO_LOAD.backgrounds.forEach(bg => {
+    promises.push(loadImage(bg));
+  });
+  
+  // Load images
+  ASSETS_TO_LOAD.images.forEach(img => {
+    promises.push(loadImage(img));
+  });
+  
+  // Load videos
+  ASSETS_TO_LOAD.videos.forEach(video => {
+    promises.push(loadVideo(video));
+  });
+  
+  // Load audio
+  ASSETS_TO_LOAD.audio.forEach(audio => {
+    promises.push(loadAudio(audio));
+  });
+  
+  // Wait for all assets to load
+  Promise.all(promises).then(() => {
+    console.log('All assets loaded!');
+    hideLoadingScreen();
+  }).catch(error => {
+    console.error('Error loading assets:', error);
+    // Show error but continue anyway after 2 seconds
+    setTimeout(hideLoadingScreen, 2000);
+  });
+}
+
+function loadImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      updateLoadingProgress();
+      resolve();
+    };
+    img.onerror = () => {
+      console.warn(`Failed to load image: ${src}`);
+      updateLoadingProgress();
+      resolve(); // Resolve anyway to not block loading
+    };
+    img.src = src;
+  });
+}
+
+function loadVideo(src) {
+  return new Promise((resolve, reject) => {
+    const video = document.createElement('video');
+    video.onloadeddata = () => {
+      updateLoadingProgress();
+      resolve();
+    };
+    video.onerror = () => {
+      console.warn(`Failed to load video: ${src}`);
+      updateLoadingProgress();
+      resolve(); // Resolve anyway to not block loading
+    };
+    video.preload = 'auto';
+    video.src = src;
+    video.load();
+  });
+}
+
+function loadAudio(src) {
+  return new Promise((resolve, reject) => {
+    const audio = new Audio();
+    audio.oncanplaythrough = () => {
+      updateLoadingProgress();
+      resolve();
+    };
+    audio.onerror = () => {
+      console.warn(`Failed to load audio: ${src}`);
+      updateLoadingProgress();
+      resolve(); // Resolve anyway to not block loading
+    };
+    audio.preload = 'auto';
+    audio.src = src;
+    audio.load();
+  });
+}
+
+function updateLoadingProgress() {
+  assetsLoaded++;
+  const percentage = Math.round((assetsLoaded / totalAssets) * 100);
+  
+  // Update progress bar
+  const progressBar = document.getElementById('loadingProgressBar');
+  const progressText = document.getElementById('loadingProgressText');
+  
+  if (progressBar) {
+    progressBar.style.width = percentage + '%';
+  }
+  
+  if (progressText) {
+    progressText.textContent = percentage + '%';
+  }
+  
+  console.log(`Loading progress: ${assetsLoaded}/${totalAssets} (${percentage}%)`);
+}
+
+function hideLoadingScreen() {
+  const loadingScreen = document.getElementById('loadingScreen');
+  const startScreen = document.getElementById('startScreen');
+  
+  if (loadingScreen) {
+    loadingScreen.style.opacity = '0';
+    setTimeout(() => {
+      loadingScreen.style.display = 'none';
+      if (startScreen) {
+        startScreen.style.display = 'flex';
+      }
+    }, 300);
+  }
+}
+
+// Start loading when DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initLoadingScreen);
+} else {
+  initLoadingScreen();
+}
+
+// ========================================
+// CHECKOUT DATABASE
+// ========================================
 // Vollständige Checkout-Datenbank
     let defaultCheckouts = {
       2: ['D1'], 3: ['S1', 'D1'], 4: ['D2'], 5: ['S1', 'D2'], 6: ['D3'], 7: ['S3', 'D2'], 8: ['D4'], 
@@ -3139,20 +3307,6 @@
     generateScore(2, 170);
     loadBackground();
     initColorPicker();
-    
-    // Preload challenge videos in background for smooth playback
-    function preloadVideos() {
-      const videos = ['THE-MENACE.mp4', 'Flugzeug.mp4', 'Waschmachine.mp4', 'Schlafen.mp4', 'Angler.mp4'];
-      videos.forEach(videoSrc => {
-        const video = document.createElement('video');
-        video.src = videoSrc;
-        video.preload = 'auto';
-        video.load();
-      });
-    }
-    
-    // Start preloading videos after a short delay (so app loads fast first)
-    setTimeout(preloadVideos, 1000);
     
     // Mark first range button (2-170) as active
     const firstRangeBtn = document.querySelector('.range-btn.bg-blue-500');
