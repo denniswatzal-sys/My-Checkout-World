@@ -226,6 +226,16 @@ function toggleVibration() {
   console.log('Vibration', vibrationEnabled ? 'enabled' : 'disabled');
 }
 
+function toggleRealisticMode() {
+  realisticMode = !realisticMode;
+  localStorage.setItem('dartTrainerRealisticMode', realisticMode.toString());
+  
+  // Give haptic feedback
+  vibrateMedium();
+  
+  console.log('Realistic Mode', realisticMode ? 'enabled' : 'disabled');
+}
+
 // Start loading when DOM is ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initLoadingScreen);
@@ -336,6 +346,81 @@ if (document.readyState === 'loading') {
     let visibleElements = {
       'userInputs': true
     };
+    
+    // Realistisch-Modus variables
+    let realisticMode = false;
+    let currentRemainingScore = null; // Internal remaining score after wrong dart
+    let originalScore = null; // Store original score for red display
+    
+    // Load realistic mode setting from localStorage
+    try {
+      const savedRealisticMode = localStorage.getItem('dartTrainerRealisticMode');
+      if (savedRealisticMode !== null) {
+        realisticMode = savedRealisticMode === 'true';
+      }
+    } catch (e) {
+      console.error('Could not load realistic mode setting:', e);
+    }
+    
+    // Helper function to calculate dart value
+    function getDartValue(dart) {
+      if (!dart) return 0;
+      
+      if (dart === 'Bull' || dart === 'BULL') return 50;
+      if (dart === 'S25') return 25;
+      
+      const match = dart.match(/^([SDT])(\d+)$/);
+      if (!match) return 0;
+      
+      const multiplier = match[1];
+      const number = parseInt(match[2]);
+      
+      if (multiplier === 'S') return number;
+      if (multiplier === 'D') return number * 2;
+      if (multiplier === 'T') return number * 3;
+      
+      return 0;
+    }
+    
+    // Helper function to find new checkout path after wrong dart in realistic mode
+    function findRealisticCheckoutPath(remainingScore, dartsLeft) {
+      console.log(`[Realistic] Finding path for ${remainingScore} with ${dartsLeft} darts left`);
+      
+      // If 2 darts left (wrong on 1st dart in 3-dart mode)
+      if (dartsLeft === 2) {
+        // First try 2-dart database
+        if (twoDartCheckouts[remainingScore]) {
+          const path = twoDartCheckouts[remainingScore];
+          console.log(`[Realistic] Found in 2-dart DB: ${path.join(', ')}`);
+          return path;
+        }
+        // Fallback to 3-dart database (take first 2 darts)
+        if (defaultCheckouts[remainingScore]) {
+          const path = defaultCheckouts[remainingScore].slice(0, 2);
+          console.log(`[Realistic] Found in 3-dart DB (first 2): ${path.join(', ')}`);
+          return path;
+        }
+      }
+      
+      // If 1 dart left (wrong on 2nd dart, or wrong on 1st dart in 2-dart mode)
+      if (dartsLeft === 1) {
+        // Try 3-dart database (take first dart)
+        if (defaultCheckouts[remainingScore]) {
+          const path = [defaultCheckouts[remainingScore][0]];
+          console.log(`[Realistic] Found in 3-dart DB (first 1): ${path.join(', ')}`);
+          return path;
+        }
+        // Try 2-dart database (take first dart)
+        if (twoDartCheckouts[remainingScore]) {
+          const path = [twoDartCheckouts[remainingScore][0]];
+          console.log(`[Realistic] Found in 2-dart DB (first 1): ${path.join(', ')}`);
+          return path;
+        }
+      }
+      
+      console.log(`[Realistic] No path found for ${remainingScore} with ${dartsLeft} darts`);
+      return null;
+    }
     
     function createDartboard() {
       const svg = document.getElementById('dartboard');
@@ -846,7 +931,7 @@ if (document.readyState === 'loading') {
       {
         element: '#menuBtn',
         title: '⚙️ Einstellungen',
-        content: '<strong>Taste antippen:</strong> Menü öffnen<br><strong>Taste gedrückt halten:</strong> Aktiviert / deaktiviert Vollbildmodus<br><br><strong>Zahlenring ein-/ ausblenden:</strong> Zahlenring ausblenden, zur Erhöhung des Schwierigkeitsgrads.<br><strong>Vibration ein-/ ausschalten:</strong> Haptische Rückmeldung<br><strong>Hintergrund anpassen:</strong> Individuell einstellbar<br><strong>Zurück zum Startbildschirm:</strong> Taste drücken / oder nach rechts wischen.',
+        content: '<strong>Taste antippen:</strong> Menü öffnen<br><strong>Taste gedrückt halten:</strong> Aktiviert / deaktiviert Vollbildmodus<br><br><strong>Zahlenring ein-/ ausblenden:</strong> Zahlenring ausblenden, zur Erhöhung des Schwierigkeitsgrads.<br><strong>Vibration ein-/ ausschalten:</strong> Haptische Rückmeldung<br><strong>Realistisch-Modus ein-/ ausschalten:</strong> Bei Fehlwurf mit Restwert weiterspielen (Zahl wird rot)<br><strong>Hintergrund anpassen:</strong> Individuell einstellbar<br><strong>Zurück zum Startbildschirm:</strong> Taste drücken / oder nach rechts wischen.',
         position: 'top-left',
         screen: 'training'
       },
@@ -1904,6 +1989,11 @@ if (document.readyState === 'loading') {
       // Remove all classes
       scoreCard.classList.remove('stell', 'twodarts');
       
+      // Reset realistic mode variables
+      currentRemainingScore = null;
+      originalScore = null;
+      scoreCard.style.background = ''; // Reset red color
+      
       // Add appropriate class
       if (isStell) {
         scoreCard.classList.add('stell');
@@ -1919,20 +2009,27 @@ if (document.readyState === 'loading') {
       // Haptic feedback for dartboard clicks
       vibrateMedium();
       
-      // Wenn Feedback für falsche Antwort angezeigt wird, nächste Aufgabe bei Klick auf Dartscheibe
-      // (Richtige Antworten gehen automatisch weiter)
+      // Wenn Feedback für falsche Antwort angezeigt wird
       if (feedback === 'wrong') {
-        // Reset manual score flag - generate random score now
-        manualScoreActive = false;
-        
-        if (window.challengeMode) {
-          generateScore(currentRangeMin, currentRangeMax);
-        } else if (window.learnModeActive) {
-          generateLearnScore();
-        } else {
-          generateScore(currentRangeMin, currentRangeMax);
+        // In EXAKT-Modus: Nächste Aufgabe
+        if (!realisticMode) {
+          manualScoreActive = false;
+          
+          if (window.challengeMode) {
+            generateScore(currentRangeMin, currentRangeMax);
+          } else if (window.learnModeActive) {
+            generateLearnScore();
+          } else {
+            generateScore(currentRangeMin, currentRangeMax);
+          }
+          return;
         }
-        return;
+        
+        // In REALISTISCH-Modus: Continue with remaining score
+        // Reset feedback to allow continuing
+        feedback = null;
+        const userInputsEl = document.getElementById('userInputs');
+        userInputsEl.classList.remove('wrong');
       }
       
       // Ignore clicks when correct feedback is showing (auto-continue active)
@@ -1940,31 +2037,91 @@ if (document.readyState === 'loading') {
         return;
       }
       
+      // Add dart to inputs
       userInputs.push(dartValue);
       updateUserInputs();
       
       const expectedDart = currentCheckout[userInputs.length - 1];
       
+      // WRONG DART
       if (dartValue !== expectedDart) {
+        // Calculate remaining score after this wrong dart
+        const dartValue_num = getDartValue(dartValue);
+        const scoreBeforeThisDart = currentRemainingScore !== null ? currentRemainingScore : currentScore;
+        const newRemainingScore = scoreBeforeThisDart - dartValue_num;
+        
+        console.log(`[Wrong dart] Expected: ${expectedDart}, Got: ${dartValue}, Score before: ${scoreBeforeThisDart}, Dart value: ${dartValue_num}, New remaining: ${newRemainingScore}`);
+        
         showFeedback(false);
+        
         if (window.challengeMode) {
           challengeStats.wrong++;
           updateChallengeStats();
         } else {
-          // Save the ACTUAL mode (2darts or 3darts), not 'mixed'
           const actualMode = currentCheckouts === twoDartCheckouts ? '2darts' : '3darts';
           problemScores[currentScore] = { count: 0, mode: actualMode };
           localStorage.setItem('problemScores', JSON.stringify(problemScores));
           updateProblemBadge();
         }
+        
+        // EXAKT-MODUS: Stop here, don't continue
+        if (!realisticMode) {
+          return;
+        }
+        
+        // REALISTISCH-MODUS: Try to find new path
+        const dartsLeft = currentCheckout.length - userInputs.length;
+        console.log(`[Realistic] Darts left: ${dartsLeft}`);
+        
+        const newPath = findRealisticCheckoutPath(newRemainingScore, dartsLeft);
+        
+        if (newPath) {
+          // Update checkout path and remaining score
+          currentCheckout = newPath;
+          currentRemainingScore = newRemainingScore;
+          
+          // Store original score for red display
+          if (originalScore === null) {
+            originalScore = currentScore;
+          }
+          
+          // Make score red
+          const scoreCard = document.getElementById('scoreCard');
+          scoreCard.style.background = 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)';
+          
+          console.log(`[Realistic] New path: ${newPath.join(' → ')}, Remaining: ${newRemainingScore}`);
+        } else {
+          console.log(`[Realistic] No valid path found - Stell-Aufgabe`);
+          // Still make it red but no valid path
+          if (originalScore === null) {
+            originalScore = currentScore;
+          }
+          const scoreCard = document.getElementById('scoreCard');
+          scoreCard.style.background = 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)';
+        }
+        
         return;
       }
       
+      // CORRECT DART
       highlightedFields.push(dartValue);
       createDartboard();
       
+      // Update remaining score after correct dart
+      if (currentRemainingScore !== null) {
+        const dartValue_num = getDartValue(dartValue);
+        currentRemainingScore -= dartValue_num;
+        console.log(`[Correct dart] ${dartValue} = ${dartValue_num}, New remaining: ${currentRemainingScore}`);
+      }
+      
+      // Check if checkout is complete
       if (userInputs.length === currentCheckout.length) {
         showFeedback(true);
+        
+        // Reset realistic mode variables
+        currentRemainingScore = null;
+        originalScore = null;
+        
         if (window.challengeMode) {
           challengeStats.correct++;
           updateChallengeStats();
@@ -1976,22 +2133,16 @@ if (document.readyState === 'loading') {
             console.log('Problem score for', currentScore, '- count:', count);
             
             if (count >= 3) {
-              // Delete after 3 correct answers
               delete problemScores[currentScore];
               console.log('Deleted problem score. Remaining:', Object.keys(problemScores));
             } else {
-              // Increment counter while preserving the ORIGINAL mode (don't overwrite with current mode)
               const originalMode = typeof problem === 'object' ? problem.mode : '3darts';
               problemScores[currentScore] = { count: count, mode: originalMode };
             }
             
-            // Save to localStorage after any modification
             localStorage.setItem('problemScores', JSON.stringify(problemScores));
-            
-            // Always update badge after modifying problemScores
             updateProblemBadge();
             
-            // Check if all problems are solved while in learn mode
             if (window.learnModeActive && Object.keys(problemScores).length === 0) {
               console.log('All problems solved! Switching to 2-170.');
               setTimeout(() => {
