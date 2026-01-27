@@ -408,6 +408,12 @@ if (document.readyState === 'loading') {
       
       // If 1 dart left (wrong on 2nd dart, or wrong on 1st dart in 2-dart mode)
       if (dartsLeft === 1) {
+        // Special case: 50 with 1 dart = Bull
+        if (remainingScore === 50) {
+          console.log(`[Realistic] 50 with 1 dart: using Bull`);
+          return ['Bull'];
+        }
+        
         // Try 3-dart database (take first dart)
         if (defaultCheckouts[remainingScore]) {
           const path = [defaultCheckouts[remainingScore][0]];
