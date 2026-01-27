@@ -353,6 +353,7 @@ if (document.readyState === 'loading') {
     let originalScore = null; // Store original score for red display
     let totalDartsThrown = 0; // Track total darts thrown in current turn (max 3)
     let realisticModeActive = false; // Track if we're in a realistic mode turn (after wrong dart)
+    let allDartsThrown = []; // Track ALL darts thrown for display (always show all 3)
     
     // Load realistic mode setting from localStorage
     try {
@@ -1996,6 +1997,7 @@ if (document.readyState === 'loading') {
       originalScore = null;
       totalDartsThrown = 0;
       realisticModeActive = false;
+      allDartsThrown = [];
       scoreCard.style.background = ''; // Reset red color
       
       // Add appropriate class
@@ -2013,9 +2015,9 @@ if (document.readyState === 'loading') {
       // Haptic feedback for dartboard clicks
       vibrateMedium();
       
-      // Wenn Feedback für falsche Antwort angezeigt wird
+      // Wenn Feedback angezeigt wird
       if (feedback === 'wrong') {
-        // In EXAKT-Modus: Nächste Aufgabe
+        // In EXAKT-Modus ODER nicht im aktiven Realistisch-Modus: Nächste Aufgabe
         if (!realisticMode || !realisticModeActive) {
           manualScoreActive = false;
           
@@ -2029,11 +2031,9 @@ if (document.readyState === 'loading') {
           return;
         }
         
-        // In REALISTISCH-Modus: Continue with remaining score
-        // Reset feedback to allow continuing
-        feedback = null;
-        const userInputsEl = document.getElementById('userInputs');
-        userInputsEl.classList.remove('wrong');
+        // In REALISTISCH-Modus: Wurde gerade "nicht checkbar" angezeigt
+        // → Zur nächsten Zahl (wird bereits im timeout gemacht)
+        return;
       }
       
       // Ignore clicks when correct feedback is showing (auto-continue active)
@@ -2047,17 +2047,18 @@ if (document.readyState === 'loading') {
         return;
       }
       
-      // Add dart to inputs
-      userInputs.push(dartValue);
+      // Add dart to ALL thrown darts (for display)
+      allDartsThrown.push(dartValue);
       totalDartsThrown++;
+      
+      // Add dart to userInputs (for validation against current checkout)
+      userInputs.push(dartValue);
       updateUserInputs();
       
       console.log(`[Dart ${totalDartsThrown}] ${dartValue}, Expected: ${currentCheckout[userInputs.length - 1]}, Realistic active: ${realisticModeActive}`);
       
-      // Determine expected dart based on current position in checkout
-      // If in realistic mode after wrong dart, use new checkout path
-      const expectedDartIndex = realisticModeActive ? userInputs.length - 1 : userInputs.length - 1;
-      const expectedDart = currentCheckout[expectedDartIndex];
+      // Determine expected dart
+      const expectedDart = currentCheckout[userInputs.length - 1];
       
       // WRONG DART
       if (dartValue !== expectedDart) {
@@ -2068,8 +2069,7 @@ if (document.readyState === 'loading') {
         
         console.log(`[Wrong dart] Expected: ${expectedDart}, Got: ${dartValue}, Score before: ${scoreBeforeThisDart}, Dart value: ${dartValue_num}, New remaining: ${newRemainingScore}`);
         
-        showFeedback(false);
-        
+        // Stats tracking
         if (window.challengeMode) {
           challengeStats.wrong++;
           updateChallengeStats();
@@ -2080,52 +2080,55 @@ if (document.readyState === 'loading') {
           updateProblemBadge();
         }
         
-        // EXAKT-MODUS: Stop here, don't continue
+        // EXAKT-MODUS: Show feedback and stop
         if (!realisticMode) {
+          showFeedback(false);
           return;
         }
         
-        // REALISTISCH-MODUS: Check if we can continue
-        // If we've thrown 3 darts, stop here
-        if (totalDartsThrown >= 3) {
-          console.log('[Realistic] 3 darts thrown, stopping');
-          return;
-        }
-        
-        // Try to find new path
+        // REALISTISCH-MODUS: Check if still checkable
         const dartsLeftInTurn = 3 - totalDartsThrown;
         console.log(`[Realistic] Total thrown: ${totalDartsThrown}, Darts left in turn: ${dartsLeftInTurn}`);
         
+        // Try to find new path
         const newPath = findRealisticCheckoutPath(newRemainingScore, dartsLeftInTurn);
         
-        if (newPath) {
-          // Update checkout path and remaining score
-          currentCheckout = newPath;
-          currentRemainingScore = newRemainingScore;
-          realisticModeActive = true;
+        if (!newPath) {
+          // NOT CHECKABLE - show error
+          console.log(`[Realistic] Not checkable with ${dartsLeftInTurn} darts`);
           
-          // Store original score for red display
-          if (originalScore === null) {
-            originalScore = currentScore;
+          showFeedback(false, 'Nicht mehr checkbar');
+          
+          // Only auto-generate in challenge mode
+          // In training mode, user must click to continue (like normal wrong answer)
+          if (window.challengeMode) {
+            setTimeout(() => {
+              generateScore(currentRangeMin, currentRangeMax);
+            }, 500);
           }
           
-          // Make score red
-          const scoreCard = document.getElementById('scoreCard');
-          scoreCard.style.background = 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)';
-          
-          // Reset userInputs to track new path from beginning
-          userInputs = [];
-          
-          console.log(`[Realistic] New path: ${newPath.join(' → ')}, Remaining: ${newRemainingScore}`);
-        } else {
-          console.log(`[Realistic] No valid path found - Stell-Aufgabe`);
-          // Still make it red but no valid path
-          if (originalScore === null) {
-            originalScore = currentScore;
-          }
-          const scoreCard = document.getElementById('scoreCard');
-          scoreCard.style.background = 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)';
+          return;
         }
+        
+        // CHECKABLE - continue with new path
+        currentCheckout = newPath;
+        currentRemainingScore = newRemainingScore;
+        realisticModeActive = true;
+        
+        // Store original score for red display
+        if (originalScore === null) {
+          originalScore = currentScore;
+        }
+        
+        // Make score red
+        const scoreCard = document.getElementById('scoreCard');
+        scoreCard.style.background = 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)';
+        
+        // Reset userInputs to track new path from beginning
+        // (but keep allDartsThrown for display)
+        userInputs = [];
+        
+        console.log(`[Realistic] New path: ${newPath.join(' → ')}, Remaining: ${newRemainingScore}`);
         
         return;
       }
@@ -2145,11 +2148,9 @@ if (document.readyState === 'loading') {
       const checkoutComplete = userInputs.length === currentCheckout.length;
       const maxDartsReached = totalDartsThrown >= 3;
       
-      if (checkoutComplete || (maxDartsReached && realisticModeActive)) {
-        // If in realistic mode and max darts reached, check if path was followed correctly
-        const wasCorrect = checkoutComplete || (realisticModeActive && userInputs.length === currentCheckout.length);
-        
-        showFeedback(wasCorrect);
+      if (checkoutComplete) {
+        // Checkout erfolgreich!
+        showFeedback(true);
         
         // Reset realistic mode variables
         currentRemainingScore = null;
@@ -2157,11 +2158,7 @@ if (document.readyState === 'loading') {
         realisticModeActive = false;
         
         if (window.challengeMode) {
-          if (wasCorrect) {
-            challengeStats.correct++;
-          } else {
-            challengeStats.wrong++;
-          }
+          challengeStats.correct++;
           updateChallengeStats();
         } else {
           // Handle problem scores
@@ -2229,16 +2226,19 @@ if (document.readyState === 'loading') {
     function updateUserInputs() {
       const container = document.getElementById('userInputs');
       
-      if (userInputs.length === 0) {
+      // In realistic mode, show ALL thrown darts (allDartsThrown)
+      const dartsToShow = realisticMode && realisticModeActive ? allDartsThrown : userInputs;
+      
+      if (dartsToShow.length === 0) {
         container.innerHTML = '';
       } else {
-        container.innerHTML = userInputs.map(input => 
+        container.innerHTML = dartsToShow.map(input => 
           `<div class="user-input-chip">${input}</div>`
         ).join('');
       }
     }
     
-    function showFeedback(isCorrect) {
+    function showFeedback(isCorrect, customMessage = null) {
       feedback = isCorrect ? 'correct' : 'wrong';
       
       // Haptic feedback
@@ -2297,13 +2297,18 @@ if (document.readyState === 'loading') {
           }
         }, delay);
       } else {
-        // Bei falsch: Rot färben + Lösung anzeigen
+        // Bei falsch: Rot färben + Lösung/Hinweis anzeigen
         userInputs.classList.add('wrong');
         
-        // Lösung unter den Eingabefeldern anzeigen
+        // Lösung oder custom message unter den Eingabefeldern anzeigen
         const solutionDiv = document.createElement('div');
         solutionDiv.className = 'solution-text';
-        solutionDiv.textContent = `Lösung: ${currentCheckout.join(' → ')}`;
+        
+        if (customMessage) {
+          solutionDiv.textContent = customMessage;
+        } else {
+          solutionDiv.textContent = `Lösung: ${currentCheckout.join(' → ')}`;
+        }
         userInputs.appendChild(solutionDiv);
       }
     }
