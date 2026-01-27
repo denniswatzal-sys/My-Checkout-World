@@ -70,7 +70,7 @@
     .mode-btn {
       padding: 6px 12px;
       background: #e5e7eb;
-      border: none;
+      border: 1px solid #000;
       border-radius: 6px;
       font-size: 13px;
       font-weight: 600;
@@ -136,7 +136,7 @@
     
     .range-btn {
       padding: 8px 4px;
-      border: none;
+      border: 1px solid #000;
       border-radius: 6px;
       color: white;
       font-weight: 600;
