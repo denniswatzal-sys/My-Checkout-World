@@ -1881,12 +1881,26 @@
       
       document.body.appendChild(overlay);
       
+      // Create heartbeat sound for countdown
+      if (!window.heartbeatSound) {
+        window.heartbeatSound = new Audio('Heartbeat.mp3');
+        window.heartbeatSound.volume = 1.0; // 100% volume (loud)
+      }
+      
       let count = 3;
       numberElement.textContent = count;
+      
+      // Play heartbeat for first number (3)
+      window.heartbeatSound.currentTime = 0;
+      window.heartbeatSound.play().catch(e => console.error('Heartbeat play failed:', e));
       
       const countdownInterval = setInterval(() => {
         count--;
         if (count > 0) {
+          // Play heartbeat sound
+          window.heartbeatSound.currentTime = 0;
+          window.heartbeatSound.play().catch(e => console.error('Heartbeat play failed:', e));
+          
           // Reset animation
           numberElement.style.animation = 'none';
           setTimeout(() => {
