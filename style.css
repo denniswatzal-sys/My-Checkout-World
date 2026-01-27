@@ -736,10 +736,10 @@
     }
     
     .start-btn-3darts {
-      background: linear-gradient(135deg, #ca8a04 0%, #92400e 100%);
-      color: white;
+      background: white;
+      color: #b45309;
       border: 2px solid #000;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
     }
     
     .start-btn-2darts {
@@ -749,10 +749,10 @@
     }
     
     .start-btn-leaderboard {
-      background: linear-gradient(135deg, #ca8a04 0%, #92400e 100%);
-      color: white;
+      background: white;
+      color: #b45309;
       border: 2px solid #000;
-      text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
     }
     
     .start-btn-tutorial {
