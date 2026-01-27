@@ -2164,9 +2164,10 @@ if (document.readyState === 'loading') {
       let count = 3;
       numberElement.textContent = count;
       
-      // Play heartbeat for first number (3)
+      // Play heartbeat and vibrate for first number (3)
       window.heartbeatSound.currentTime = 0;
       window.heartbeatSound.play().catch(e => console.error('Heartbeat play failed:', e));
+      vibrateHeavy(); // Vibration for countdown
       
       const countdownInterval = setInterval(() => {
         count--;
@@ -2174,6 +2175,9 @@ if (document.readyState === 'loading') {
           // Play heartbeat sound
           window.heartbeatSound.currentTime = 0;
           window.heartbeatSound.play().catch(e => console.error('Heartbeat play failed:', e));
+          
+          // Vibrate
+          vibrateHeavy();
           
           // Reset animation
           numberElement.style.animation = 'none';
@@ -2288,6 +2292,9 @@ if (document.readyState === 'loading') {
           
           // Play heartbeat during last 3 seconds (timeLeft: 3, 2, 1)
           if (timeLeft <= 3 && timeLeft >= 1) {
+            // Vibration during last 3 seconds
+            vibrateHeavy();
+            
             if (window.heartbeatSound) {
               window.heartbeatSound.currentTime = 0;
               window.heartbeatSound.play().catch(e => console.error('Heartbeat play failed:', e));
