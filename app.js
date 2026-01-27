@@ -355,6 +355,7 @@ if (document.readyState === 'loading') {
     let realisticModeActive = false; // Track if we're in a realistic mode turn (after wrong dart)
     let allDartsThrown = []; // Track ALL darts thrown for display (always show all 3)
     let originalCheckout = null; // Store original checkout path for solution display
+    let originalDartCount = 0; // Track original number of darts (2 or 3) for this score
     
     // Load realistic mode setting from localStorage
     try {
@@ -387,11 +388,17 @@ if (document.readyState === 'loading') {
     }
     
     // Helper function to find new checkout path after wrong dart in realistic mode
-    function findRealisticCheckoutPath(remainingScore, dartsLeft) {
-      console.log(`[Realistic] Finding path for ${remainingScore} with ${dartsLeft} darts left`);
+    function findRealisticCheckoutPath(remainingScore, dartsLeft, wasOriginal3Dart) {
+      console.log(`[Realistic] Finding path for ${remainingScore} with ${dartsLeft} darts left (original: ${wasOriginal3Dart ? '3-dart' : '2-dart'})`);
+      
+      // Special case: 50 with 1 dart = Bull
+      if (dartsLeft === 1 && remainingScore === 50) {
+        console.log(`[Realistic] 50 with 1 dart: using Bull`);
+        return ['Bull'];
+      }
       
       // If 2 darts left (wrong on 1st dart in 3-dart mode)
-      if (dartsLeft === 2) {
+      if (dartsLeft === 2 && wasOriginal3Dart) {
         // First try 2-dart database
         if (twoDartCheckouts[remainingScore]) {
           const path = twoDartCheckouts[remainingScore];
@@ -407,25 +414,17 @@ if (document.readyState === 'loading') {
       }
       
       // If 1 dart left (wrong on 2nd dart, or wrong on 1st dart in 2-dart mode)
+      // ALWAYS use 3-dart database (first dart only)
       if (dartsLeft === 1) {
-        // Special case: 50 with 1 dart = Bull
-        if (remainingScore === 50) {
-          console.log(`[Realistic] 50 with 1 dart: using Bull`);
-          return ['Bull'];
-        }
-        
-        // Try 3-dart database (take first dart)
         if (defaultCheckouts[remainingScore]) {
           const path = [defaultCheckouts[remainingScore][0]];
           console.log(`[Realistic] Found in 3-dart DB (first 1): ${path.join(', ')}`);
           return path;
         }
-        // Try 2-dart database (take first dart)
-        if (twoDartCheckouts[remainingScore]) {
-          const path = [twoDartCheckouts[remainingScore][0]];
-          console.log(`[Realistic] Found in 2-dart DB (first 1): ${path.join(', ')}`);
-          return path;
-        }
+        
+        // Not in 3-dart DB = not checkable with 1 dart
+        console.log(`[Realistic] ${remainingScore} not in 3-dart DB, not checkable with 1 dart`);
+        return null;
       }
       
       console.log(`[Realistic] No path found for ${remainingScore} with ${dartsLeft} darts`);
@@ -1980,6 +1979,9 @@ if (document.readyState === 'loading') {
       highlightedFields = [];
       feedback = null;
       
+      // Store original dart count for this score
+      originalDartCount = currentCheckout.length;
+      
       document.getElementById('scoreValue').textContent = currentScore;
       
       // Reset user-inputs
@@ -2006,6 +2008,7 @@ if (document.readyState === 'loading') {
       realisticModeActive = false;
       allDartsThrown = [];
       originalCheckout = null;
+      originalDartCount = 0;
       scoreCard.style.background = ''; // Reset red color
       
       // Add appropriate class
@@ -2104,7 +2107,7 @@ if (document.readyState === 'loading') {
         console.log(`[Realistic] Total thrown: ${totalDartsThrown}, Darts left in turn: ${dartsLeftInTurn}`);
         
         // Try to find new path
-        const newPath = findRealisticCheckoutPath(newRemainingScore, dartsLeftInTurn);
+        const newPath = findRealisticCheckoutPath(newRemainingScore, dartsLeftInTurn, originalDartCount >= 3);
         
         if (!newPath) {
           // NOT CHECKABLE - show error
