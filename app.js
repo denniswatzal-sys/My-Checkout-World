@@ -1979,7 +1979,7 @@
         if (!window.challengeMusic) {
           window.challengeMusic = new Audio('Quiz.mp3');
           window.challengeMusic.loop = true;
-          window.challengeMusic.volume = 0.5; // 50% volume (halb so laut)
+          window.challengeMusic.volume = 0.25; // 25% volume (halb so laut wie vorher)
           console.log('Challenge music created');
         }
         window.challengeMusic.play()
@@ -2010,8 +2010,8 @@
           timeLeft--;
           document.getElementById('challengeTime').textContent = `⏱️ ${timeLeft}s`;
           
-          // Play heartbeat during last 3 seconds (timeLeft: 2, 1, 0)
-          if (timeLeft <= 2 && timeLeft >= 0) {
+          // Play heartbeat during last 3 seconds (timeLeft: 3, 2, 1)
+          if (timeLeft <= 3 && timeLeft >= 1) {
             if (window.heartbeatSound) {
               window.heartbeatSound.currentTime = 0;
               window.heartbeatSound.play().catch(e => console.error('Heartbeat play failed:', e));
