@@ -1138,13 +1138,22 @@ if (document.readyState === 'loading') {
       // Update toggle buttons
       const bgBtn = document.getElementById('toggleBackground');
       const fieldBtn = document.getElementById('toggleField');
+      const imagesSection = document.getElementById('imagesSection');
       
       if (target === 'background') {
         bgBtn.classList.add('active');
         fieldBtn.classList.remove('active');
+        // Zeige Bilder-Sektion
+        if (imagesSection) {
+          imagesSection.style.display = 'block';
+        }
       } else {
         bgBtn.classList.remove('active');
         fieldBtn.classList.add('active');
+        // Verstecke Bilder-Sektion
+        if (imagesSection) {
+          imagesSection.style.display = 'none';
+        }
       }
     }
     
@@ -1203,6 +1212,17 @@ if (document.readyState === 'loading') {
         localStorage.setItem('dartTrainerBackgroundCustom', imageStyle);
       }
       // Image background only works for body background, not for field
+    }
+    
+    function applyTransparent() {
+      // Transparent only works for field, not for body background
+      if (colorTarget === 'field') {
+        const rangeCard = document.querySelector('#rangeCard');
+        if (rangeCard) {
+          rangeCard.style.background = 'transparent';
+        }
+        localStorage.setItem('dartTrainerFieldCustom', 'transparent');
+      }
     }
     
     // Helper function to adjust color brightness

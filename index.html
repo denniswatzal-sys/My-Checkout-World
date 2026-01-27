@@ -285,7 +285,7 @@
         </div>
         
         <!-- Bilder Sektion -->
-        <div style="margin-bottom: 24px;">
+        <div id="imagesSection" style="margin-bottom: 24px;">
           <div style="font-weight: 600; font-size: 16px; margin-bottom: 12px; color: #1f2937; text-align: center;">
             Bilder
           </div>
@@ -327,11 +327,17 @@
             <button class="bg-option" onclick="applyPresetColor('#004e7a', '#006399')" style="background: linear-gradient(135deg, #004e7a 0%, #006399 100%);">
               <span style="color: white; font-weight: 600;">Blau</span>
             </button>
-            <button class="bg-option" onclick="applyPresetColor('#dc2626', '#ef4444')" style="background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);">
+            <button class="bg-option" onclick="applyPresetColor('#dc2626', '#dc2626')" style="background: #dc2626;">
               <span style="color: white; font-weight: 600;">Rot</span>
             </button>
             <button class="bg-option" onclick="applyPresetColor('#00c0c0', '#00d4d4')" style="background: linear-gradient(135deg, #00c0c0 0%, #00d4d4 100%);">
               <span style="color: white; font-weight: 600;">Türkis</span>
+            </button>
+            <button class="bg-option" onclick="applyPresetColor('#eab308', '#fbbf24')" style="background: linear-gradient(135deg, #eab308 0%, #fbbf24 100%);">
+              <span style="color: white; font-weight: 600;">Gelb</span>
+            </button>
+            <button class="bg-option" onclick="applyTransparent()" style="background: repeating-linear-gradient(45deg, #ddd 0px, #ddd 10px, #fff 10px, #fff 20px); border: 2px solid #000;">
+              <span style="color: #1f2937; font-weight: 600;">Transparent</span>
             </button>
           </div>
         </div>
