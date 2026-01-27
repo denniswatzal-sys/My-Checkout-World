@@ -1979,9 +1979,11 @@
         if (!window.challengeMusic) {
           window.challengeMusic = new Audio('Quiz.mp3');
           window.challengeMusic.loop = true;
-          window.challengeMusic.volume = 0.0625; // 6.25% volume (sehr leise)
           console.log('Challenge music created');
         }
+        // Always set volume (in case it was changed elsewhere)
+        window.challengeMusic.volume = 0.3; // 30% volume
+        
         window.challengeMusic.play()
           .then(() => console.log('Challenge music playing'))
           .catch(e => console.error('Audio play failed:', e));
