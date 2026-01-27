@@ -1177,8 +1177,10 @@ if (document.readyState === 'loading') {
         const rangeCard = document.querySelector('#rangeCard');
         if (rangeCard) {
           rangeCard.style.background = gradient;
+          rangeCard.style.border = '1px solid #000';
         }
         localStorage.setItem('dartTrainerFieldCustom', gradient);
+        localStorage.setItem('dartTrainerFieldBorder', '1px solid #000');
       }
     }
     
@@ -1196,8 +1198,10 @@ if (document.readyState === 'loading') {
         const rangeCard = document.querySelector('#rangeCard');
         if (rangeCard) {
           rangeCard.style.background = gradient;
+          rangeCard.style.border = '1px solid #000';
         }
         localStorage.setItem('dartTrainerFieldCustom', gradient);
+        localStorage.setItem('dartTrainerFieldBorder', '1px solid #000');
       }
     }
     
@@ -1220,8 +1224,10 @@ if (document.readyState === 'loading') {
         const rangeCard = document.querySelector('#rangeCard');
         if (rangeCard) {
           rangeCard.style.background = 'transparent';
+          rangeCard.style.border = 'none';
         }
         localStorage.setItem('dartTrainerFieldCustom', 'transparent');
+        localStorage.setItem('dartTrainerFieldBorder', 'none');
       }
     }
     
@@ -1349,10 +1355,14 @@ if (document.readyState === 'loading') {
       
       // Load custom field color
       const savedField = localStorage.getItem('dartTrainerFieldCustom');
+      const savedBorder = localStorage.getItem('dartTrainerFieldBorder');
       if (savedField) {
         const rangeCard = document.querySelector('#rangeCard');
         if (rangeCard) {
           rangeCard.style.background = savedField;
+          if (savedBorder) {
+            rangeCard.style.border = savedBorder;
+          }
         }
       }
     }
@@ -3022,6 +3032,7 @@ if (document.readyState === 'loading') {
       // Remove custom colors from localStorage
       localStorage.removeItem('dartTrainerBackgroundCustom');
       localStorage.removeItem('dartTrainerFieldCustom');
+      localStorage.removeItem('dartTrainerFieldBorder');
       console.log('Colors reset to defaults');
       
       // Reload page to apply default colors
