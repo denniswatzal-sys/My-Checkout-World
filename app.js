@@ -173,6 +173,34 @@ function enterFullscreen() {
   }
 }
 
+// ========================================
+// HAPTIC FEEDBACK SYSTEM
+// ========================================
+function vibrate(duration) {
+  if ('vibrate' in navigator) {
+    navigator.vibrate(duration);
+  }
+}
+
+// Different vibration patterns for different actions
+function vibrateLight() {
+  vibrate(30); // Short tap for normal buttons
+}
+
+function vibrateMedium() {
+  vibrate(50); // Medium tap for important buttons
+}
+
+function vibrateHeavy() {
+  vibrate(100); // Long tap for feedback (correct/wrong)
+}
+
+function vibratePattern(pattern) {
+  if ('vibrate' in navigator) {
+    navigator.vibrate(pattern);
+  }
+}
+
 // Start loading when DOM is ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initLoadingScreen);
@@ -815,6 +843,7 @@ if (document.readyState === 'loading') {
     }
     
     function startTutorial() {
+      vibrateMedium();
       currentTutorialStep = 0;
       tutorialActive = true;
       
@@ -1994,6 +2023,14 @@ if (document.readyState === 'loading') {
     
     function showFeedback(isCorrect) {
       feedback = isCorrect ? 'correct' : 'wrong';
+      
+      // Haptic feedback
+      if (isCorrect) {
+        vibratePattern([50, 50, 50]); // Double vibration for correct
+      } else {
+        vibrateHeavy(); // Single long vibration for wrong
+      }
+      
       const userInputs = document.getElementById('userInputs');
       
       // Remove previous states
@@ -2781,6 +2818,7 @@ if (document.readyState === 'loading') {
     }
     
     function goToTrainer() {
+      vibrateMedium();
       document.getElementById('startScreen').style.display = 'none';
       document.getElementById('mainApp').style.display = 'block';
       
@@ -2832,6 +2870,7 @@ if (document.readyState === 'loading') {
     }
     
     function openDatabaseEditor() {
+      vibrateMedium();
       // Mark that we came from start screen
       window.cameFromStartScreen = true;
       
@@ -2848,6 +2887,7 @@ if (document.readyState === 'loading') {
     }
     
     function openLeaderboard(currentEntry = null) {
+      vibrateMedium();
       const modal = document.getElementById('leaderboardModal');
       const list = document.getElementById('leaderboardList');
       
@@ -3361,6 +3401,31 @@ if (document.readyState === 'loading') {
     if (firstRangeBtn) {
       firstRangeBtn.classList.add('active-range');
     }
+    
+    // ========================================
+    // ADD VIBRATION TO ALL BUTTONS
+    // ========================================
+    // Add vibration to all mode buttons
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+      btn.addEventListener('click', () => vibrateLight());
+    });
+    
+    // Add vibration to all range buttons
+    document.querySelectorAll('.range-btn').forEach(btn => {
+      btn.addEventListener('click', () => vibrateLight());
+    });
+    
+    // Add vibration to all modal buttons
+    document.querySelectorAll('.save-modal-btn, .close-modal-btn, .close-btn').forEach(btn => {
+      btn.addEventListener('click', () => vibrateLight());
+    });
+    
+    // Add vibration to dartboard fields (SVG circles)
+    setTimeout(() => {
+      document.querySelectorAll('#dartboard circle').forEach(circle => {
+        circle.addEventListener('click', () => vibrateMedium());
+      });
+    }, 500);
     
     // Load problemScores from localStorage FIRST, then update badge
     // RESET: Clear problemScores for fresh start (can be removed after first use)
