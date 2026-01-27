@@ -1891,6 +1891,9 @@ if (document.readyState === 'loading') {
     }
     
     function handleDartClick(dartValue) {
+      // Haptic feedback for dartboard clicks
+      vibrateMedium();
+      
       // Wenn Feedback für falsche Antwort angezeigt wird, nächste Aufgabe bei Klick auf Dartscheibe
       // (Richtige Antworten gehen automatisch weiter)
       if (feedback === 'wrong') {
@@ -3095,6 +3098,7 @@ if (document.readyState === 'loading') {
     
     function startMenuBtnPress(e) {
       e.preventDefault();
+      vibrateMedium(); // Haptic feedback
       menuBtnLongPressTriggered = false;
       
       menuBtnPressTimer = setTimeout(() => {
@@ -3412,7 +3416,8 @@ if (document.readyState === 'loading') {
     
     // Add vibration to all range buttons
     document.querySelectorAll('.range-btn').forEach(btn => {
-      btn.addEventListener('click', () => vibrateLight());
+      btn.addEventListener('mousedown', () => vibrateMedium());
+      btn.addEventListener('touchstart', () => vibrateMedium());
     });
     
     // Add vibration to all modal buttons
