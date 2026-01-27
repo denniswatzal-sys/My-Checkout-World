@@ -351,6 +351,8 @@ if (document.readyState === 'loading') {
     let realisticMode = false;
     let currentRemainingScore = null; // Internal remaining score after wrong dart
     let originalScore = null; // Store original score for red display
+    let totalDartsThrown = 0; // Track total darts thrown in current turn (max 3)
+    let realisticModeActive = false; // Track if we're in a realistic mode turn (after wrong dart)
     
     // Load realistic mode setting from localStorage
     try {
@@ -1992,6 +1994,8 @@ if (document.readyState === 'loading') {
       // Reset realistic mode variables
       currentRemainingScore = null;
       originalScore = null;
+      totalDartsThrown = 0;
+      realisticModeActive = false;
       scoreCard.style.background = ''; // Reset red color
       
       // Add appropriate class
@@ -2012,7 +2016,7 @@ if (document.readyState === 'loading') {
       // Wenn Feedback für falsche Antwort angezeigt wird
       if (feedback === 'wrong') {
         // In EXAKT-Modus: Nächste Aufgabe
-        if (!realisticMode) {
+        if (!realisticMode || !realisticModeActive) {
           manualScoreActive = false;
           
           if (window.challengeMode) {
@@ -2037,11 +2041,23 @@ if (document.readyState === 'loading') {
         return;
       }
       
+      // Check if max 3 darts reached
+      if (totalDartsThrown >= 3) {
+        console.log('[Max darts] Already thrown 3 darts, ignoring click');
+        return;
+      }
+      
       // Add dart to inputs
       userInputs.push(dartValue);
+      totalDartsThrown++;
       updateUserInputs();
       
-      const expectedDart = currentCheckout[userInputs.length - 1];
+      console.log(`[Dart ${totalDartsThrown}] ${dartValue}, Expected: ${currentCheckout[userInputs.length - 1]}, Realistic active: ${realisticModeActive}`);
+      
+      // Determine expected dart based on current position in checkout
+      // If in realistic mode after wrong dart, use new checkout path
+      const expectedDartIndex = realisticModeActive ? userInputs.length - 1 : userInputs.length - 1;
+      const expectedDart = currentCheckout[expectedDartIndex];
       
       // WRONG DART
       if (dartValue !== expectedDart) {
@@ -2069,16 +2085,24 @@ if (document.readyState === 'loading') {
           return;
         }
         
-        // REALISTISCH-MODUS: Try to find new path
-        const dartsLeft = currentCheckout.length - userInputs.length;
-        console.log(`[Realistic] Darts left: ${dartsLeft}`);
+        // REALISTISCH-MODUS: Check if we can continue
+        // If we've thrown 3 darts, stop here
+        if (totalDartsThrown >= 3) {
+          console.log('[Realistic] 3 darts thrown, stopping');
+          return;
+        }
         
-        const newPath = findRealisticCheckoutPath(newRemainingScore, dartsLeft);
+        // Try to find new path
+        const dartsLeftInTurn = 3 - totalDartsThrown;
+        console.log(`[Realistic] Total thrown: ${totalDartsThrown}, Darts left in turn: ${dartsLeftInTurn}`);
+        
+        const newPath = findRealisticCheckoutPath(newRemainingScore, dartsLeftInTurn);
         
         if (newPath) {
           // Update checkout path and remaining score
           currentCheckout = newPath;
           currentRemainingScore = newRemainingScore;
+          realisticModeActive = true;
           
           // Store original score for red display
           if (originalScore === null) {
@@ -2088,6 +2112,9 @@ if (document.readyState === 'loading') {
           // Make score red
           const scoreCard = document.getElementById('scoreCard');
           scoreCard.style.background = 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)';
+          
+          // Reset userInputs to track new path from beginning
+          userInputs = [];
           
           console.log(`[Realistic] New path: ${newPath.join(' → ')}, Remaining: ${newRemainingScore}`);
         } else {
@@ -2114,16 +2141,27 @@ if (document.readyState === 'loading') {
         console.log(`[Correct dart] ${dartValue} = ${dartValue_num}, New remaining: ${currentRemainingScore}`);
       }
       
-      // Check if checkout is complete
-      if (userInputs.length === currentCheckout.length) {
-        showFeedback(true);
+      // Check if checkout is complete OR if 3 darts thrown
+      const checkoutComplete = userInputs.length === currentCheckout.length;
+      const maxDartsReached = totalDartsThrown >= 3;
+      
+      if (checkoutComplete || (maxDartsReached && realisticModeActive)) {
+        // If in realistic mode and max darts reached, check if path was followed correctly
+        const wasCorrect = checkoutComplete || (realisticModeActive && userInputs.length === currentCheckout.length);
+        
+        showFeedback(wasCorrect);
         
         // Reset realistic mode variables
         currentRemainingScore = null;
         originalScore = null;
+        realisticModeActive = false;
         
         if (window.challengeMode) {
-          challengeStats.correct++;
+          if (wasCorrect) {
+            challengeStats.correct++;
+          } else {
+            challengeStats.wrong++;
+          }
           updateChallengeStats();
         } else {
           // Handle problem scores
