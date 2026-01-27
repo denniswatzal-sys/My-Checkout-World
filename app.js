@@ -2099,7 +2099,10 @@ if (document.readyState === 'loading') {
           // NOT CHECKABLE - show error
           console.log(`[Realistic] Not checkable with ${dartsLeftInTurn} darts`);
           
-          showFeedback(false, 'Nicht mehr checkbar');
+          // Deactivate realistic mode so click works to continue
+          realisticModeActive = false;
+          
+          showFeedback(false, 'Nicht mehr checkbar!');
           
           // Only auto-generate in challenge mode
           // In training mode, user must click to continue (like normal wrong answer)
@@ -2151,8 +2154,11 @@ if (document.readyState === 'loading') {
         console.log(`[Correct dart] ${dartValue} = ${dartValue_num}, New remaining: ${currentRemainingScore}`);
       }
       
-      // Check if checkout is complete OR if 3 darts thrown
-      const checkoutComplete = userInputs.length === currentCheckout.length;
+      // Check if checkout is complete
+      // In realistic mode: must check remaining score is 0, not just dart count!
+      const checkoutComplete = realisticModeActive 
+        ? (userInputs.length === currentCheckout.length && currentRemainingScore === 0)
+        : (userInputs.length === currentCheckout.length);
       const maxDartsReached = totalDartsThrown >= 3;
       
       if (checkoutComplete) {
@@ -2227,6 +2233,23 @@ if (document.readyState === 'loading') {
               }, 500);
             }
           }
+        }
+      } else if (maxDartsReached && realisticModeActive) {
+        // 3 Darts thrown but checkout not complete in realistic mode
+        // This means the path was not followed correctly OR not enough darts to finish
+        console.log(`[Realistic] 3 darts thrown, not checked out. Remaining: ${currentRemainingScore}`);
+        
+        showFeedback(false);
+        
+        // Reset realistic mode variables
+        currentRemainingScore = null;
+        originalScore = null;
+        originalCheckout = null;
+        realisticModeActive = false;
+        
+        if (window.challengeMode) {
+          challengeStats.wrong++;
+          updateChallengeStats();
         }
       }
     }
