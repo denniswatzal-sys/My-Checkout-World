@@ -2062,8 +2062,13 @@ if (document.readyState === 'loading') {
       // Determine expected dart
       const expectedDart = currentCheckout[userInputs.length - 1];
       
+      // Special case: Bull and D25 are equivalent (both = 50 points)
+      const dartsMatch = dartValue === expectedDart || 
+                        (dartValue === 'Bull' && expectedDart === 'D25') ||
+                        (dartValue === 'D25' && expectedDart === 'Bull');
+      
       // WRONG DART
-      if (dartValue !== expectedDart) {
+      if (!dartsMatch) {
         // Calculate remaining score after this wrong dart
         const dartValue_num = getDartValue(dartValue);
         const scoreBeforeThisDart = currentRemainingScore !== null ? currentRemainingScore : currentScore;
