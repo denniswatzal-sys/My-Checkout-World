@@ -119,7 +119,7 @@
     
     .reset-btn {
       padding: 4px 10px;
-      background: #ef4444;
+      background: #dc2626;
       border: none;
       border-radius: 4px;
       color: white;
@@ -401,7 +401,7 @@
     }
     
     .challenge-cancel-btn {
-      background: #ef4444;
+      background: #dc2626;
       border: none;
       padding: 6px 12px;
       border-radius: 6px;
@@ -413,7 +413,7 @@
     }
     
     .challenge-cancel-btn:active {
-      background: #dc2626;
+      background: #b91c1c;
     }
     
     .action-btns {
@@ -583,7 +583,7 @@
     
     .save-modal-btn {
       flex: 1;
-      background: #10b981;
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
       border: none;
       padding: 12px;
       border-radius: 8px;
@@ -966,9 +966,9 @@
     }
     
     .color-toggle-btn.active {
-      background: #10b981;
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
       color: white;
-      border-color: #059669;
+      border-color: #047857;
     }
     
     .color-toggle-btn:active {
