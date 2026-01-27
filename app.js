@@ -152,7 +152,24 @@ function hideLoadingScreen() {
       if (startScreen) {
         startScreen.style.display = 'flex';
       }
+      
+      // Versuche automatisch in Vollbildmodus zu wechseln
+      enterFullscreen();
     }, 300);
+  }
+}
+
+function enterFullscreen() {
+  const elem = document.documentElement;
+  
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen().catch(err => {
+      console.log('Fullscreen request failed:', err);
+    });
+  } else if (elem.webkitRequestFullscreen) { // Safari
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { // IE11
+    elem.msRequestFullscreen();
   }
 }
 
