@@ -1979,7 +1979,7 @@
         if (!window.challengeMusic) {
           window.challengeMusic = new Audio('Quiz.mp3');
           window.challengeMusic.loop = true;
-          window.challengeMusic.volume = 0.125; // 12.5% volume (halb so laut)
+          window.challengeMusic.volume = 0.0625; // 6.25% volume (sehr leise)
           console.log('Challenge music created');
         }
         window.challengeMusic.play()
