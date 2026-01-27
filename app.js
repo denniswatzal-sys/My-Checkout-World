@@ -1884,7 +1884,7 @@
       // Create heartbeat sound for countdown
       if (!window.heartbeatSound) {
         window.heartbeatSound = new Audio('Heartbeat.mp3');
-        window.heartbeatSound.volume = 1.0; // 100% volume (loud)
+        window.heartbeatSound.volume = 1.0; // Max volume (browser limit)
       }
       
       let count = 3;
@@ -1979,7 +1979,7 @@
         if (!window.challengeMusic) {
           window.challengeMusic = new Audio('Quiz.mp3');
           window.challengeMusic.loop = true;
-          window.challengeMusic.volume = 1.0; // 100% volume
+          window.challengeMusic.volume = 0.5; // 50% volume (halb so laut)
           console.log('Challenge music created');
         }
         window.challengeMusic.play()
@@ -2009,6 +2009,14 @@
         window.challengeTimer = setInterval(() => {
           timeLeft--;
           document.getElementById('challengeTime').textContent = `⏱️ ${timeLeft}s`;
+          
+          // Play heartbeat during last 3 seconds (timeLeft: 2, 1, 0)
+          if (timeLeft <= 2 && timeLeft >= 0) {
+            if (window.heartbeatSound) {
+              window.heartbeatSound.currentTime = 0;
+              window.heartbeatSound.play().catch(e => console.error('Heartbeat play failed:', e));
+            }
+          }
           
           if (timeLeft <= 0) {
             endChallenge();

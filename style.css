@@ -600,7 +600,7 @@
       display: flex;
       align-items: flex-start;
       justify-content: center;
-      background: linear-gradient(135deg, #ff8c00 0%, #ffa500 100%);
+      background: url('Hintergrund6.jpg') center/cover no-repeat fixed;
       padding-top: 8vh;
       position: relative;
     }
