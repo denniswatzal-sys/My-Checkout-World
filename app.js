@@ -2311,8 +2311,16 @@ if (document.readyState === 'loading') {
           const scoreCard = document.getElementById('scoreCard');
           scoreCard.classList.add('error');
           
+          console.log('=== ERSTER FEHLWURF ===');
+          console.log('Rufe showFeedback(false) auf...');
+          
           // Zeige Feedback mit Restwert
           showFeedback(false);
+          
+          console.log('Nach showFeedback - prüfe Klassen:');
+          const userInputsEl = document.getElementById('userInputs');
+          console.log('Klassen:', userInputsEl.className);
+          console.log('Lösung vorhanden:', !!userInputsEl.querySelector('.solution-text'));
           
           // Dartboard neu zeichnen mit Highlight
           createDartboard();
@@ -2327,7 +2335,13 @@ if (document.readyState === 'loading') {
             remainingDiv3.className = 'remaining-score';
             remainingDiv3.textContent = `Restwert: ${currentRemainingScore}`;
             userInputsEl3.appendChild(remainingDiv3);
+            console.log('Restwert hinzugefügt');
           }
+          
+          console.log('FINALE Klassen:', userInputsEl3.className);
+          console.log('FINALE Lösung vorhanden:', !!userInputsEl3.querySelector('.solution-text'));
+          console.log('FINALE Restwert vorhanden:', !!userInputsEl3.querySelector('.remaining-score'));
+          console.log('=== ENDE FEHLWURF ===');
           
           if (window.challengeMode) {
             challengeStats.wrong++;
