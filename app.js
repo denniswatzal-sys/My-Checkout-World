@@ -173,59 +173,6 @@ function enterFullscreen() {
   }
 }
 
-// ========================================
-// HAPTIC FEEDBACK SYSTEM
-// ========================================
-// Global vibration enabled state (loaded from localStorage)
-let vibrationEnabled = true;
-
-// Load vibration setting from localStorage
-try {
-  const savedSetting = localStorage.getItem('dartTrainerVibrationEnabled');
-  if (savedSetting !== null) {
-    vibrationEnabled = savedSetting === 'true';
-  }
-} catch (e) {
-  console.error('Could not load vibration setting:', e);
-}
-
-function vibrate(duration) {
-  if (vibrationEnabled && 'vibrate' in navigator) {
-    navigator.vibrate(duration);
-  }
-}
-
-// Different vibration patterns for different actions
-function vibrateLight() {
-  vibrate(30); // Short tap for normal buttons
-}
-
-function vibrateMedium() {
-  vibrate(50); // Medium tap for important buttons
-}
-
-function vibrateHeavy() {
-  vibrate(100); // Long tap for feedback (correct/wrong)
-}
-
-function vibratePattern(pattern) {
-  if (vibrationEnabled && 'vibrate' in navigator) {
-    navigator.vibrate(pattern);
-  }
-}
-
-function toggleVibration() {
-  vibrationEnabled = !vibrationEnabled;
-  localStorage.setItem('dartTrainerVibrationEnabled', vibrationEnabled.toString());
-  
-  // Give haptic feedback if turning ON
-  if (vibrationEnabled) {
-    vibrateMedium();
-  }
-  
-  console.log('Vibration', vibrationEnabled ? 'enabled' : 'disabled');
-}
-
 // Start loading when DOM is ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initLoadingScreen);
@@ -360,12 +307,6 @@ if (document.readyState === 'loading') {
       bg.setAttribute('stroke-width', '2');
       bg.setAttribute('id', 'dartboard-outer-ring');
       svg.appendChild(bg);
-      
-      // Create segments
-      boardOrder.forEach((number, index) => {
-        const angle = (index * 18) - 100;
-        const startAngle = angle * Math.PI / 180;
-        const endAngle = (angle + 18) * Math.PI / 180;
     
     // ========================================
     // REALISTISCH-MODUS HILFSFUNKTIONEN
@@ -472,6 +413,12 @@ if (document.readyState === 'loading') {
         resetRealisticState();
       }
     }
+      
+      // Create segments
+      boardOrder.forEach((number, index) => {
+        const angle = (index * 18) - 100;
+        const startAngle = angle * Math.PI / 180;
+        const endAngle = (angle + 18) * Math.PI / 180;
         
         const isDouble = highlightedFields.includes(`D${number}`);
         const isSingle = highlightedFields.includes(`S${number}`);
@@ -961,7 +908,7 @@ if (document.readyState === 'loading') {
       {
         element: '#menuBtn',
         title: '⚙️ Einstellungen',
-        content: '<strong>Taste antippen:</strong> Menü öffnen<br><strong>Taste gedrückt halten:</strong> Aktiviert / deaktiviert Vollbildmodus<br><br><strong>Zahlenring ein-/ ausblenden:</strong> Zahlenring ausblenden, zur Erhöhung des Schwierigkeitsgrads.<br><strong>Vibration ein-/ ausschalten:</strong> Haptische Rückmeldung<br><strong>Hintergrund anpassen:</strong> Individuell einstellbar<br><strong>Zurück zum Startbildschirm:</strong> Taste drücken / oder nach rechts wischen.',
+        content: '<strong>Taste antippen:</strong> Menü öffnen<br><strong>Taste gedrückt halten:</strong> Aktiviert / deaktiviert Vollbildmodus<br><br><strong>Zahlenring ein-/ ausblenden:</strong> Zahlenring ausblenden, zur Erhöhung des Schwierigkeitsgrads.<br><strong>Hintergrund anpassen:</strong> Passe den Hintergrund der Benutzeroberfläche individuell an.<br><strong>Zurück zum Startbildschirm:</strong> Taste drücken / nach rechts wischen.',
         position: 'top-left',
         screen: 'training'
       },
@@ -983,7 +930,6 @@ if (document.readyState === 'loading') {
     }
     
     function startTutorial() {
-      vibrateMedium();
       currentTutorialStep = 0;
       tutorialActive = true;
       
@@ -2036,9 +1982,6 @@ if (document.readyState === 'loading') {
     }
     
     function handleDartClick(dartValue) {
-      // Haptic feedback for dartboard clicks
-      vibrateMedium();
-      
       // Wenn Feedback für falsche Antwort angezeigt wird, nächste Aufgabe bei Klick auf Dartscheibe
       // (Richtige Antworten gehen automatisch weiter)
       if (feedback === 'wrong') {
@@ -2268,14 +2211,6 @@ if (document.readyState === 'loading') {
     
     function showFeedback(isCorrect, checkoutNotPossible = false) {
       feedback = isCorrect ? 'correct' : 'wrong';
-      
-      // Haptic feedback
-      if (isCorrect) {
-        vibratePattern([50, 50, 50]); // Double vibration for correct
-      } else {
-        vibrateHeavy(); // Single long vibration for wrong
-      }
-      
       const userInputs = document.getElementById('userInputs');
       
       // Remove previous states
@@ -2394,10 +2329,9 @@ if (document.readyState === 'loading') {
       let count = 3;
       numberElement.textContent = count;
       
-      // Play heartbeat and vibrate for first number (3)
+      // Play heartbeat for first number (3)
       window.heartbeatSound.currentTime = 0;
       window.heartbeatSound.play().catch(e => console.error('Heartbeat play failed:', e));
-      vibrateHeavy(); // Vibration for countdown
       
       const countdownInterval = setInterval(() => {
         count--;
@@ -2405,9 +2339,6 @@ if (document.readyState === 'loading') {
           // Play heartbeat sound
           window.heartbeatSound.currentTime = 0;
           window.heartbeatSound.play().catch(e => console.error('Heartbeat play failed:', e));
-          
-          // Vibrate
-          vibrateHeavy();
           
           // Reset animation
           numberElement.style.animation = 'none';
@@ -2522,9 +2453,6 @@ if (document.readyState === 'loading') {
           
           // Play heartbeat during last 3 seconds (timeLeft: 3, 2, 1)
           if (timeLeft <= 3 && timeLeft >= 1) {
-            // Vibration during last 3 seconds
-            vibrateHeavy();
-            
             if (window.heartbeatSound) {
               window.heartbeatSound.currentTime = 0;
               window.heartbeatSound.play().catch(e => console.error('Heartbeat play failed:', e));
@@ -3083,7 +3011,6 @@ if (document.readyState === 'loading') {
     }
     
     function goToTrainer() {
-      vibrateMedium();
       document.getElementById('startScreen').style.display = 'none';
       document.getElementById('mainApp').style.display = 'block';
       
@@ -3135,7 +3062,6 @@ if (document.readyState === 'loading') {
     }
     
     function openDatabaseEditor() {
-      vibrateMedium();
       // Mark that we came from start screen
       window.cameFromStartScreen = true;
       
@@ -3152,7 +3078,6 @@ if (document.readyState === 'loading') {
     }
     
     function openLeaderboard(currentEntry = null) {
-      vibrateMedium();
       const modal = document.getElementById('leaderboardModal');
       const list = document.getElementById('leaderboardList');
       
@@ -3360,7 +3285,6 @@ if (document.readyState === 'loading') {
     
     function startMenuBtnPress(e) {
       e.preventDefault();
-      vibrateMedium(); // Haptic feedback
       menuBtnLongPressTriggered = false;
       
       menuBtnPressTimer = setTimeout(() => {
@@ -3667,32 +3591,6 @@ if (document.readyState === 'loading') {
     if (firstRangeBtn) {
       firstRangeBtn.classList.add('active-range');
     }
-    
-    // ========================================
-    // ADD VIBRATION TO ALL BUTTONS
-    // ========================================
-    // Add vibration to all mode buttons
-    document.querySelectorAll('.mode-btn').forEach(btn => {
-      btn.addEventListener('click', () => vibrateLight());
-    });
-    
-    // Add vibration to all range buttons
-    document.querySelectorAll('.range-btn').forEach(btn => {
-      btn.addEventListener('mousedown', () => vibrateMedium());
-      btn.addEventListener('touchstart', () => vibrateMedium());
-    });
-    
-    // Add vibration to all modal buttons
-    document.querySelectorAll('.save-modal-btn, .close-modal-btn, .close-btn').forEach(btn => {
-      btn.addEventListener('click', () => vibrateLight());
-    });
-    
-    // Add vibration to dartboard fields (SVG circles)
-    setTimeout(() => {
-      document.querySelectorAll('#dartboard circle').forEach(circle => {
-        circle.addEventListener('click', () => vibrateMedium());
-      });
-    }, 500);
     
     // Load problemScores from localStorage FIRST, then update badge
     // RESET: Clear problemScores for fresh start (can be removed after first use)
