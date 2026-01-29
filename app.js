@@ -173,6 +173,174 @@ function enterFullscreen() {
   }
 }
 
+// ========================================
+// HAPTIC FEEDBACK SYSTEM
+// ========================================
+// Global vibration enabled state (loaded from localStorage)
+let vibrationEnabled = true;
+
+// Load vibration setting from localStorage
+try {
+  const savedSetting = localStorage.getItem('dartTrainerVibrationEnabled');
+  if (savedSetting !== null) {
+    vibrationEnabled = savedSetting === 'true';
+  }
+} catch (e) {
+  console.error('Could not load vibration setting:', e);
+}
+
+// ========================================
+// REALISTISCH-MODUS VARIABLEN
+// ========================================
+let realisticMode = localStorage.getItem('realisticMode') === 'true' || false;
+let remainingDarts = 3; // Verbleibende Darts in der aktuellen Runde
+let maxDartsPerRound = 3; // Maximum Darts pro Runde (3 oder 2 je nach Modus)
+let currentRemainingScore = null; // Aktueller Restwert nach Fehlwurf
+let isInRealisticErrorState = false; // Ob wir im Fehler-Zustand sind (rote Box)
+
+function vibrate(duration) {
+  if (vibrationEnabled && 'vibrate' in navigator) {
+    navigator.vibrate(duration);
+  }
+}
+
+// Different vibration patterns for different actions
+function vibrateLight() {
+  vibrate(30); // Short tap for normal buttons
+}
+
+function vibrateMedium() {
+  vibrate(50); // Medium tap for important buttons
+}
+
+function vibrateHeavy() {
+  vibrate(100); // Long tap for feedback (correct/wrong)
+}
+
+function vibratePattern(pattern) {
+  if (vibrationEnabled && 'vibrate' in navigator) {
+    navigator.vibrate(pattern);
+  }
+}
+
+function toggleVibration() {
+  vibrationEnabled = !vibrationEnabled;
+  localStorage.setItem('dartTrainerVibrationEnabled', vibrationEnabled.toString());
+  
+  // Give haptic feedback if turning ON
+  if (vibrationEnabled) {
+    vibrateMedium();
+  }
+  
+  console.log('Vibration', vibrationEnabled ? 'enabled' : 'disabled');
+}
+
+// ========================================
+// REALISTISCH-MODUS FUNKTIONEN
+// ========================================
+
+// Berechne den Wert eines Darts (z.B. "T20" -> 60, "D16" -> 32, "Bull" -> 50)
+function getDartValue(dart) {
+  if (dart === 'Bull') return 50;
+  if (dart.startsWith('S25')) return 25;
+  
+  const multiplier = dart[0] === 'T' ? 3 : dart[0] === 'D' ? 2 : 1;
+  const number = parseInt(dart.substring(1));
+  return multiplier * number;
+}
+
+// Prüfe ob eine Zahl mit N Darts checkbar ist
+function isCheckoutPossible(score, darts) {
+  if (darts === 1) {
+    // Mit 1 Dart: Nur Doubles und Bull
+    const checkableWith1Dart = [2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,50];
+    return checkableWith1Dart.includes(score);
+  } else if (darts === 2) {
+    // Mit 2 Darts: Nicht über 110 und nicht 99
+    return score <= 110 && score !== 99;
+  }
+  // Mit 3 Darts: Alles bis 170
+  return score <= 170;
+}
+
+// Finde den nächsten Dart im Checkout-Weg basierend auf Restwert und verbleibenden Darts
+function findNextDart(remainingScore, dartsLeft) {
+  console.log(`[Realistisch] Finding next dart for score ${remainingScore} with ${dartsLeft} darts left`);
+  
+  // Spezialfall: 2 Darts übrig - prüfe zuerst 2-Dart-DB
+  if (dartsLeft === 2) {
+    const twoDartCheckout = twoDartCheckouts[remainingScore];
+    if (twoDartCheckout && twoDartCheckout.length > 0) {
+      console.log(`[Realistisch] Found in 2-dart DB: ${twoDartCheckout[0]}`);
+      return { dart: twoDartCheckout[0], checkout: twoDartCheckout, fromTwoDartDB: true };
+    }
+  }
+  
+  // Sonst: Suche in 3-Dart-DB
+  const threeDartCheckout = defaultCheckouts[remainingScore];
+  if (!threeDartCheckout || threeDartCheckout.length === 0) {
+    console.log(`[Realistisch] No checkout found in database`);
+    return null;
+  }
+  
+  // Bestimme welcher Dart der Reihe (von links nach rechts)
+  let dartIndex;
+  if (dartsLeft === 3) {
+    dartIndex = 0; // Erster Dart
+  } else if (dartsLeft === 2) {
+    dartIndex = 1; // Zweiter Dart (da nicht in 2D-DB gefunden)
+  } else if (dartsLeft === 1) {
+    dartIndex = 2; // Dritter Dart
+  }
+  
+  const nextDart = threeDartCheckout[dartIndex];
+  console.log(`[Realistisch] Found in 3-dart DB at index ${dartIndex}: ${nextDart}`);
+  
+  return { dart: nextDart, checkout: threeDartCheckout, fromTwoDartDB: false };
+}
+
+// Setze Realistisch-Modus Zustand zurück (bei neuer Zahl)
+function resetRealisticState() {
+  currentRemainingScore = null;
+  isInRealisticErrorState = false;
+  
+  // Setze Dart-Limit basierend auf aktuellem Modus
+  if (currentMode === '3darts' || (currentMode === 'mixed' && currentCheckouts === defaultCheckouts)) {
+    maxDartsPerRound = 3;
+    remainingDarts = 3;
+  } else if (currentMode === '2darts' || (currentMode === 'mixed' && currentCheckouts === twoDartCheckouts)) {
+    maxDartsPerRound = 2;
+    remainingDarts = 2;
+  }
+  
+  // Entferne rote Färbung
+  const scoreCard = document.getElementById('scoreCard');
+  if (scoreCard) {
+    scoreCard.classList.remove('realistic-error');
+  }
+  
+  console.log(`[Realistisch] State reset - maxDarts: ${maxDartsPerRound}, remaining: ${remainingDarts}`);
+}
+
+// Toggle Realistisch-Modus
+function toggleRealisticMode() {
+  realisticMode = !realisticMode;
+  localStorage.setItem('realisticMode', realisticMode);
+  
+  // Update UI
+  const toggle = document.getElementById('realisticToggle');
+  if (toggle) {
+    toggle.textContent = realisticMode ? '☑' : '☐';
+  }
+  
+  console.log(`[Realistisch] Mode ${realisticMode ? 'enabled' : 'disabled'}`);
+  
+  // Reset state wenn Modus gewechselt wird
+  if (!realisticMode) {
+    resetRealisticState();
+  }
+}
+
 // Start loading when DOM is ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initLoadingScreen);
@@ -284,15 +452,6 @@ if (document.readyState === 'loading') {
       'userInputs': true
     };
     
-    // ========================================
-    // REALISTISCH-MODUS
-    // ========================================
-    let realisticMode = localStorage.getItem('realisticMode') === 'true' || false;
-    let remainingDarts = 3; // Verbleibende Darts in der aktuellen Runde
-    let maxDartsPerRound = 3; // Maximum Darts pro Runde (3 oder 2 je nach Modus)
-    let currentRemainingScore = null; // Aktueller Restwert nach Fehlwurf
-    let isInRealisticErrorState = false; // Ob wir im Fehler-Zustand sind (rote Box)
-    
     function createDartboard() {
       const svg = document.getElementById('dartboard');
       svg.innerHTML = '';
@@ -307,112 +466,6 @@ if (document.readyState === 'loading') {
       bg.setAttribute('stroke-width', '2');
       bg.setAttribute('id', 'dartboard-outer-ring');
       svg.appendChild(bg);
-    
-    // ========================================
-    // REALISTISCH-MODUS HILFSFUNKTIONEN
-    // ========================================
-    
-    // Berechne den Wert eines Darts (z.B. "T20" -> 60, "D16" -> 32, "Bull" -> 50)
-    function getDartValue(dart) {
-      if (dart === 'Bull') return 50;
-      if (dart.startsWith('S25')) return 25;
-      
-      const multiplier = dart[0] === 'T' ? 3 : dart[0] === 'D' ? 2 : 1;
-      const number = parseInt(dart.substring(1));
-      return multiplier * number;
-    }
-    
-    // Prüfe ob eine Zahl mit N Darts checkbar ist
-    function isCheckoutPossible(score, darts) {
-      if (darts === 1) {
-        // Mit 1 Dart: Nur Doubles und Bull
-        const checkableWith1Dart = [2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,50];
-        return checkableWith1Dart.includes(score);
-      } else if (darts === 2) {
-        // Mit 2 Darts: Nicht über 110 und nicht 99
-        return score <= 110 && score !== 99;
-      }
-      // Mit 3 Darts: Alles bis 170
-      return score <= 170;
-    }
-    
-    // Finde den nächsten Dart im Checkout-Weg basierend auf Restwert und verbleibenden Darts
-    function findNextDart(remainingScore, dartsLeft) {
-      console.log(`[Realistisch] Finding next dart for score ${remainingScore} with ${dartsLeft} darts left`);
-      
-      // Spezialfall: 2 Darts übrig - prüfe zuerst 2-Dart-DB
-      if (dartsLeft === 2) {
-        const twoDartCheckout = twoDartCheckouts[remainingScore];
-        if (twoDartCheckout && twoDartCheckout.length > 0) {
-          console.log(`[Realistisch] Found in 2-dart DB: ${twoDartCheckout[0]}`);
-          return { dart: twoDartCheckout[0], checkout: twoDartCheckout, fromTwoDartDB: true };
-        }
-      }
-      
-      // Sonst: Suche in 3-Dart-DB
-      const threeDartCheckout = defaultCheckouts[remainingScore];
-      if (!threeDartCheckout || threeDartCheckout.length === 0) {
-        console.log(`[Realistisch] No checkout found in database`);
-        return null;
-      }
-      
-      // Bestimme welcher Dart der Reihe (von links nach rechts)
-      let dartIndex;
-      if (dartsLeft === 3) {
-        dartIndex = 0; // Erster Dart
-      } else if (dartsLeft === 2) {
-        dartIndex = 1; // Zweiter Dart (da nicht in 2D-DB gefunden)
-      } else if (dartsLeft === 1) {
-        dartIndex = 2; // Dritter Dart
-      }
-      
-      const nextDart = threeDartCheckout[dartIndex];
-      console.log(`[Realistisch] Found in 3-dart DB at index ${dartIndex}: ${nextDart}`);
-      
-      return { dart: nextDart, checkout: threeDartCheckout, fromTwoDartDB: false };
-    }
-    
-    // Setze Realistisch-Modus Zustand zurück (bei neuer Zahl)
-    function resetRealisticState() {
-      currentRemainingScore = null;
-      isInRealisticErrorState = false;
-      
-      // Setze Dart-Limit basierend auf aktuellem Modus
-      if (currentMode === '3darts' || (currentMode === 'mixed' && currentCheckouts === defaultCheckouts)) {
-        maxDartsPerRound = 3;
-        remainingDarts = 3;
-      } else if (currentMode === '2darts' || (currentMode === 'mixed' && currentCheckouts === twoDartCheckouts)) {
-        maxDartsPerRound = 2;
-        remainingDarts = 2;
-      }
-      
-      // Entferne rote Färbung
-      const scoreCard = document.getElementById('scoreCard');
-      if (scoreCard) {
-        scoreCard.classList.remove('realistic-error');
-      }
-      
-      console.log(`[Realistisch] State reset - maxDarts: ${maxDartsPerRound}, remaining: ${remainingDarts}`);
-    }
-    
-    // Toggle Realistisch-Modus
-    function toggleRealisticMode() {
-      realisticMode = !realisticMode;
-      localStorage.setItem('realisticMode', realisticMode);
-      
-      // Update UI
-      const toggle = document.getElementById('realisticToggle');
-      if (toggle) {
-        toggle.textContent = realisticMode ? '☑' : '☐';
-      }
-      
-      console.log(`[Realistisch] Mode ${realisticMode ? 'enabled' : 'disabled'}`);
-      
-      // Reset state wenn Modus gewechselt wird
-      if (!realisticMode) {
-        resetRealisticState();
-      }
-    }
       
       // Create segments
       boardOrder.forEach((number, index) => {
@@ -908,7 +961,7 @@ if (document.readyState === 'loading') {
       {
         element: '#menuBtn',
         title: '⚙️ Einstellungen',
-        content: '<strong>Taste antippen:</strong> Menü öffnen<br><strong>Taste gedrückt halten:</strong> Aktiviert / deaktiviert Vollbildmodus<br><br><strong>Zahlenring ein-/ ausblenden:</strong> Zahlenring ausblenden, zur Erhöhung des Schwierigkeitsgrads.<br><strong>Hintergrund anpassen:</strong> Passe den Hintergrund der Benutzeroberfläche individuell an.<br><strong>Zurück zum Startbildschirm:</strong> Taste drücken / nach rechts wischen.',
+        content: '<strong>Taste antippen:</strong> Menü öffnen<br><strong>Taste gedrückt halten:</strong> Aktiviert / deaktiviert Vollbildmodus<br><br><strong>Zahlenring ein-/ ausblenden:</strong> Zahlenring ausblenden, zur Erhöhung des Schwierigkeitsgrads.<br><strong>Vibration ein-/ ausschalten:</strong> Haptische Rückmeldung<br><strong>Hintergrund anpassen:</strong> Individuell einstellbar<br><strong>Zurück zum Startbildschirm:</strong> Taste drücken / oder nach rechts wischen.',
         position: 'top-left',
         screen: 'training'
       },
@@ -930,6 +983,7 @@ if (document.readyState === 'loading') {
     }
     
     function startTutorial() {
+      vibrateMedium();
       currentTutorialStep = 0;
       tutorialActive = true;
       
@@ -1982,6 +2036,9 @@ if (document.readyState === 'loading') {
     }
     
     function handleDartClick(dartValue) {
+      // Haptic feedback for dartboard clicks
+      vibrateMedium();
+      
       // Wenn Feedback für falsche Antwort angezeigt wird, nächste Aufgabe bei Klick auf Dartscheibe
       // (Richtige Antworten gehen automatisch weiter)
       if (feedback === 'wrong') {
@@ -2211,6 +2268,14 @@ if (document.readyState === 'loading') {
     
     function showFeedback(isCorrect, checkoutNotPossible = false) {
       feedback = isCorrect ? 'correct' : 'wrong';
+      
+      // Haptic feedback
+      if (isCorrect) {
+        vibratePattern([50, 50, 50]); // Double vibration for correct
+      } else {
+        vibrateHeavy(); // Single long vibration for wrong
+      }
+      
       const userInputs = document.getElementById('userInputs');
       
       // Remove previous states
@@ -2329,9 +2394,10 @@ if (document.readyState === 'loading') {
       let count = 3;
       numberElement.textContent = count;
       
-      // Play heartbeat for first number (3)
+      // Play heartbeat and vibrate for first number (3)
       window.heartbeatSound.currentTime = 0;
       window.heartbeatSound.play().catch(e => console.error('Heartbeat play failed:', e));
+      vibrateHeavy(); // Vibration for countdown
       
       const countdownInterval = setInterval(() => {
         count--;
@@ -2339,6 +2405,9 @@ if (document.readyState === 'loading') {
           // Play heartbeat sound
           window.heartbeatSound.currentTime = 0;
           window.heartbeatSound.play().catch(e => console.error('Heartbeat play failed:', e));
+          
+          // Vibrate
+          vibrateHeavy();
           
           // Reset animation
           numberElement.style.animation = 'none';
@@ -2453,6 +2522,9 @@ if (document.readyState === 'loading') {
           
           // Play heartbeat during last 3 seconds (timeLeft: 3, 2, 1)
           if (timeLeft <= 3 && timeLeft >= 1) {
+            // Vibration during last 3 seconds
+            vibrateHeavy();
+            
             if (window.heartbeatSound) {
               window.heartbeatSound.currentTime = 0;
               window.heartbeatSound.play().catch(e => console.error('Heartbeat play failed:', e));
@@ -3011,6 +3083,7 @@ if (document.readyState === 'loading') {
     }
     
     function goToTrainer() {
+      vibrateMedium();
       document.getElementById('startScreen').style.display = 'none';
       document.getElementById('mainApp').style.display = 'block';
       
@@ -3062,6 +3135,7 @@ if (document.readyState === 'loading') {
     }
     
     function openDatabaseEditor() {
+      vibrateMedium();
       // Mark that we came from start screen
       window.cameFromStartScreen = true;
       
@@ -3078,6 +3152,7 @@ if (document.readyState === 'loading') {
     }
     
     function openLeaderboard(currentEntry = null) {
+      vibrateMedium();
       const modal = document.getElementById('leaderboardModal');
       const list = document.getElementById('leaderboardList');
       
@@ -3285,6 +3360,7 @@ if (document.readyState === 'loading') {
     
     function startMenuBtnPress(e) {
       e.preventDefault();
+      vibrateMedium(); // Haptic feedback
       menuBtnLongPressTriggered = false;
       
       menuBtnPressTimer = setTimeout(() => {
@@ -3591,6 +3667,32 @@ if (document.readyState === 'loading') {
     if (firstRangeBtn) {
       firstRangeBtn.classList.add('active-range');
     }
+    
+    // ========================================
+    // ADD VIBRATION TO ALL BUTTONS
+    // ========================================
+    // Add vibration to all mode buttons
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+      btn.addEventListener('click', () => vibrateLight());
+    });
+    
+    // Add vibration to all range buttons
+    document.querySelectorAll('.range-btn').forEach(btn => {
+      btn.addEventListener('mousedown', () => vibrateMedium());
+      btn.addEventListener('touchstart', () => vibrateMedium());
+    });
+    
+    // Add vibration to all modal buttons
+    document.querySelectorAll('.save-modal-btn, .close-modal-btn, .close-btn').forEach(btn => {
+      btn.addEventListener('click', () => vibrateLight());
+    });
+    
+    // Add vibration to dartboard fields (SVG circles)
+    setTimeout(() => {
+      document.querySelectorAll('#dartboard circle').forEach(circle => {
+        circle.addEventListener('click', () => vibrateMedium());
+      });
+    }, 500);
     
     // Load problemScores from localStorage FIRST, then update badge
     // RESET: Clear problemScores for fresh start (can be removed after first use)

@@ -46,7 +46,8 @@
     }
     
     #rangeCard {
-      border: 1px solid #000;
+      background: transparent;
+      border: none;
       position: relative;
     }
     
@@ -304,7 +305,7 @@
     
     .user-inputs.correct {
       background: #d1fae5;
-      border: 2px solid #10b981;
+      border: 2px solid #059669;
       cursor: pointer;
     }
     
@@ -1215,11 +1216,11 @@
     @keyframes flashCorrect {
       0% { 
         stroke: white;
-        filter: drop-shadow(0 0 0px rgba(16, 185, 129, 0));
+        filter: drop-shadow(0 0 0px rgba(5, 150, 105, 0));
       }
       100% { 
-        stroke: #10b981;
-        filter: drop-shadow(0 0 10px rgba(16, 185, 129, 1));
+        stroke: #059669;
+        filter: drop-shadow(0 0 10px rgba(5, 150, 105, 1));
       }
     }
     
@@ -1355,9 +1356,9 @@
     .loading-progress-bar {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+      background: linear-gradient(90deg, #059669 0%, #047857 100%);
       transition: width 0.3s ease;
-      box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+      box-shadow: 0 0 20px rgba(5, 150, 105, 0.5);
       position: relative;
       overflow: hidden;
     }
