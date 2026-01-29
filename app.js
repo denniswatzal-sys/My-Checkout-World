@@ -2064,18 +2064,8 @@ if (document.readyState === 'loading') {
           
           // Restwert-Anzeige NICHT entfernen - wird bei nächstem Wurf aktualisiert
           
-          // Prüfe ob Max-Darts erreicht
-          if (dartsUsedInRound >= maxDartsForRound) {
-            // Maximale Darts erreicht - neue Zahl generieren
-            if (window.challengeMode) {
-              generateScore(currentRangeMin, currentRangeMax);
-            } else if (window.learnModeActive) {
-              generateLearnScore();
-            } else {
-              generateScore(currentRangeMin, currentRangeMax);
-            }
-            return;
-          }
+          // KEINE Max-Darts Prüfung hier! Der Dart muss erst verarbeitet werden.
+          // Die Prüfung kommt später, nachdem wir wissen ob ein Checkout geschafft wurde.
           
           // KEIN return hier - Dart wird sofort verarbeitet!
           // Der Code läuft weiter und verarbeitet den aktuellen Klick
@@ -2215,6 +2205,17 @@ if (document.readyState === 'loading') {
             if (window.challengeMode) {
               challengeStats.wrong++;
               updateChallengeStats();
+            }
+            
+            // Wenn keine Darts mehr übrig sind, generiere neue Zahl
+            if (dartsLeft <= 0) {
+              if (window.challengeMode) {
+                generateScore(currentRangeMin, currentRangeMax);
+              } else if (window.learnModeActive) {
+                generateLearnScore();
+              } else {
+                generateScore(currentRangeMin, currentRangeMax);
+              }
             }
             
             return;
