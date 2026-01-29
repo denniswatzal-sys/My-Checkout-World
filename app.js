@@ -290,6 +290,15 @@ function toggleVibration() {
 }
 
 function toggleRealisticMode() {
+  // Im Challenge-Modus ist Realistisch-Modus nicht erlaubt
+  if (window.challengeMode) {
+    const realisticToggle = document.getElementById('realisticModeToggle');
+    if (realisticToggle) {
+      realisticToggle.checked = false;
+    }
+    return;
+  }
+  
   realisticMode = !realisticMode;
   localStorage.setItem('dartTrainerRealisticMode', realisticMode.toString());
   
@@ -2873,6 +2882,20 @@ if (document.readyState === 'loading') {
         }
         window.learnModeActive = false;
         
+        // FORCE: Deaktiviere Realistisch-Modus im Challenge
+        realisticMode = false;
+        const realisticToggle = document.getElementById('realisticModeToggle');
+        if (realisticToggle) {
+          realisticToggle.checked = false;
+        }
+        
+        // Reset realistic mode state
+        isInErrorState = false;
+        currentRemainingScore = null;
+        dartsUsedInRound = 0;
+        errorStateCheckout = [];
+        dartsInErrorState = 0;
+        
         // Update hint range
         currentHintRange = '2-170';
         if (hintVisible) {
@@ -3019,6 +3042,14 @@ if (document.readyState === 'loading') {
         learnBtn.style.borderColor = '#b91c1c';
       }
       window.learnModeActive = false;
+      
+      // Restore realistic mode from localStorage
+      const savedRealisticMode = localStorage.getItem('dartTrainerRealisticMode');
+      realisticMode = savedRealisticMode === 'true';
+      const realisticToggle = document.getElementById('realisticModeToggle');
+      if (realisticToggle) {
+        realisticToggle.checked = realisticMode;
+      }
       
       // Update hint range
       currentHintRange = '2-170';
