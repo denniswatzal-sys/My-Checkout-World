@@ -2226,6 +2226,9 @@ if (document.readyState === 'loading') {
           return;
         } else {
           // FALSCH! Erneuter Fehlwurf im Error-State
+          // Highlighte das getroffene Feld
+          highlightedFields.push(dartValue);
+          
           // Berechne neuen Restwert
           currentRemainingScore -= dartPoints;
           
@@ -2252,6 +2255,9 @@ if (document.readyState === 'loading') {
           
           // Zeige Feedback für Fehlwurf
           showFeedback(false);
+          
+          // Dartboard neu zeichnen mit Highlight
+          createDartboard();
           
           // Aktualisiere Restwert-Anzeige
           const userInputsEl2 = document.getElementById('userInputs');
@@ -2280,6 +2286,9 @@ if (document.readyState === 'loading') {
           // Im Realistisch-Modus: Berechne Restwert und gehe in Error-State
           isInErrorState = true;
           
+          // Highlighte das getroffene Feld
+          highlightedFields.push(dartValue);
+          
           // Berechne was wir vom ursprünglichen Score abziehen müssen
           let pointsScored = 0;
           for (let i = 0; i < userInputs.length; i++) {
@@ -2300,6 +2309,9 @@ if (document.readyState === 'loading') {
           
           // Zeige Feedback mit Restwert
           showFeedback(false);
+          
+          // Dartboard neu zeichnen mit Highlight
+          createDartboard();
           
           // Aktualisiere oder erstelle Restwert-Anzeige
           const userInputsEl3 = document.getElementById('userInputs');
@@ -2323,7 +2335,7 @@ if (document.readyState === 'loading') {
             updateProblemBadge();
           }
         } else {
-          // Normal Mode: Wie bisher
+          // Normal Mode: Wie bisher (kein Highlight bei Fehlwurf)
           showFeedback(false);
           if (window.challengeMode) {
             challengeStats.wrong++;
