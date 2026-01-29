@@ -337,6 +337,19 @@
       border: 1px solid #991b1b;
     }
     
+    .remaining-score {
+      width: 100%;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: #1e40af;
+      margin-top: 6px;
+      padding: 6px;
+      background: #dbeafe;
+      border-radius: 6px;
+      border: 1px solid #3b82f6;
+    }
+    
     .user-input-chip {
       background: #3b82f6;
       color: white;

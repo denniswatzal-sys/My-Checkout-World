@@ -2069,6 +2069,11 @@ if (document.readyState === 'loading') {
             existingImpossible.remove();
           }
           
+          const existingRemaining = userInputsEl.querySelector('.remaining-score');
+          if (existingRemaining) {
+            existingRemaining.remove();
+          }
+          
           // Prüfe ob Max-Darts erreicht
           if (dartsUsedInRound >= maxDartsForRound) {
             // Maximale Darts erreicht - neue Zahl generieren
@@ -2168,12 +2173,7 @@ if (document.readyState === 'loading') {
             // Überkauft oder unmöglich - Wurf ungültig, Runde beendet
             showFeedback(false);
             
-            // Zeige "Checken nicht möglich!"
-            const userInputsEl = document.getElementById('userInputs');
-            const impossibleDiv = document.createElement('div');
-            impossibleDiv.className = 'impossible-checkout';
-            impossibleDiv.textContent = 'Checken nicht möglich!';
-            userInputsEl.appendChild(impossibleDiv);
+            // Keine Restwert-Anzeige bei Überkauft/auf 1
             
             if (window.challengeMode) {
               challengeStats.wrong++;
@@ -2186,14 +2186,15 @@ if (document.readyState === 'loading') {
           // Prüfe ob Checkout mit restlichen Darts noch möglich ist
           const dartsLeft = maxDartsForRound - dartsUsedInRound;
           if (!canCheckoutWithDarts(currentRemainingScore, dartsLeft)) {
-            // Nicht mehr möglich
+            // Nicht mehr möglich - zeige Restwert
             showFeedback(false);
             
-            // Zeige "Checken nicht möglich!"
+            // Zeige Restwert
             const userInputsEl = document.getElementById('userInputs');
-            const impossibleDiv = document.createElement('div');
-            impossibleDiv.className = 'impossible-checkout';
-            impossibleDiv.textContent = 'Checken nicht möglich!';
+            const remainingDiv = document.createElement('div');
+            remainingDiv.className = 'remaining-score';
+            remainingDiv.textContent = `Restwert: ${currentRemainingScore}`;
+            userInputsEl.appendChild(remainingDiv);
             userInputsEl.appendChild(impossibleDiv);
             
             if (window.challengeMode) {
@@ -2219,11 +2220,7 @@ if (document.readyState === 'loading') {
             // Überkauft oder unmöglich
             showFeedback(false);
             
-            const userInputsEl = document.getElementById('userInputs');
-            const impossibleDiv = document.createElement('div');
-            impossibleDiv.className = 'impossible-checkout';
-            impossibleDiv.textContent = 'Checken nicht möglich!';
-            userInputsEl.appendChild(impossibleDiv);
+            // Keine Restwert-Anzeige bei Überkauft/auf 1
             
             if (window.challengeMode) {
               challengeStats.wrong++;
@@ -2237,19 +2234,15 @@ if (document.readyState === 'loading') {
           errorStateCheckout = currentCheckouts[currentRemainingScore] || [];
           dartsInErrorState = 0;
           
-          // Zeige Feedback für Fehlwurf
+          // Zeige Feedback für Fehlwurf mit Restwert
           showFeedback(false);
           
-          // Prüfe ob Checkout mit restlichen Darts noch möglich ist
-          const dartsLeft = maxDartsForRound - dartsUsedInRound;
-          if (!canCheckoutWithDarts(currentRemainingScore, dartsLeft)) {
-            // Nicht mehr möglich
-            const userInputsEl = document.getElementById('userInputs');
-            const impossibleDiv = document.createElement('div');
-            impossibleDiv.className = 'impossible-checkout';
-            impossibleDiv.textContent = 'Checken nicht möglich!';
-            userInputsEl.appendChild(impossibleDiv);
-          }
+          // Zeige Restwert
+          const userInputsEl2 = document.getElementById('userInputs');
+          const remainingDiv2 = document.createElement('div');
+          remainingDiv2.className = 'remaining-score';
+          remainingDiv2.textContent = `Restwert: ${currentRemainingScore}`;
+          userInputsEl2.appendChild(remainingDiv2);
           
           if (window.challengeMode) {
             challengeStats.wrong++;
@@ -2284,19 +2277,15 @@ if (document.readyState === 'loading') {
           const scoreCard = document.getElementById('scoreCard');
           scoreCard.classList.add('error');
           
-          // Zeige Feedback
+          // Zeige Feedback mit Restwert
           showFeedback(false);
           
-          // Prüfe ob Checkout mit restlichen Darts noch möglich ist
-          const dartsLeft = maxDartsForRound - dartsUsedInRound;
-          if (!canCheckoutWithDarts(currentRemainingScore, dartsLeft)) {
-            // Nicht mehr möglich
-            const userInputsEl = document.getElementById('userInputs');
-            const impossibleDiv = document.createElement('div');
-            impossibleDiv.className = 'impossible-checkout';
-            impossibleDiv.textContent = 'Checken nicht möglich!';
-            userInputsEl.appendChild(impossibleDiv);
-          }
+          // Zeige Restwert
+          const userInputsEl3 = document.getElementById('userInputs');
+          const remainingDiv3 = document.createElement('div');
+          remainingDiv3.className = 'remaining-score';
+          remainingDiv3.textContent = `Restwert: ${currentRemainingScore}`;
+          userInputsEl3.appendChild(remainingDiv3);
           
           if (window.challengeMode) {
             challengeStats.wrong++;
