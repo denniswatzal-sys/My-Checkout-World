@@ -2298,6 +2298,24 @@ if (document.readyState === 'loading') {
             userInputsEl2.appendChild(remainingDiv2);
           }
           
+          // WICHTIG: Prüfe ob Checkout mit restlichen Darts noch möglich ist!
+          if (!canCheckoutWithDarts(currentRemainingScore, dartsLeftAfterThis)) {
+            // Checkout nicht mehr möglich → Runde beendet, SOFORT neue Zahl generieren
+            console.log('[DEBUG] Nach Fehlwurf: Checkout nicht mehr möglich → neue Zahl!');
+            
+            if (window.challengeMode) {
+              challengeStats.wrong++;
+              updateChallengeStats();
+              generateScore(currentRangeMin, currentRangeMax);
+            } else if (window.learnModeActive) {
+              generateLearnScore();
+            } else {
+              generateScore(currentRangeMin, currentRangeMax);
+            }
+            
+            return;
+          }
+          
           if (window.challengeMode) {
             challengeStats.wrong++;
             updateChallengeStats();
