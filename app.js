@@ -244,9 +244,11 @@ function toggleRealisticMode() {
   localStorage.setItem('dartTrainerRealisticMode', realisticMode.toString());
   
   // Reset error state when toggling
-  isInErrorState = false;
-  currentRemainingScore = null;
-  dartsUsedInRound = 0;
+  if (typeof isInErrorState !== 'undefined') {
+    isInErrorState = false;
+    currentRemainingScore = null;
+    dartsUsedInRound = 0;
+  }
   
   // Remove error class from score card
   const scoreCard = document.getElementById('scoreCard');
@@ -542,7 +544,15 @@ if (document.readyState === 'loading') {
       }
       
       // Reset realistic mode state when changing modes
-      resetRealisticMode();
+      if (realisticMode) {
+        isInErrorState = false;
+        currentRemainingScore = null;
+        dartsUsedInRound = 0;
+        const scoreCard = document.getElementById('scoreCard');
+        if (scoreCard) {
+          scoreCard.classList.remove('error');
+        }
+      }
       
       // Clear anti-repetition history when switching modes
       clearAntiRepetitionHistory();
@@ -1956,7 +1966,11 @@ if (document.readyState === 'loading') {
       scoreCard.classList.remove('stell', 'twodarts', 'error');
       
       // Reset realistic mode state
-      resetRealisticMode();
+      if (realisticMode) {
+        isInErrorState = false;
+        currentRemainingScore = null;
+        dartsUsedInRound = 0;
+      }
       
       // Add appropriate class
       if (isStell) {
@@ -2000,7 +2014,6 @@ if (document.readyState === 'loading') {
           // Prüfe ob Max-Darts erreicht
           if (dartsUsedInRound >= maxDartsForRound) {
             // Maximale Darts erreicht - neue Zahl generieren
-            resetRealisticMode();
             if (window.challengeMode) {
               generateScore(currentRangeMin, currentRangeMax);
             } else if (window.learnModeActive) {
@@ -2015,17 +2028,17 @@ if (document.readyState === 'loading') {
           // Der Code läuft weiter und verarbeitet den aktuellen Klick
         } else {
           // Normal mode oder nicht im Error-State: Reset und neue Zahl
-        manualScoreActive = false;
-        resetRealisticMode();
-        
-        if (window.challengeMode) {
-          generateScore(currentRangeMin, currentRangeMax);
-        } else if (window.learnModeActive) {
-          generateLearnScore();
-        } else {
-          generateScore(currentRangeMin, currentRangeMax);
+          manualScoreActive = false;
+          
+          if (window.challengeMode) {
+            generateScore(currentRangeMin, currentRangeMax);
+          } else if (window.learnModeActive) {
+            generateLearnScore();
+          } else {
+            generateScore(currentRangeMin, currentRangeMax);
+          }
+          return;
         }
-        return;
       }
       
       // Ignore clicks when correct feedback is showing (auto-continue active)
@@ -2041,7 +2054,6 @@ if (document.readyState === 'loading') {
         if (dartsUsedInRound > maxDartsForRound) {
           // Zu viele Darts - ignoriere den Wurf und generiere neue Zahl
           dartsUsedInRound = maxDartsForRound; // Korrigiere Zähler
-          resetRealisticMode();
           
           if (window.challengeMode) {
             generateScore(currentRangeMin, currentRangeMax);
@@ -2077,7 +2089,6 @@ if (document.readyState === 'loading') {
             updateChallengeStats();
           }
           
-          resetRealisticMode();
           return;
         }
         
@@ -2303,18 +2314,6 @@ if (document.readyState === 'loading') {
       }
       
       return false;
-    }
-    
-    function resetRealisticMode() {
-      isInErrorState = false;
-      currentRemainingScore = null;
-      dartsUsedInRound = 0;
-      
-      // Entferne error-Klasse von score-card
-      const scoreCard = document.getElementById('scoreCard');
-      if (scoreCard) {
-        scoreCard.classList.remove('error');
-      }
     }
     
     function updateUserInputs() {
@@ -2873,7 +2872,11 @@ if (document.readyState === 'loading') {
       scoreCard.classList.remove('twodarts', 'stell', 'error');
       
       // Reset realistic mode state
-      resetRealisticMode();
+      if (realisticMode) {
+        isInErrorState = false;
+        currentRemainingScore = null;
+        dartsUsedInRound = 0;
+      }
       
       if (actualMode === '2darts') {
         scoreCard.classList.add('twodarts');
