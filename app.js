@@ -2197,19 +2197,18 @@ if (document.readyState === 'loading') {
           console.log(`[DEBUG] Prüfe Checkout-Möglichkeit: Restwert ${currentRemainingScore}, Darts übrig: ${dartsLeft}`);
           
           if (!canCheckoutWithDarts(currentRemainingScore, dartsLeft)) {
-            // Checkout nicht mehr möglich → Runde beendet, SOFORT neue Zahl generieren
+            // Checkout nicht mehr möglich → Runde beendet
+            // User kann durch Klick auf Container oder Dartboard weitergehen
             
-            console.log('[DEBUG] Checkout nicht mehr möglich → neue Zahl!');
+            console.log('[DEBUG] Checkout nicht mehr möglich → warte auf Klick');
             
             if (window.challengeMode) {
               challengeStats.wrong++;
               updateChallengeStats();
-              generateScore(currentRangeMin, currentRangeMax);
-            } else if (window.learnModeActive) {
-              generateLearnScore();
-            } else {
-              generateScore(currentRangeMin, currentRangeMax);
             }
+            
+            // Setze feedback = 'wrong' damit beim nächsten Klick neue Zahl generiert wird
+            feedback = 'wrong';
             
             return;
           }
@@ -2300,18 +2299,17 @@ if (document.readyState === 'loading') {
           
           // WICHTIG: Prüfe ob Checkout mit restlichen Darts noch möglich ist!
           if (!canCheckoutWithDarts(currentRemainingScore, dartsLeftAfterThis)) {
-            // Checkout nicht mehr möglich → Runde beendet, SOFORT neue Zahl generieren
-            console.log('[DEBUG] Nach Fehlwurf: Checkout nicht mehr möglich → neue Zahl!');
+            // Checkout nicht mehr möglich → Runde beendet
+            // User kann durch Klick auf Container oder Dartboard weitergehen
+            console.log('[DEBUG] Nach Fehlwurf: Checkout nicht mehr möglich → warte auf Klick');
             
             if (window.challengeMode) {
               challengeStats.wrong++;
               updateChallengeStats();
-              generateScore(currentRangeMin, currentRangeMax);
-            } else if (window.learnModeActive) {
-              generateLearnScore();
-            } else {
-              generateScore(currentRangeMin, currentRangeMax);
             }
+            
+            // Setze feedback = 'wrong' damit beim nächsten Klick neue Zahl generiert wird
+            feedback = 'wrong';
             
             return;
           }
