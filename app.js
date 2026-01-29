@@ -2008,12 +2008,13 @@ if (document.readyState === 'loading') {
             } else {
               generateScore(currentRangeMin, currentRangeMax);
             }
+            return;
           }
           
-          return;
-        }
-        
-        // Normal mode oder nicht im Error-State: Reset und neue Zahl
+          // KEIN return hier - Dart wird sofort verarbeitet!
+          // Der Code läuft weiter und verarbeitet den aktuellen Klick
+        } else {
+          // Normal mode oder nicht im Error-State: Reset und neue Zahl
         manualScoreActive = false;
         resetRealisticMode();
         
@@ -2291,8 +2292,8 @@ if (document.readyState === 'loading') {
       
       // Prüfe anhand der Datenbanken
       if (dartsLeft === 1) {
-        // Nur noch 1 Dart - muss ein Double sein
-        return score >= 2 && score <= 40 && score % 2 === 0;
+        // Nur noch 1 Dart - muss ein Double sein (oder Bull für 50)
+        return (score >= 2 && score <= 40 && score % 2 === 0) || score === 50;
       } else if (dartsLeft === 2) {
         // 2 Darts - checke 2-Dart-Datenbank
         return twoDartCheckouts[score] !== undefined;
