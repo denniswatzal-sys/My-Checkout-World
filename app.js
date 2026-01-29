@@ -2207,6 +2207,9 @@ if (document.readyState === 'loading') {
               updateChallengeStats();
             }
             
+            // WICHTIG: Beende Error-State damit keine weiteren Darts möglich sind
+            isInErrorState = false;
+            
             // Setze feedback = 'wrong' damit beim nächsten Klick neue Zahl generiert wird
             feedback = 'wrong';
             
@@ -2307,6 +2310,9 @@ if (document.readyState === 'loading') {
               challengeStats.wrong++;
               updateChallengeStats();
             }
+            
+            // WICHTIG: Beende Error-State damit keine weiteren Darts möglich sind
+            isInErrorState = false;
             
             // Setze feedback = 'wrong' damit beim nächsten Klick neue Zahl generiert wird
             feedback = 'wrong';
