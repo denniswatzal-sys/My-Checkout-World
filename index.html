@@ -84,9 +84,11 @@
           <div class="menu-title">⚙️ Einstellungen</div>
           <button class="menu-close-btn" onclick="closeMenu()">×</button>
         </div>
+        <button class="menu-item" onclick="toggleRealisticMode(); closeMenu();">
+          <span id="realisticToggle">☐</span> Realistisch-Modus
+        </button>
         <button class="menu-item" onclick="toggleBlackRing(); closeMenu();">Zahlenring ein-/ ausblenden</button>
         <button class="menu-item" onclick="toggleVibration(); closeMenu();">Vibration ein-/ ausschalten</button>
-        <button class="menu-item" onclick="toggleRealisticMode(); closeMenu();">Realistisch-Modus ein-/ ausschalten</button>
         <button class="menu-item" onclick="showBackgroundModal(); closeMenu();">Hintergrund anpassen</button>
         <button class="menu-item" onclick="goToStart(); closeMenu();">Zurück zum Startbildschirm</button>
       </div>
@@ -391,6 +393,18 @@
   </div>
   
   <script src="app.js?v=TEST5SEC"></script>
+  
+  <!-- Initialize Realistic Mode Toggle -->
+  <script>
+    // Set initial toggle state based on localStorage
+    document.addEventListener('DOMContentLoaded', function() {
+      const realisticMode = localStorage.getItem('realisticMode') === 'true';
+      const toggle = document.getElementById('realisticToggle');
+      if (toggle) {
+        toggle.textContent = realisticMode ? '☑' : '☐';
+      }
+    });
+  </script>
   
   <!-- Service Worker Registration -->
   <script>

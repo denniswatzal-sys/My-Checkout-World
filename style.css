@@ -210,6 +210,11 @@
       border-color: #000;
     }
     
+    .score-card.realistic-error {
+      background: #dc2626;
+      border-color: #000;
+    }
+    
     .score-title {
       display: none;
     }
