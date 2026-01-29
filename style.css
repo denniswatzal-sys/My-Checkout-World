@@ -210,6 +210,11 @@
       border-color: #000;
     }
     
+    .score-card.error {
+      background: #dc2626;
+      border-color: #000;
+    }
+    
     .score-title {
       display: none;
     }
@@ -317,6 +322,19 @@
       font-weight: 600;
       color: #991b1b;
       margin-top: 4px;
+    }
+    
+    .impossible-checkout {
+      width: 100%;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #7f1d1d;
+      margin-top: 6px;
+      padding: 6px;
+      background: #fecaca;
+      border-radius: 6px;
+      border: 1px solid #991b1b;
     }
     
     .user-input-chip {

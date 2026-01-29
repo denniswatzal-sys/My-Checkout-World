@@ -179,6 +179,9 @@ function enterFullscreen() {
 // Global vibration enabled state (loaded from localStorage)
 let vibrationEnabled = true;
 
+// Global realistic mode state (loaded from localStorage)
+let realisticMode = false;
+
 // Load vibration setting from localStorage
 try {
   const savedSetting = localStorage.getItem('dartTrainerVibrationEnabled');
@@ -187,6 +190,16 @@ try {
   }
 } catch (e) {
   console.error('Could not load vibration setting:', e);
+}
+
+// Load realistic mode setting from localStorage
+try {
+  const savedRealisticMode = localStorage.getItem('dartTrainerRealisticMode');
+  if (savedRealisticMode !== null) {
+    realisticMode = savedRealisticMode === 'true';
+  }
+} catch (e) {
+  console.error('Could not load realistic mode setting:', e);
 }
 
 function vibrate(duration) {
@@ -224,6 +237,25 @@ function toggleVibration() {
   }
   
   console.log('Vibration', vibrationEnabled ? 'enabled' : 'disabled');
+}
+
+function toggleRealisticMode() {
+  realisticMode = !realisticMode;
+  localStorage.setItem('dartTrainerRealisticMode', realisticMode.toString());
+  
+  // Reset error state when toggling
+  isInErrorState = false;
+  currentRemainingScore = null;
+  dartsUsedInRound = 0;
+  
+  // Remove error class from score card
+  const scoreCard = document.getElementById('scoreCard');
+  if (scoreCard) {
+    scoreCard.classList.remove('error');
+  }
+  
+  vibrateMedium();
+  console.log('Realistic Mode', realisticMode ? 'enabled' : 'disabled');
 }
 
 // Start loading when DOM is ready
@@ -299,6 +331,12 @@ if (document.readyState === 'loading') {
     let currentCheckout = ['T17', 'D18'];
     let userInputs = [];
     let highlightedFields = [];
+    
+    // Realistic Mode Variables (realisticMode is global)
+    let currentRemainingScore = null;
+    let dartsUsedInRound = 0;
+    let maxDartsForRound = 3;
+    let isInErrorState = false;
     
     // Track current range for challenge mode
     let currentRangeMin = 2;
@@ -493,6 +531,18 @@ if (document.readyState === 'loading') {
     
     function setMode(mode, buttonElement) {
       currentMode = mode;
+      
+      // Set maxDartsForRound based on mode
+      if (mode === '2darts') {
+        maxDartsForRound = 2;
+      } else if (mode === '3darts') {
+        maxDartsForRound = 3;
+      } else if (mode === 'mixed') {
+        maxDartsForRound = 3; // Will be updated dynamically in generateScore
+      }
+      
+      // Reset realistic mode state when changing modes
+      resetRealisticMode();
       
       // Clear anti-repetition history when switching modes
       clearAntiRepetitionHistory();
@@ -1713,6 +1763,7 @@ if (document.readyState === 'loading') {
       if (currentMode === 'mixed') {
         const useTwoDarts = Math.random() > 0.5;
         currentCheckouts = useTwoDarts ? twoDartCheckouts : defaultCheckouts;
+        maxDartsForRound = useTwoDarts ? 2 : 3;
       }
       
       // Determine current mode for tracking
@@ -1901,8 +1952,11 @@ if (document.readyState === 'loading') {
       const isStell = stellZahlen.includes(currentScore);
       const scoreCard = document.getElementById('scoreCard');
       
-      // Remove all classes
-      scoreCard.classList.remove('stell', 'twodarts');
+      // Remove all classes including error
+      scoreCard.classList.remove('stell', 'twodarts', 'error');
+      
+      // Reset realistic mode state
+      resetRealisticMode();
       
       // Add appropriate class
       if (isStell) {
@@ -1922,8 +1976,46 @@ if (document.readyState === 'loading') {
       // Wenn Feedback für falsche Antwort angezeigt wird, nächste Aufgabe bei Klick auf Dartscheibe
       // (Richtige Antworten gehen automatisch weiter)
       if (feedback === 'wrong') {
-        // Reset manual score flag - generate random score now
+        // Im Realistisch-Modus: Bei Fehlwurf weiterspielen erlauben
+        if (realisticMode && isInErrorState) {
+          // Nicht sofort neue Zahl generieren - weiterspielen!
+          // Feedback zurücksetzen damit weitere Würfe möglich sind
+          feedback = null;
+          
+          // Entferne Feedback-Klassen aber behalte error-Klasse auf score-card
+          const userInputsEl = document.getElementById('userInputs');
+          userInputsEl.classList.remove('correct', 'wrong');
+          
+          // Entferne Lösung
+          const existingSolution = userInputsEl.querySelector('.solution-text');
+          if (existingSolution) {
+            existingSolution.remove();
+          }
+          
+          const existingImpossible = userInputsEl.querySelector('.impossible-checkout');
+          if (existingImpossible) {
+            existingImpossible.remove();
+          }
+          
+          // Prüfe ob Max-Darts erreicht
+          if (dartsUsedInRound >= maxDartsForRound) {
+            // Maximale Darts erreicht - neue Zahl generieren
+            resetRealisticMode();
+            if (window.challengeMode) {
+              generateScore(currentRangeMin, currentRangeMax);
+            } else if (window.learnModeActive) {
+              generateLearnScore();
+            } else {
+              generateScore(currentRangeMin, currentRangeMax);
+            }
+          }
+          
+          return;
+        }
+        
+        // Normal mode oder nicht im Error-State: Reset und neue Zahl
         manualScoreActive = false;
+        resetRealisticMode();
         
         if (window.challengeMode) {
           generateScore(currentRangeMin, currentRangeMax);
@@ -1940,22 +2032,155 @@ if (document.readyState === 'loading') {
         return;
       }
       
+      // Im Realistisch-Modus: Dart-Counter erhöhen
+      if (realisticMode) {
+        dartsUsedInRound++;
+        
+        // Prüfe ob Max-Darts erreicht BEVOR wir den Wurf verarbeiten
+        if (dartsUsedInRound > maxDartsForRound) {
+          // Zu viele Darts - ignoriere den Wurf und generiere neue Zahl
+          dartsUsedInRound = maxDartsForRound; // Korrigiere Zähler
+          resetRealisticMode();
+          
+          if (window.challengeMode) {
+            generateScore(currentRangeMin, currentRangeMax);
+          } else if (window.learnModeActive) {
+            generateLearnScore();
+          } else {
+            generateScore(currentRangeMin, currentRangeMax);
+          }
+          return;
+        }
+      }
+      
       userInputs.push(dartValue);
       updateUserInputs();
       
-      const expectedDart = currentCheckout[userInputs.length - 1];
+      const expectedDart = isInErrorState ? null : currentCheckout[userInputs.length - 1];
+      
+      // Im Error-State (Realistisch-Modus): Berechne was getroffen wurde
+      if (isInErrorState && realisticMode) {
+        // Berechne Punktwert des Wurfs
+        const dartPoints = calculateDartValue(dartValue);
+        currentRemainingScore -= dartPoints;
+        
+        // Prüfe ob Checkout erreicht wurde (genau 0 mit Double)
+        if (currentRemainingScore === 0 && isDartDouble(dartValue)) {
+          // Checkout geschafft!
+          highlightedFields.push(dartValue);
+          createDartboard();
+          showFeedback(true);
+          
+          if (window.challengeMode) {
+            challengeStats.correct++;
+            updateChallengeStats();
+          }
+          
+          resetRealisticMode();
+          return;
+        }
+        
+        // Prüfe ob überkauft oder auf 1 gelandet
+        if (currentRemainingScore < 0 || currentRemainingScore === 1) {
+          // Überkauft oder unmöglich - Wurf ungültig, Runde beendet
+          showFeedback(false);
+          
+          // Zeige "Checken nicht möglich!"
+          const userInputsEl = document.getElementById('userInputs');
+          const impossibleDiv = document.createElement('div');
+          impossibleDiv.className = 'impossible-checkout';
+          impossibleDiv.textContent = 'Checken nicht möglich!';
+          userInputsEl.appendChild(impossibleDiv);
+          
+          if (window.challengeMode) {
+            challengeStats.wrong++;
+            updateChallengeStats();
+          }
+          
+          return;
+        }
+        
+        // Prüfe ob Checkout mit restlichen Darts noch möglich ist
+        const dartsLeft = maxDartsForRound - dartsUsedInRound;
+        if (!canCheckoutWithDarts(currentRemainingScore, dartsLeft)) {
+          // Nicht mehr möglich
+          showFeedback(false);
+          
+          // Zeige "Checken nicht möglich!"
+          const userInputsEl = document.getElementById('userInputs');
+          const impossibleDiv = document.createElement('div');
+          impossibleDiv.className = 'impossible-checkout';
+          impossibleDiv.textContent = 'Checken nicht möglich!';
+          userInputsEl.appendChild(impossibleDiv);
+          
+          if (window.challengeMode) {
+            challengeStats.wrong++;
+            updateChallengeStats();
+          }
+          
+          return;
+        }
+        
+        // Wurf akzeptiert, highlighte
+        highlightedFields.push(dartValue);
+        createDartboard();
+        
+        return;
+      }
       
       if (dartValue !== expectedDart) {
-        showFeedback(false);
-        if (window.challengeMode) {
-          challengeStats.wrong++;
-          updateChallengeStats();
+        // Fehlwurf
+        if (realisticMode) {
+          // Im Realistisch-Modus: Berechne Restwert und gehe in Error-State
+          isInErrorState = true;
+          
+          // Berechne was wir vom ursprünglichen Score abziehen müssen
+          let pointsScored = 0;
+          for (let i = 0; i < userInputs.length; i++) {
+            pointsScored += calculateDartValue(userInputs[i]);
+          }
+          
+          currentRemainingScore = currentScore - pointsScored;
+          
+          // Score-Card rot färben
+          const scoreCard = document.getElementById('scoreCard');
+          scoreCard.classList.add('error');
+          
+          // Zeige Feedback
+          showFeedback(false);
+          
+          // Prüfe ob Checkout mit restlichen Darts noch möglich ist
+          const dartsLeft = maxDartsForRound - dartsUsedInRound;
+          if (!canCheckoutWithDarts(currentRemainingScore, dartsLeft)) {
+            // Nicht mehr möglich
+            const userInputsEl = document.getElementById('userInputs');
+            const impossibleDiv = document.createElement('div');
+            impossibleDiv.className = 'impossible-checkout';
+            impossibleDiv.textContent = 'Checken nicht möglich!';
+            userInputsEl.appendChild(impossibleDiv);
+          }
+          
+          if (window.challengeMode) {
+            challengeStats.wrong++;
+            updateChallengeStats();
+          } else {
+            const actualMode = currentCheckouts === twoDartCheckouts ? '2darts' : '3darts';
+            problemScores[currentScore] = { count: 0, mode: actualMode };
+            localStorage.setItem('problemScores', JSON.stringify(problemScores));
+            updateProblemBadge();
+          }
         } else {
-          // Save the ACTUAL mode (2darts or 3darts), not 'mixed'
-          const actualMode = currentCheckouts === twoDartCheckouts ? '2darts' : '3darts';
-          problemScores[currentScore] = { count: 0, mode: actualMode };
-          localStorage.setItem('problemScores', JSON.stringify(problemScores));
-          updateProblemBadge();
+          // Normal Mode: Wie bisher
+          showFeedback(false);
+          if (window.challengeMode) {
+            challengeStats.wrong++;
+            updateChallengeStats();
+          } else {
+            const actualMode = currentCheckouts === twoDartCheckouts ? '2darts' : '3darts';
+            problemScores[currentScore] = { count: 0, mode: actualMode };
+            localStorage.setItem('problemScores', JSON.stringify(problemScores));
+            updateProblemBadge();
+          }
         }
         return;
       }
@@ -2034,6 +2259,60 @@ if (document.readyState === 'loading') {
             }
           }
         }
+      }
+    }
+    
+    // ========================================
+    // REALISTIC MODE HELPER FUNCTIONS
+    // ========================================
+    
+    function calculateDartValue(dartValue) {
+      if (dartValue === 'Bull') return 50;
+      if (dartValue === 'S25') return 25;
+      
+      const prefix = dartValue.charAt(0); // 'S', 'D', 'T'
+      const number = parseInt(dartValue.substring(1));
+      
+      if (prefix === 'S') return number;
+      if (prefix === 'D') return number * 2;
+      if (prefix === 'T') return number * 3;
+      
+      return 0;
+    }
+    
+    function isDartDouble(dartValue) {
+      return dartValue.charAt(0) === 'D' || dartValue === 'Bull';
+    }
+    
+    function canCheckoutWithDarts(score, dartsLeft) {
+      if (dartsLeft <= 0) return false;
+      if (score < 2) return false; // 0 oder 1 nicht checkbar
+      if (score > 170) return false; // Über 170 nicht mit 3 Darts checkbar
+      
+      // Prüfe anhand der Datenbanken
+      if (dartsLeft === 1) {
+        // Nur noch 1 Dart - muss ein Double sein
+        return score >= 2 && score <= 40 && score % 2 === 0;
+      } else if (dartsLeft === 2) {
+        // 2 Darts - checke 2-Dart-Datenbank
+        return twoDartCheckouts[score] !== undefined;
+      } else if (dartsLeft >= 3) {
+        // 3+ Darts - checke 3-Dart-Datenbank
+        return defaultCheckouts[score] !== undefined;
+      }
+      
+      return false;
+    }
+    
+    function resetRealisticMode() {
+      isInErrorState = false;
+      currentRemainingScore = null;
+      dartsUsedInRound = 0;
+      
+      // Entferne error-Klasse von score-card
+      const scoreCard = document.getElementById('scoreCard');
+      if (scoreCard) {
+        scoreCard.classList.remove('error');
       }
     }
     
@@ -2577,9 +2856,11 @@ if (document.readyState === 'loading') {
       if (actualMode === '2darts') {
         currentCheckout = twoDartCheckouts[randomScore] || [];
         currentCheckouts = twoDartCheckouts; // Set the current database
+        maxDartsForRound = 2;
       } else {
         currentCheckout = defaultCheckouts[randomScore] || [];
         currentCheckouts = defaultCheckouts; // Set the current database
+        maxDartsForRound = 3;
       }
       
       userInputs = [];
@@ -2588,7 +2869,11 @@ if (document.readyState === 'loading') {
       
       // Update score card styling based on stored mode
       const scoreCard = document.querySelector('.score-card');
-      scoreCard.classList.remove('twodarts', 'stell');
+      scoreCard.classList.remove('twodarts', 'stell', 'error');
+      
+      // Reset realistic mode state
+      resetRealisticMode();
+      
       if (actualMode === '2darts') {
         scoreCard.classList.add('twodarts');
       }
