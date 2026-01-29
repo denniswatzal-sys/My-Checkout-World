@@ -2472,12 +2472,28 @@ if (document.readyState === 'loading') {
     function updateUserInputs() {
       const container = document.getElementById('userInputs');
       
+      // Behalte Lösung und Restwert, lösche nur die Chips
+      const solution = container.querySelector('.solution-text');
+      const remaining = container.querySelector('.remaining-score');
+      
       if (userInputs.length === 0) {
-        container.innerHTML = '';
+        // Entferne nur die Chips
+        container.querySelectorAll('.user-input-chip').forEach(chip => chip.remove());
       } else {
-        container.innerHTML = userInputs.map(input => 
+        // Entferne nur die Chips
+        container.querySelectorAll('.user-input-chip').forEach(chip => chip.remove());
+        
+        // Füge neue Chips hinzu (vor solution/remaining wenn vorhanden)
+        const chipsHTML = userInputs.map(input => 
           `<div class="user-input-chip">${input}</div>`
         ).join('');
+        
+        // Füge am Anfang ein (vor solution und remaining)
+        if (solution || remaining) {
+          container.insertAdjacentHTML('afterbegin', chipsHTML);
+        } else {
+          container.innerHTML = chipsHTML;
+        }
       }
     }
     
