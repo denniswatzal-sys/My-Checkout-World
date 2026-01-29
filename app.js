@@ -2137,6 +2137,22 @@ if (document.readyState === 'loading') {
         // Berechne Punktwert des Wurfs
         const dartPoints = calculateDartValue(dartValue);
         
+        // SONDERFALL: Bull bei Restwert 50 ist immer ein gültiger Checkout
+        if (currentRemainingScore === 50 && dartValue === 'Bull') {
+          // Checkout geschafft mit Bull!
+          currentRemainingScore = 0;
+          highlightedFields.push(dartValue);
+          createDartboard();
+          showFeedback(true);
+          
+          if (window.challengeMode) {
+            challengeStats.correct++;
+            updateChallengeStats();
+          }
+          
+          return;
+        }
+        
         // Prüfe ob der Dart dem erwarteten Dart entspricht
         if (dartValue === expectedDart) {
           // RICHTIG! Dart entspricht der Datenbank
@@ -2175,22 +2191,26 @@ if (document.readyState === 'loading') {
             return;
           }
           
+          // WICHTIG: Dart IMMER highlighten (auch wenn danach nicht mehr checkbar)
+          highlightedFields.push(dartValue);
+          createDartboard();
+          
+          // Aktualisiere Restwert-Anzeige
+          const userInputsEl = document.getElementById('userInputs');
+          const existingRemaining = userInputsEl.querySelector('.remaining-score');
+          if (existingRemaining) {
+            existingRemaining.textContent = `Restwert: ${currentRemainingScore}`;
+          } else {
+            const remainingDiv = document.createElement('div');
+            remainingDiv.className = 'remaining-score';
+            remainingDiv.textContent = `Restwert: ${currentRemainingScore}`;
+            userInputsEl.appendChild(remainingDiv);
+          }
+          
           // Prüfe ob Checkout mit restlichen Darts noch möglich ist
           const dartsLeft = maxDartsForRound - dartsUsedInRound;
           if (!canCheckoutWithDarts(currentRemainingScore, dartsLeft)) {
-            // Nicht mehr möglich - zeige Restwert
-            
-            // Aktualisiere Restwert-Anzeige
-            const userInputsEl = document.getElementById('userInputs');
-            const existingRemaining = userInputsEl.querySelector('.remaining-score');
-            if (existingRemaining) {
-              existingRemaining.textContent = `Restwert: ${currentRemainingScore}`;
-            } else {
-              const remainingDiv = document.createElement('div');
-              remainingDiv.className = 'remaining-score';
-              remainingDiv.textContent = `Restwert: ${currentRemainingScore}`;
-              userInputsEl.appendChild(remainingDiv);
-            }
+            // Nicht mehr möglich - Statistik aktualisieren
             
             if (window.challengeMode) {
               challengeStats.wrong++;
@@ -2198,22 +2218,6 @@ if (document.readyState === 'loading') {
             }
             
             return;
-          }
-          
-          // Wurf korrekt - aktualisiere Restwert-Anzeige
-          highlightedFields.push(dartValue);
-          createDartboard();
-          
-          // Aktualisiere Restwert-Anzeige
-          const userInputsEl2 = document.getElementById('userInputs');
-          const existingRemaining2 = userInputsEl2.querySelector('.remaining-score');
-          if (existingRemaining2) {
-            existingRemaining2.textContent = `Restwert: ${currentRemainingScore}`;
-          } else {
-            const remainingDiv2 = document.createElement('div');
-            remainingDiv2.className = 'remaining-score';
-            remainingDiv2.textContent = `Restwert: ${currentRemainingScore}`;
-            userInputsEl2.appendChild(remainingDiv2);
           }
           
           return;
@@ -2311,16 +2315,8 @@ if (document.readyState === 'loading') {
           const scoreCard = document.getElementById('scoreCard');
           scoreCard.classList.add('error');
           
-          console.log('=== ERSTER FEHLWURF ===');
-          console.log('Rufe showFeedback(false) auf...');
-          
           // Zeige Feedback mit Restwert
           showFeedback(false);
-          
-          console.log('Nach showFeedback - prüfe Klassen:');
-          const userInputsEl = document.getElementById('userInputs');
-          console.log('Klassen:', userInputsEl.className);
-          console.log('Lösung vorhanden:', !!userInputsEl.querySelector('.solution-text'));
           
           // Dartboard neu zeichnen mit Highlight
           createDartboard();
@@ -2335,13 +2331,7 @@ if (document.readyState === 'loading') {
             remainingDiv3.className = 'remaining-score';
             remainingDiv3.textContent = `Restwert: ${currentRemainingScore}`;
             userInputsEl3.appendChild(remainingDiv3);
-            console.log('Restwert hinzugefügt');
           }
-          
-          console.log('FINALE Klassen:', userInputsEl3.className);
-          console.log('FINALE Lösung vorhanden:', !!userInputsEl3.querySelector('.solution-text'));
-          console.log('FINALE Restwert vorhanden:', !!userInputsEl3.querySelector('.remaining-score'));
-          console.log('=== ENDE FEHLWURF ===');
           
           if (window.challengeMode) {
             challengeStats.wrong++;
