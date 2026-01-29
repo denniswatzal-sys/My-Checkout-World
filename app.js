@@ -2093,10 +2093,14 @@ if (document.readyState === 'loading') {
       if (realisticMode) {
         dartsUsedInRound++;
         
+        console.log(`[DEBUG] Dart ${dartsUsedInRound}/${maxDartsForRound} - dartValue: ${dartValue}`);
+        
         // Prüfe ob Max-Darts erreicht BEVOR wir den Wurf verarbeiten
         if (dartsUsedInRound > maxDartsForRound) {
           // Zu viele Darts - ignoriere den Wurf und generiere neue Zahl
           dartsUsedInRound = maxDartsForRound; // Korrigiere Zähler
+          
+          console.log('[DEBUG] Zu viele Darts! Generiere neue Zahl.');
           
           if (window.challengeMode) {
             generateScore(currentRangeMin, currentRangeMax);
@@ -2117,9 +2121,11 @@ if (document.readyState === 'loading') {
       if (isInErrorState) {
         // Im Error-State: Erwarteten Dart aus dem errorStateCheckout holen
         expectedDart = errorStateCheckout[dartsInErrorState];
+        console.log(`[DEBUG] Error-State: expectedDart = ${expectedDart} (aus errorStateCheckout[${dartsInErrorState}]), dartValue = ${dartValue}`);
       } else {
         // Normal: Aus dem ursprünglichen Checkout
         expectedDart = currentCheckout[userInputs.length - 1];
+        console.log(`[DEBUG] Normal: expectedDart = ${expectedDart} (aus currentCheckout[${userInputs.length - 1}]), dartValue = ${dartValue}`);
       }
       
       // Im Error-State (Realistisch-Modus): Prüfe gegen Datenbank
@@ -2149,9 +2155,12 @@ if (document.readyState === 'loading') {
           currentRemainingScore -= dartPoints;
           dartsInErrorState++;
           
+          console.log(`[DEBUG] Korrekter Dart im Error-State! Restwert: ${currentRemainingScore}, isDouble: ${isDartDouble(dartValue)}`);
+          
           // Prüfe ob Checkout erreicht wurde (genau 0 mit Double)
           if (currentRemainingScore === 0 && isDartDouble(dartValue)) {
             // Checkout geschafft!
+            console.log('[DEBUG] ✅ CHECKOUT GESCHAFFT!');
             highlightedFields.push(dartValue);
             createDartboard();
             showFeedback(true);
@@ -2163,6 +2172,8 @@ if (document.readyState === 'loading') {
             
             return;
           }
+          
+          console.log(`[DEBUG] Noch nicht fertig. Restwert: ${currentRemainingScore}, Darts übrig: ${maxDartsForRound - dartsUsedInRound}`);
           
           // Prüfe ob überkauft oder auf 1 gelandet
           if (currentRemainingScore < 0 || currentRemainingScore === 1) {
@@ -2199,8 +2210,12 @@ if (document.readyState === 'loading') {
           
           // Prüfe ob Checkout mit restlichen Darts noch möglich ist
           const dartsLeft = maxDartsForRound - dartsUsedInRound;
+          console.log(`[DEBUG] Prüfe Checkout-Möglichkeit: Restwert ${currentRemainingScore}, Darts übrig: ${dartsLeft}`);
+          
           if (!canCheckoutWithDarts(currentRemainingScore, dartsLeft)) {
             // Nicht mehr möglich - Statistik aktualisieren
+            
+            console.log('[DEBUG] Checkout nicht mehr möglich!');
             
             if (window.challengeMode) {
               challengeStats.wrong++;
@@ -2209,6 +2224,7 @@ if (document.readyState === 'loading') {
             
             // Wenn keine Darts mehr übrig sind, generiere neue Zahl
             if (dartsLeft <= 0) {
+              console.log('[DEBUG] Keine Darts mehr übrig → neue Zahl');
               if (window.challengeMode) {
                 generateScore(currentRangeMin, currentRangeMax);
               } else if (window.learnModeActive) {
@@ -2221,6 +2237,7 @@ if (document.readyState === 'loading') {
             return;
           }
           
+          console.log('[DEBUG] Checkout noch möglich, weitermachen!');
           return;
         } else {
           // FALSCH! Erneuter Fehlwurf im Error-State
