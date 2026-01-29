@@ -2263,13 +2263,74 @@ if (document.readyState === 'loading') {
               }
             }
           } else if (dartsLeftAfterThis === 2) {
-            // 2 Darts übrig - verwende 2-Dart-Datenbank
-            errorStateCheckout = twoDartCheckouts[currentRemainingScore] || [];
+            // 2 Darts übrig
+            // SONDERFÄLLE: Diese Scores sind mit 2 Darts mathematisch UNMÖGLICH
+            const impossibleWith2Darts = [99, 102, 103, 105, 106, 108, 109];
+            const isOver110 = currentRemainingScore > 110;
+            
+            if (impossibleWith2Darts.includes(currentRemainingScore) || isOver110) {
+              // Wirklich unmöglich mit 2 Darts
+              errorStateCheckout = [];
+            } else {
+              // Versuche 2-Dart-Datenbank, sonst 3-Dart-DB (erste 2 Darts nehmen)
+              if (twoDartCheckouts[currentRemainingScore]) {
+                errorStateCheckout = twoDartCheckouts[currentRemainingScore];
+              } else if (defaultCheckouts[currentRemainingScore]) {
+                // Nutze die ersten 2 Darts aus der 3-Dart-Lösung
+                errorStateCheckout = defaultCheckouts[currentRemainingScore].slice(0, 2);
+              } else {
+                errorStateCheckout = [];
+              }
+            }
           } else {
             // 3+ Darts übrig - verwende 3-Dart-Datenbank
             errorStateCheckout = defaultCheckouts[currentRemainingScore] || [];
           }
           dartsInErrorState = 0;
+          
+          // WICHTIG: Wenn errorStateCheckout leer ist, ist kein Checkout möglich!
+          if (errorStateCheckout.length === 0) {
+            console.log('[DEBUG] Nach Fehlwurf: Kein Checkout möglich → Runde beendet!');
+            
+            // Vibration und Dartboard-Flash
+            vibrateHeavy();
+            
+            const outerRing = document.getElementById('dartboard-outer-ring');
+            if (outerRing) {
+              outerRing.classList.remove('flash-correct', 'flash-wrong', 'challenge-mode');
+              void outerRing.offsetWidth;
+              if (window.challengeMode) {
+                outerRing.classList.add('challenge-mode');
+              }
+              outerRing.classList.add('flash-wrong');
+            }
+            
+            // Dartboard neu zeichnen mit Highlight
+            createDartboard();
+            
+            // Aktualisiere Restwert-Anzeige
+            const userInputsEl2 = document.getElementById('userInputs');
+            const existingRemaining2 = userInputsEl2.querySelector('.remaining-score');
+            if (existingRemaining2) {
+              existingRemaining2.textContent = `Restwert: ${currentRemainingScore}`;
+            } else {
+              const remainingDiv2 = document.createElement('div');
+              remainingDiv2.className = 'remaining-score';
+              remainingDiv2.textContent = `Restwert: ${currentRemainingScore}`;
+              userInputsEl2.appendChild(remainingDiv2);
+            }
+            
+            if (window.challengeMode) {
+              challengeStats.wrong++;
+              updateChallengeStats();
+            }
+            
+            // Beende Error-State und warte auf Klick
+            isInErrorState = false;
+            feedback = 'wrong';
+            
+            return;
+          }
           
           // KEIN showFeedback - Box ist schon da!
           // Nur Vibration und Dartboard-Flash
@@ -2366,8 +2427,25 @@ if (document.readyState === 'loading') {
               }
             }
           } else if (dartsLeftAfterError === 2) {
-            // 2 Darts übrig - verwende 2-Dart-Datenbank
-            errorStateCheckout = twoDartCheckouts[currentRemainingScore] || [];
+            // 2 Darts übrig
+            // SONDERFÄLLE: Diese Scores sind mit 2 Darts mathematisch UNMÖGLICH
+            const impossibleWith2Darts = [99, 102, 103, 105, 106, 108, 109];
+            const isOver110 = currentRemainingScore > 110;
+            
+            if (impossibleWith2Darts.includes(currentRemainingScore) || isOver110) {
+              // Wirklich unmöglich mit 2 Darts
+              errorStateCheckout = [];
+            } else {
+              // Versuche 2-Dart-Datenbank, sonst 3-Dart-DB (erste 2 Darts nehmen)
+              if (twoDartCheckouts[currentRemainingScore]) {
+                errorStateCheckout = twoDartCheckouts[currentRemainingScore];
+              } else if (defaultCheckouts[currentRemainingScore]) {
+                // Nutze die ersten 2 Darts aus der 3-Dart-Lösung
+                errorStateCheckout = defaultCheckouts[currentRemainingScore].slice(0, 2);
+              } else {
+                errorStateCheckout = [];
+              }
+            }
           } else {
             // 3+ Darts übrig - verwende 3-Dart-Datenbank
             errorStateCheckout = defaultCheckouts[currentRemainingScore] || [];
@@ -2375,6 +2453,39 @@ if (document.readyState === 'loading') {
           dartsInErrorState = 0;
           
           console.log(`Fehlwurf! Restwert: ${currentRemainingScore}, Darts übrig: ${dartsLeftAfterError}, Checkout: ${errorStateCheckout.join(' → ')}`);
+          
+          // WICHTIG: Wenn errorStateCheckout leer ist, ist kein Checkout möglich!
+          if (errorStateCheckout.length === 0) {
+            console.log('[DEBUG] Kein Checkout möglich mit verbleibenden Darts → Runde beendet!');
+            
+            // Score-Card rot färben
+            const scoreCard = document.getElementById('scoreCard');
+            scoreCard.classList.add('error');
+            
+            // Zeige Feedback
+            showFeedback(false);
+            
+            // Dartboard neu zeichnen mit Highlight
+            createDartboard();
+            
+            // Zeige Restwert-Anzeige (zeigt dass Checkout unmöglich ist)
+            const userInputsEl = document.getElementById('userInputs');
+            const remainingDiv = document.createElement('div');
+            remainingDiv.className = 'remaining-score';
+            remainingDiv.textContent = `Restwert: ${currentRemainingScore}`;
+            userInputsEl.appendChild(remainingDiv);
+            
+            if (window.challengeMode) {
+              challengeStats.wrong++;
+              updateChallengeStats();
+            }
+            
+            // Beende Error-State und warte auf Klick
+            isInErrorState = false;
+            feedback = 'wrong';
+            
+            return;
+          }
           
           // Score-Card rot färben
           const scoreCard = document.getElementById('scoreCard');
