@@ -2197,25 +2197,18 @@ if (document.readyState === 'loading') {
           console.log(`[DEBUG] Prüfe Checkout-Möglichkeit: Restwert ${currentRemainingScore}, Darts übrig: ${dartsLeft}`);
           
           if (!canCheckoutWithDarts(currentRemainingScore, dartsLeft)) {
-            // Nicht mehr möglich - Statistik aktualisieren
+            // Checkout nicht mehr möglich → Runde beendet, SOFORT neue Zahl generieren
             
-            console.log('[DEBUG] Checkout nicht mehr möglich!');
+            console.log('[DEBUG] Checkout nicht mehr möglich → neue Zahl!');
             
             if (window.challengeMode) {
               challengeStats.wrong++;
               updateChallengeStats();
-            }
-            
-            // Wenn keine Darts mehr übrig sind, generiere neue Zahl
-            if (dartsLeft <= 0) {
-              console.log('[DEBUG] Keine Darts mehr übrig → neue Zahl');
-              if (window.challengeMode) {
-                generateScore(currentRangeMin, currentRangeMax);
-              } else if (window.learnModeActive) {
-                generateLearnScore();
-              } else {
-                generateScore(currentRangeMin, currentRangeMax);
-              }
+              generateScore(currentRangeMin, currentRangeMax);
+            } else if (window.learnModeActive) {
+              generateLearnScore();
+            } else {
+              generateScore(currentRangeMin, currentRangeMax);
             }
             
             return;
