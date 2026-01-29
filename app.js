@@ -2246,8 +2246,19 @@ if (document.readyState === 'loading') {
           errorStateCheckout = currentCheckouts[currentRemainingScore] || [];
           dartsInErrorState = 0;
           
-          // Zeige Feedback für Fehlwurf
-          showFeedback(false);
+          // KEIN showFeedback - Box ist schon da!
+          // Nur Vibration und Dartboard-Flash
+          vibrateHeavy();
+          
+          const outerRing = document.getElementById('dartboard-outer-ring');
+          if (outerRing) {
+            outerRing.classList.remove('flash-correct', 'flash-wrong', 'challenge-mode');
+            void outerRing.offsetWidth;
+            if (window.challengeMode) {
+              outerRing.classList.add('challenge-mode');
+            }
+            outerRing.classList.add('flash-wrong');
+          }
           
           // Dartboard neu zeichnen mit Highlight
           createDartboard();
@@ -2501,21 +2512,6 @@ if (document.readyState === 'loading') {
       }
       
       const userInputs = document.getElementById('userInputs');
-      
-      // Im Error-State: Klassen und Lösung NICHT ändern
-      if (realisticMode && isInErrorState && !isCorrect) {
-        // Nur Dartboard Flash
-        const outerRing = document.getElementById('dartboard-outer-ring');
-        if (outerRing) {
-          outerRing.classList.remove('flash-correct', 'flash-wrong', 'challenge-mode');
-          void outerRing.offsetWidth;
-          if (window.challengeMode) {
-            outerRing.classList.add('challenge-mode');
-          }
-          outerRing.classList.add('flash-wrong');
-        }
-        return;
-      }
       
       // Remove previous states
       userInputs.classList.remove('correct', 'wrong');
