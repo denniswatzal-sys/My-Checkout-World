@@ -2054,17 +2054,10 @@ if (document.readyState === 'loading') {
           // Feedback zurücksetzen damit weitere Würfe möglich sind
           feedback = null;
           
-          // Entferne Feedback-Klassen aber behalte error-Klasse auf score-card
-          const userInputsEl = document.getElementById('userInputs');
-          userInputsEl.classList.remove('correct', 'wrong');
+          // WICHTIG: Im Error-State die 'wrong' Klasse und Lösung NICHT entfernen!
+          // Die rote Box soll bis zum Ende der Runde sichtbar bleiben
           
-          // Entferne Lösung
-          const existingSolution = userInputsEl.querySelector('.solution-text');
-          if (existingSolution) {
-            existingSolution.remove();
-          }
-          
-          const existingImpossible = userInputsEl.querySelector('.impossible-checkout');
+          const existingImpossible = document.getElementById('userInputs').querySelector('.impossible-checkout');
           if (existingImpossible) {
             existingImpossible.remove();
           }
@@ -2508,6 +2501,21 @@ if (document.readyState === 'loading') {
       }
       
       const userInputs = document.getElementById('userInputs');
+      
+      // Im Error-State: Klassen und Lösung NICHT ändern
+      if (realisticMode && isInErrorState && !isCorrect) {
+        // Nur Dartboard Flash
+        const outerRing = document.getElementById('dartboard-outer-ring');
+        if (outerRing) {
+          outerRing.classList.remove('flash-correct', 'flash-wrong', 'challenge-mode');
+          void outerRing.offsetWidth;
+          if (window.challengeMode) {
+            outerRing.classList.add('challenge-mode');
+          }
+          outerRing.classList.add('flash-wrong');
+        }
+        return;
+      }
       
       // Remove previous states
       userInputs.classList.remove('correct', 'wrong');
