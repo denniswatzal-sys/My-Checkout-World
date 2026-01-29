@@ -298,6 +298,8 @@ function toggleRealisticMode() {
     isInErrorState = false;
     currentRemainingScore = null;
     dartsUsedInRound = 0;
+    errorStateCheckout = [];
+    dartsInErrorState = 0;
   }
   
   // Remove error class from score card
@@ -389,6 +391,8 @@ if (document.readyState === 'loading') {
     let dartsUsedInRound = 0;
     let maxDartsForRound = 3;
     let isInErrorState = false;
+    let errorStateCheckout = []; // Das Checkout-Array für den Restwert
+    let dartsInErrorState = 0; // Wie viele Darts wurden im Error-State geworfen
     
     // Track current range for challenge mode
     let currentRangeMin = 2;
@@ -598,6 +602,8 @@ if (document.readyState === 'loading') {
         isInErrorState = false;
         currentRemainingScore = null;
         dartsUsedInRound = 0;
+        errorStateCheckout = [];
+        dartsInErrorState = 0;
         const scoreCard = document.getElementById('scoreCard');
         if (scoreCard) {
           scoreCard.classList.remove('error');
@@ -2020,6 +2026,8 @@ if (document.readyState === 'loading') {
         isInErrorState = false;
         currentRemainingScore = null;
         dartsUsedInRound = 0;
+        errorStateCheckout = [];
+        dartsInErrorState = 0;
       }
       
       // Add appropriate class
@@ -2119,40 +2127,129 @@ if (document.readyState === 'loading') {
       userInputs.push(dartValue);
       updateUserInputs();
       
-      const expectedDart = isInErrorState ? null : currentCheckout[userInputs.length - 1];
+      // Bestimme erwarteten Dart
+      let expectedDart;
+      if (isInErrorState) {
+        // Im Error-State: Erwarteten Dart aus dem errorStateCheckout holen
+        expectedDart = errorStateCheckout[dartsInErrorState];
+      } else {
+        // Normal: Aus dem ursprünglichen Checkout
+        expectedDart = currentCheckout[userInputs.length - 1];
+      }
       
-      // Im Error-State (Realistisch-Modus): Berechne was getroffen wurde
+      // Im Error-State (Realistisch-Modus): Prüfe gegen Datenbank
       if (isInErrorState && realisticMode) {
         // Berechne Punktwert des Wurfs
         const dartPoints = calculateDartValue(dartValue);
-        currentRemainingScore -= dartPoints;
         
-        // Prüfe ob Checkout erreicht wurde (genau 0 mit Double)
-        if (currentRemainingScore === 0 && isDartDouble(dartValue)) {
-          // Checkout geschafft!
+        // Prüfe ob der Dart dem erwarteten Dart entspricht
+        if (dartValue === expectedDart) {
+          // RICHTIG! Dart entspricht der Datenbank
+          currentRemainingScore -= dartPoints;
+          dartsInErrorState++;
+          
+          // Prüfe ob Checkout erreicht wurde (genau 0 mit Double)
+          if (currentRemainingScore === 0 && isDartDouble(dartValue)) {
+            // Checkout geschafft!
+            highlightedFields.push(dartValue);
+            createDartboard();
+            showFeedback(true);
+            
+            if (window.challengeMode) {
+              challengeStats.correct++;
+              updateChallengeStats();
+            }
+            
+            return;
+          }
+          
+          // Prüfe ob überkauft oder auf 1 gelandet
+          if (currentRemainingScore < 0 || currentRemainingScore === 1) {
+            // Überkauft oder unmöglich - Wurf ungültig, Runde beendet
+            showFeedback(false);
+            
+            // Zeige "Checken nicht möglich!"
+            const userInputsEl = document.getElementById('userInputs');
+            const impossibleDiv = document.createElement('div');
+            impossibleDiv.className = 'impossible-checkout';
+            impossibleDiv.textContent = 'Checken nicht möglich!';
+            userInputsEl.appendChild(impossibleDiv);
+            
+            if (window.challengeMode) {
+              challengeStats.wrong++;
+              updateChallengeStats();
+            }
+            
+            return;
+          }
+          
+          // Prüfe ob Checkout mit restlichen Darts noch möglich ist
+          const dartsLeft = maxDartsForRound - dartsUsedInRound;
+          if (!canCheckoutWithDarts(currentRemainingScore, dartsLeft)) {
+            // Nicht mehr möglich
+            showFeedback(false);
+            
+            // Zeige "Checken nicht möglich!"
+            const userInputsEl = document.getElementById('userInputs');
+            const impossibleDiv = document.createElement('div');
+            impossibleDiv.className = 'impossible-checkout';
+            impossibleDiv.textContent = 'Checken nicht möglich!';
+            userInputsEl.appendChild(impossibleDiv);
+            
+            if (window.challengeMode) {
+              challengeStats.wrong++;
+              updateChallengeStats();
+            }
+            
+            return;
+          }
+          
+          // Wurf korrekt, highlighte und weitermachen
           highlightedFields.push(dartValue);
           createDartboard();
-          showFeedback(true);
-          
-          if (window.challengeMode) {
-            challengeStats.correct++;
-            updateChallengeStats();
-          }
           
           return;
-        }
-        
-        // Prüfe ob überkauft oder auf 1 gelandet
-        if (currentRemainingScore < 0 || currentRemainingScore === 1) {
-          // Überkauft oder unmöglich - Wurf ungültig, Runde beendet
+        } else {
+          // FALSCH! Erneuter Fehlwurf im Error-State
+          // Berechne neuen Restwert
+          currentRemainingScore -= dartPoints;
+          
+          // Prüfe ob überkauft oder auf 1 gelandet
+          if (currentRemainingScore < 0 || currentRemainingScore === 1) {
+            // Überkauft oder unmöglich
+            showFeedback(false);
+            
+            const userInputsEl = document.getElementById('userInputs');
+            const impossibleDiv = document.createElement('div');
+            impossibleDiv.className = 'impossible-checkout';
+            impossibleDiv.textContent = 'Checken nicht möglich!';
+            userInputsEl.appendChild(impossibleDiv);
+            
+            if (window.challengeMode) {
+              challengeStats.wrong++;
+              updateChallengeStats();
+            }
+            
+            return;
+          }
+          
+          // Hole neues Checkout für den neuen Restwert
+          errorStateCheckout = currentCheckouts[currentRemainingScore] || [];
+          dartsInErrorState = 0;
+          
+          // Zeige Feedback für Fehlwurf
           showFeedback(false);
           
-          // Zeige "Checken nicht möglich!"
-          const userInputsEl = document.getElementById('userInputs');
-          const impossibleDiv = document.createElement('div');
-          impossibleDiv.className = 'impossible-checkout';
-          impossibleDiv.textContent = 'Checken nicht möglich!';
-          userInputsEl.appendChild(impossibleDiv);
+          // Prüfe ob Checkout mit restlichen Darts noch möglich ist
+          const dartsLeft = maxDartsForRound - dartsUsedInRound;
+          if (!canCheckoutWithDarts(currentRemainingScore, dartsLeft)) {
+            // Nicht mehr möglich
+            const userInputsEl = document.getElementById('userInputs');
+            const impossibleDiv = document.createElement('div');
+            impossibleDiv.className = 'impossible-checkout';
+            impossibleDiv.textContent = 'Checken nicht möglich!';
+            userInputsEl.appendChild(impossibleDiv);
+          }
           
           if (window.challengeMode) {
             challengeStats.wrong++;
@@ -2161,37 +2258,10 @@ if (document.readyState === 'loading') {
           
           return;
         }
-        
-        // Prüfe ob Checkout mit restlichen Darts noch möglich ist
-        const dartsLeft = maxDartsForRound - dartsUsedInRound;
-        if (!canCheckoutWithDarts(currentRemainingScore, dartsLeft)) {
-          // Nicht mehr möglich
-          showFeedback(false);
-          
-          // Zeige "Checken nicht möglich!"
-          const userInputsEl = document.getElementById('userInputs');
-          const impossibleDiv = document.createElement('div');
-          impossibleDiv.className = 'impossible-checkout';
-          impossibleDiv.textContent = 'Checken nicht möglich!';
-          userInputsEl.appendChild(impossibleDiv);
-          
-          if (window.challengeMode) {
-            challengeStats.wrong++;
-            updateChallengeStats();
-          }
-          
-          return;
-        }
-        
-        // Wurf akzeptiert, highlighte
-        highlightedFields.push(dartValue);
-        createDartboard();
-        
-        return;
       }
       
       if (dartValue !== expectedDart) {
-        // Fehlwurf
+        // Fehlwurf (erster Fehlwurf oder Normal-Modus)
         if (realisticMode) {
           // Im Realistisch-Modus: Berechne Restwert und gehe in Error-State
           isInErrorState = true;
@@ -2203,6 +2273,12 @@ if (document.readyState === 'loading') {
           }
           
           currentRemainingScore = currentScore - pointsScored;
+          
+          // Hole Checkout für den Restwert aus Datenbank
+          errorStateCheckout = currentCheckouts[currentRemainingScore] || [];
+          dartsInErrorState = 0;
+          
+          console.log(`Fehlwurf! Restwert: ${currentRemainingScore}, Checkout: ${errorStateCheckout.join(' → ')}`);
           
           // Score-Card rot färben
           const scoreCard = document.getElementById('scoreCard');
@@ -2926,6 +3002,8 @@ if (document.readyState === 'loading') {
         isInErrorState = false;
         currentRemainingScore = null;
         dartsUsedInRound = 0;
+        errorStateCheckout = [];
+        dartsInErrorState = 0;
       }
       
       if (actualMode === '2darts') {
