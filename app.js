@@ -2133,22 +2133,6 @@ if (document.readyState === 'loading') {
         // Berechne Punktwert des Wurfs
         const dartPoints = calculateDartValue(dartValue);
         
-        // SONDERFALL: Bull bei Restwert 50 ist immer ein gültiger Checkout
-        if (currentRemainingScore === 50 && dartValue === 'Bull') {
-          // Checkout geschafft mit Bull!
-          currentRemainingScore = 0;
-          highlightedFields.push(dartValue);
-          createDartboard();
-          showFeedback(true);
-          
-          if (window.challengeMode) {
-            challengeStats.correct++;
-            updateChallengeStats();
-          }
-          
-          return;
-        }
-        
         // Prüfe ob der Dart dem erwarteten Dart entspricht
         if (dartValue === expectedDart) {
           // RICHTIG! Dart entspricht der Datenbank
@@ -2265,7 +2249,31 @@ if (document.readyState === 'loading') {
           }
           
           // Hole neues Checkout für den neuen Restwert
-          errorStateCheckout = currentCheckouts[currentRemainingScore] || [];
+          // WICHTIG: Wähle die richtige Datenbank basierend auf verbleibenden Darts!
+          const dartsLeftAfterThis = maxDartsForRound - dartsUsedInRound;
+          if (dartsLeftAfterThis === 1) {
+            // Nur 1 Dart übrig
+            // SONDERFALL: Bei Restwert 50 ist Bull immer erlaubt
+            if (currentRemainingScore === 50) {
+              errorStateCheckout = ['Bull'];
+            } else {
+              // Schaue in 3-Dart-Datenbank
+              // Nutze nur wenn es ein 1-Dart-Checkout ist (Array-Länge 1)
+              const checkoutFromDB = defaultCheckouts[currentRemainingScore];
+              if (checkoutFromDB && checkoutFromDB.length === 1) {
+                errorStateCheckout = checkoutFromDB;
+              } else {
+                // Nicht mit 1 Dart checkbar
+                errorStateCheckout = [];
+              }
+            }
+          } else if (dartsLeftAfterThis === 2) {
+            // 2 Darts übrig - verwende 2-Dart-Datenbank
+            errorStateCheckout = twoDartCheckouts[currentRemainingScore] || [];
+          } else {
+            // 3+ Darts übrig - verwende 3-Dart-Datenbank
+            errorStateCheckout = defaultCheckouts[currentRemainingScore] || [];
+          }
           dartsInErrorState = 0;
           
           // KEIN showFeedback - Box ist schon da!
@@ -2324,10 +2332,34 @@ if (document.readyState === 'loading') {
           currentRemainingScore = currentScore - pointsScored;
           
           // Hole Checkout für den Restwert aus Datenbank
-          errorStateCheckout = currentCheckouts[currentRemainingScore] || [];
+          // WICHTIG: Wähle die richtige Datenbank basierend auf verbleibenden Darts!
+          const dartsLeftAfterError = maxDartsForRound - dartsUsedInRound;
+          if (dartsLeftAfterError === 1) {
+            // Nur 1 Dart übrig
+            // SONDERFALL: Bei Restwert 50 ist Bull immer erlaubt
+            if (currentRemainingScore === 50) {
+              errorStateCheckout = ['Bull'];
+            } else {
+              // Schaue in 3-Dart-Datenbank
+              // Nutze nur wenn es ein 1-Dart-Checkout ist (Array-Länge 1)
+              const checkoutFromDB = defaultCheckouts[currentRemainingScore];
+              if (checkoutFromDB && checkoutFromDB.length === 1) {
+                errorStateCheckout = checkoutFromDB;
+              } else {
+                // Nicht mit 1 Dart checkbar
+                errorStateCheckout = [];
+              }
+            }
+          } else if (dartsLeftAfterError === 2) {
+            // 2 Darts übrig - verwende 2-Dart-Datenbank
+            errorStateCheckout = twoDartCheckouts[currentRemainingScore] || [];
+          } else {
+            // 3+ Darts übrig - verwende 3-Dart-Datenbank
+            errorStateCheckout = defaultCheckouts[currentRemainingScore] || [];
+          }
           dartsInErrorState = 0;
           
-          console.log(`Fehlwurf! Restwert: ${currentRemainingScore}, Checkout: ${errorStateCheckout.join(' → ')}`);
+          console.log(`Fehlwurf! Restwert: ${currentRemainingScore}, Darts übrig: ${dartsLeftAfterError}, Checkout: ${errorStateCheckout.join(' → ')}`);
           
           // Score-Card rot färben
           const scoreCard = document.getElementById('scoreCard');
