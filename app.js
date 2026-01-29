@@ -32,6 +32,14 @@ function initLoadingScreen() {
   
   console.log(`Starting to load ${totalAssets} assets...`);
   
+  // Safety timeout: force continue after 10 seconds
+  setTimeout(() => {
+    if (document.getElementById('loadingScreen').style.display !== 'none') {
+      console.warn('Loading timeout - forcing continue');
+      hideLoadingScreen();
+    }
+  }, 10000);
+  
   // Load all assets
   loadAssets();
 }
@@ -65,22 +73,36 @@ function loadAssets() {
     hideLoadingScreen();
   }).catch(error => {
     console.error('Error loading assets:', error);
-    // Show error but continue anyway after 2 seconds
-    setTimeout(hideLoadingScreen, 2000);
+    // Show error but continue anyway after 1 second
+    setTimeout(hideLoadingScreen, 1000);
   });
 }
 
 function loadImage(src) {
   return new Promise((resolve, reject) => {
     const img = new Image();
-    img.onload = () => {
-      updateLoadingProgress();
-      resolve();
+    let resolved = false;
+    
+    const finish = () => {
+      if (!resolved) {
+        resolved = true;
+        updateLoadingProgress();
+        resolve();
+      }
     };
+    
+    // Timeout after 3 seconds
+    setTimeout(() => {
+      if (!resolved) {
+        console.warn(`Image loading timeout: ${src}`);
+        finish();
+      }
+    }, 3000);
+    
+    img.onload = finish;
     img.onerror = () => {
       console.warn(`Failed to load image: ${src}`);
-      updateLoadingProgress();
-      resolve(); // Resolve anyway to not block loading
+      finish();
     };
     img.src = src;
   });
@@ -89,14 +111,28 @@ function loadImage(src) {
 function loadVideo(src) {
   return new Promise((resolve, reject) => {
     const video = document.createElement('video');
-    video.onloadeddata = () => {
-      updateLoadingProgress();
-      resolve();
+    let resolved = false;
+    
+    const finish = () => {
+      if (!resolved) {
+        resolved = true;
+        updateLoadingProgress();
+        resolve();
+      }
     };
+    
+    // Timeout after 3 seconds
+    setTimeout(() => {
+      if (!resolved) {
+        console.warn(`Video loading timeout: ${src}`);
+        finish();
+      }
+    }, 3000);
+    
+    video.onloadeddata = finish;
     video.onerror = () => {
       console.warn(`Failed to load video: ${src}`);
-      updateLoadingProgress();
-      resolve(); // Resolve anyway to not block loading
+      finish();
     };
     video.preload = 'auto';
     video.src = src;
@@ -107,14 +143,28 @@ function loadVideo(src) {
 function loadAudio(src) {
   return new Promise((resolve, reject) => {
     const audio = new Audio();
-    audio.oncanplaythrough = () => {
-      updateLoadingProgress();
-      resolve();
+    let resolved = false;
+    
+    const finish = () => {
+      if (!resolved) {
+        resolved = true;
+        updateLoadingProgress();
+        resolve();
+      }
     };
+    
+    // Timeout after 3 seconds
+    setTimeout(() => {
+      if (!resolved) {
+        console.warn(`Audio loading timeout: ${src}`);
+        finish();
+      }
+    }, 3000);
+    
+    audio.oncanplaythrough = finish;
     audio.onerror = () => {
       console.warn(`Failed to load audio: ${src}`);
-      updateLoadingProgress();
-      resolve(); // Resolve anyway to not block loading
+      finish();
     };
     audio.preload = 'auto';
     audio.src = src;
