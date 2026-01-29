@@ -189,15 +189,6 @@ try {
   console.error('Could not load vibration setting:', e);
 }
 
-// ========================================
-// REALISTISCH-MODUS VARIABLEN
-// ========================================
-let realisticMode = localStorage.getItem('realisticMode') === 'true' || false;
-let remainingDarts = 3; // Verbleibende Darts in der aktuellen Runde
-let maxDartsPerRound = 3; // Maximum Darts pro Runde (3 oder 2 je nach Modus)
-let currentRemainingScore = null; // Aktueller Restwert nach Fehlwurf
-let isInRealisticErrorState = false; // Ob wir im Fehler-Zustand sind (rote Box)
-
 function vibrate(duration) {
   if (vibrationEnabled && 'vibrate' in navigator) {
     navigator.vibrate(duration);
@@ -233,112 +224,6 @@ function toggleVibration() {
   }
   
   console.log('Vibration', vibrationEnabled ? 'enabled' : 'disabled');
-}
-
-// ========================================
-// REALISTISCH-MODUS FUNKTIONEN
-// ========================================
-
-// Berechne den Wert eines Darts (z.B. "T20" -> 60, "D16" -> 32, "Bull" -> 50)
-function getDartValue(dart) {
-  if (dart === 'Bull') return 50;
-  if (dart.startsWith('S25')) return 25;
-  
-  const multiplier = dart[0] === 'T' ? 3 : dart[0] === 'D' ? 2 : 1;
-  const number = parseInt(dart.substring(1));
-  return multiplier * number;
-}
-
-// Prüfe ob eine Zahl mit N Darts checkbar ist
-function isCheckoutPossible(score, darts) {
-  if (darts === 1) {
-    // Mit 1 Dart: Nur Doubles und Bull
-    const checkableWith1Dart = [2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,50];
-    return checkableWith1Dart.includes(score);
-  } else if (darts === 2) {
-    // Mit 2 Darts: Nicht über 110 und nicht 99
-    return score <= 110 && score !== 99;
-  }
-  // Mit 3 Darts: Alles bis 170
-  return score <= 170;
-}
-
-// Finde den nächsten Dart im Checkout-Weg basierend auf Restwert und verbleibenden Darts
-function findNextDart(remainingScore, dartsLeft) {
-  console.log(`[Realistisch] Finding next dart for score ${remainingScore} with ${dartsLeft} darts left`);
-  
-  // Spezialfall: 2 Darts übrig - prüfe zuerst 2-Dart-DB
-  if (dartsLeft === 2) {
-    const twoDartCheckout = twoDartCheckouts[remainingScore];
-    if (twoDartCheckout && twoDartCheckout.length > 0) {
-      console.log(`[Realistisch] Found in 2-dart DB: ${twoDartCheckout[0]}`);
-      return { dart: twoDartCheckout[0], checkout: twoDartCheckout, fromTwoDartDB: true };
-    }
-  }
-  
-  // Sonst: Suche in 3-Dart-DB
-  const threeDartCheckout = defaultCheckouts[remainingScore];
-  if (!threeDartCheckout || threeDartCheckout.length === 0) {
-    console.log(`[Realistisch] No checkout found in database`);
-    return null;
-  }
-  
-  // Bestimme welcher Dart der Reihe (von links nach rechts)
-  let dartIndex;
-  if (dartsLeft === 3) {
-    dartIndex = 0; // Erster Dart
-  } else if (dartsLeft === 2) {
-    dartIndex = 1; // Zweiter Dart (da nicht in 2D-DB gefunden)
-  } else if (dartsLeft === 1) {
-    dartIndex = 2; // Dritter Dart
-  }
-  
-  const nextDart = threeDartCheckout[dartIndex];
-  console.log(`[Realistisch] Found in 3-dart DB at index ${dartIndex}: ${nextDart}`);
-  
-  return { dart: nextDart, checkout: threeDartCheckout, fromTwoDartDB: false };
-}
-
-// Setze Realistisch-Modus Zustand zurück (bei neuer Zahl)
-function resetRealisticState() {
-  currentRemainingScore = null;
-  isInRealisticErrorState = false;
-  
-  // Setze Dart-Limit basierend auf aktuellem Modus
-  if (currentMode === '3darts' || (currentMode === 'mixed' && currentCheckouts === defaultCheckouts)) {
-    maxDartsPerRound = 3;
-    remainingDarts = 3;
-  } else if (currentMode === '2darts' || (currentMode === 'mixed' && currentCheckouts === twoDartCheckouts)) {
-    maxDartsPerRound = 2;
-    remainingDarts = 2;
-  }
-  
-  // Entferne rote Färbung
-  const scoreCard = document.getElementById('scoreCard');
-  if (scoreCard) {
-    scoreCard.classList.remove('realistic-error');
-  }
-  
-  console.log(`[Realistisch] State reset - maxDarts: ${maxDartsPerRound}, remaining: ${remainingDarts}`);
-}
-
-// Toggle Realistisch-Modus
-function toggleRealisticMode() {
-  realisticMode = !realisticMode;
-  localStorage.setItem('realisticMode', realisticMode);
-  
-  // Update UI
-  const toggle = document.getElementById('realisticToggle');
-  if (toggle) {
-    toggle.textContent = realisticMode ? '☑' : '☐';
-  }
-  
-  console.log(`[Realistisch] Mode ${realisticMode ? 'enabled' : 'disabled'}`);
-  
-  // Reset state wenn Modus gewechselt wird
-  if (!realisticMode) {
-    resetRealisticState();
-  }
 }
 
 // Start loading when DOM is ready
@@ -2026,11 +1911,6 @@ if (document.readyState === 'loading') {
         scoreCard.classList.add('twodarts');
       }
       
-      // Reset Realistisch-Modus state bei neuer Zahl
-      if (realisticMode) {
-        resetRealisticState();
-      }
-      
       updateScoreTitle();
       createDartboard();
     }
@@ -2042,40 +1922,17 @@ if (document.readyState === 'loading') {
       // Wenn Feedback für falsche Antwort angezeigt wird, nächste Aufgabe bei Klick auf Dartscheibe
       // (Richtige Antworten gehen automatisch weiter)
       if (feedback === 'wrong') {
-        // Im Realistisch-Modus: Wenn "Checken nicht möglich", keine weiteren Eingaben erlauben
-        if (realisticMode && isInRealisticErrorState) {
-          // Nur neue Zahl generieren, nicht weiterspielen
-          manualScoreActive = false;
-          
-          if (window.challengeMode) {
-            generateScore(currentRangeMin, currentRangeMax);
-          } else if (window.learnModeActive) {
-            generateLearnScore();
-          } else {
-            generateScore(currentRangeMin, currentRangeMax);
-          }
-          return;
-        }
+        // Reset manual score flag - generate random score now
+        manualScoreActive = false;
         
-        // Exakt-Modus oder Realistisch-Modus ohne "Checken nicht möglich"
-        if (!realisticMode) {
-          // Exakt-Modus: Normale Weiterleitung
-          manualScoreActive = false;
-          
-          if (window.challengeMode) {
-            generateScore(currentRangeMin, currentRangeMax);
-          } else if (window.learnModeActive) {
-            generateLearnScore();
-          } else {
-            generateScore(currentRangeMin, currentRangeMax);
-          }
-          return;
+        if (window.challengeMode) {
+          generateScore(currentRangeMin, currentRangeMax);
+        } else if (window.learnModeActive) {
+          generateLearnScore();
         } else {
-          // Realistisch-Modus: Nach Fehlwurf weiterspielen erlauben
-          // Feedback bleibt "wrong", aber wir akzeptieren weitere Eingaben
-          feedback = null; // Reset feedback um weitere Eingaben zu ermöglichen
-          // NICHT return - weiterspielen!
+          generateScore(currentRangeMin, currentRangeMax);
         }
+        return;
       }
       
       // Ignore clicks when correct feedback is showing (auto-continue active)
@@ -2086,110 +1943,28 @@ if (document.readyState === 'loading') {
       userInputs.push(dartValue);
       updateUserInputs();
       
-      // Bestimme erwarteten Dart
-      let expectedDart;
+      const expectedDart = currentCheckout[userInputs.length - 1];
       
-      if (realisticMode && currentRemainingScore !== null) {
-        // Im Realistisch-Modus mit Restwert: Finde nächsten Dart aus DB
-        const nextDartInfo = findNextDart(currentRemainingScore, remainingDarts);
-        
-        if (!nextDartInfo) {
-          console.error(`[Realistisch] No dart found for score ${currentRemainingScore} with ${remainingDarts} darts`);
-          expectedDart = null;
+      if (dartValue !== expectedDart) {
+        showFeedback(false);
+        if (window.challengeMode) {
+          challengeStats.wrong++;
+          updateChallengeStats();
         } else {
-          expectedDart = nextDartInfo.dart;
-          console.log(`[Realistisch] Expected dart: ${expectedDart} (from ${nextDartInfo.fromTwoDartDB ? '2D' : '3D'} DB)`);
-        }
-      } else {
-        // Normal: Aus aktuellem Checkout
-        expectedDart = currentCheckout[userInputs.length - 1];
-      }
-      
-      // Prüfe ob Eingabe korrekt
-      const isCorrect = dartValue === expectedDart;
-      
-      if (!isCorrect) {
-        // FEHLWURF
-        remainingDarts--; // Dart verbraucht
-        console.log(`[Realistisch] Wrong dart. Remaining darts: ${remainingDarts}`);
-        
-        if (realisticMode) {
-          // REALISTISCH-MODUS: Berechne Restwert und prüfe ob weiterspielen möglich
-          
-          // Berechne Restwert
-          const dartPoints = getDartValue(dartValue);
-          const scoreToUse = currentRemainingScore !== null ? currentRemainingScore : currentScore;
-          currentRemainingScore = scoreToUse - dartPoints;
-          
-          console.log(`[Realistisch] New remaining score: ${currentRemainingScore} (was ${scoreToUse}, hit ${dartValue} = ${dartPoints})`);
-          
-          // Prüfe ob Checkout noch möglich
-          const checkoutPossible = isCheckoutPossible(currentRemainingScore, remainingDarts);
-          
-          console.log(`[Realistisch] Checkout possible with ${remainingDarts} darts: ${checkoutPossible}`);
-          
-          if (!checkoutPossible) {
-            // NICHT MEHR CHECKBAR
-            isInRealisticErrorState = true;
-            showFeedback(false, true); // true = "Checken nicht möglich!"
-            
-            // Färbe Score-Card rot
-            const scoreCard = document.getElementById('scoreCard');
-            scoreCard.classList.add('realistic-error');
-          } else {
-            // NOCH CHECKBAR - weiterspielen
-            showFeedback(false, false); // Zeige Lösung, aber erlaube weiterspielen
-            
-            // Färbe Score-Card rot (bleibt bis neue Zahl)
-            const scoreCard = document.getElementById('scoreCard');
-            scoreCard.classList.add('realistic-error');
-          }
-          
-          // Problem-Score tracken
-          if (!window.challengeMode) {
-            const actualMode = currentCheckouts === twoDartCheckouts ? '2darts' : '3darts';
-            problemScores[currentScore] = { count: 0, mode: actualMode };
-            localStorage.setItem('problemScores', JSON.stringify(problemScores));
-            updateProblemBadge();
-          }
-          
-          if (window.challengeMode) {
-            challengeStats.wrong++;
-            updateChallengeStats();
-          }
-        } else {
-          // EXAKT-MODUS: Normale Fehlerbehandlung
-          showFeedback(false);
-          
-          if (window.challengeMode) {
-            challengeStats.wrong++;
-            updateChallengeStats();
-          } else {
-            const actualMode = currentCheckouts === twoDartCheckouts ? '2darts' : '3darts';
-            problemScores[currentScore] = { count: 0, mode: actualMode };
-            localStorage.setItem('problemScores', JSON.stringify(problemScores));
-            updateProblemBadge();
-          }
+          // Save the ACTUAL mode (2darts or 3darts), not 'mixed'
+          const actualMode = currentCheckouts === twoDartCheckouts ? '2darts' : '3darts';
+          problemScores[currentScore] = { count: 0, mode: actualMode };
+          localStorage.setItem('problemScores', JSON.stringify(problemScores));
+          updateProblemBadge();
         }
         return;
       }
       
-      // RICHTIGER DART
-      remainingDarts--; // Dart verbraucht
-      console.log(`[Realistisch] Correct dart. Remaining darts: ${remainingDarts}`);
-      
       highlightedFields.push(dartValue);
       createDartboard();
       
-      // Prüfe ob Checkout komplett
-      const checkoutComplete = realisticMode && currentRemainingScore !== null 
-        ? currentRemainingScore - getDartValue(dartValue) === 0
-        : userInputs.length === currentCheckout.length;
-      
-      if (checkoutComplete) {
-        // CHECKOUT ERFOLGREICH
+      if (userInputs.length === currentCheckout.length) {
         showFeedback(true);
-        
         if (window.challengeMode) {
           challengeStats.correct++;
           updateChallengeStats();
@@ -2201,23 +1976,32 @@ if (document.readyState === 'loading') {
             console.log('Problem score for', currentScore, '- count:', count);
             
             if (count >= 3) {
+              // Delete after 3 correct answers
               delete problemScores[currentScore];
               console.log('Deleted problem score. Remaining:', Object.keys(problemScores));
             } else {
+              // Increment counter while preserving the ORIGINAL mode (don't overwrite with current mode)
               const originalMode = typeof problem === 'object' ? problem.mode : '3darts';
               problemScores[currentScore] = { count: count, mode: originalMode };
             }
             
+            // Save to localStorage after any modification
             localStorage.setItem('problemScores', JSON.stringify(problemScores));
+            
+            // Always update badge after modifying problemScores
             updateProblemBadge();
             
+            // Check if all problems are solved while in learn mode
             if (window.learnModeActive && Object.keys(problemScores).length === 0) {
               console.log('All problems solved! Switching to 2-170.');
               setTimeout(() => {
                 window.learnModeActive = false;
+                
+                // Reset to 3-Dart mode
                 currentMode = '3darts';
                 currentCheckouts = defaultCheckouts;
                 
+                // Update mode buttons
                 const mode3DartsBtn = document.getElementById('mode3DartsBtn');
                 const mode2DartsBtn = document.getElementById('mode2DartsBtn');
                 const modeMixBtn = document.getElementById('modeMixBtn');
@@ -2226,17 +2010,21 @@ if (document.readyState === 'loading') {
                 if (mode2DartsBtn) mode2DartsBtn.classList.remove('active');
                 if (modeMixBtn) modeMixBtn.classList.remove('active');
                 
+                // Update range buttons for 3-Dart
                 updateRangeButtonsFor3Dart();
                 
+                // Switch to 2-170
                 currentRangeMin = 2;
                 currentRangeMax = 170;
                 
+                // Activate 2-170 button
                 const btn2_170 = document.querySelector('.range-btn.bg-blue-500');
                 if (btn2_170) {
                   document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active-range'));
                   btn2_170.classList.add('active-range');
                 }
                 
+                // Update hint text
                 currentHintRange = '2-170';
                 updateHintText();
                 
@@ -2246,11 +2034,6 @@ if (document.readyState === 'loading') {
             }
           }
         }
-      } else if (realisticMode && currentRemainingScore !== null) {
-        // Im Realistisch-Modus: Update Restwert nach korrektem Dart
-        const dartPoints = getDartValue(dartValue);
-        currentRemainingScore = currentRemainingScore - dartPoints;
-        console.log(`[Realistisch] Updated remaining score after correct dart: ${currentRemainingScore}`);
       }
     }
     
@@ -2266,7 +2049,7 @@ if (document.readyState === 'loading') {
       }
     }
     
-    function showFeedback(isCorrect, checkoutNotPossible = false) {
+    function showFeedback(isCorrect) {
       feedback = isCorrect ? 'correct' : 'wrong';
       
       // Haptic feedback
@@ -2332,19 +2115,6 @@ if (document.readyState === 'loading') {
         const solutionDiv = document.createElement('div');
         solutionDiv.className = 'solution-text';
         solutionDiv.textContent = `Lösung: ${currentCheckout.join(' → ')}`;
-        
-        // Im Realistisch-Modus: Zusätzlich "Checken nicht möglich!" wenn zutreffend
-        if (checkoutNotPossible) {
-          const notPossibleDiv = document.createElement('div');
-          notPossibleDiv.className = 'solution-text';
-          notPossibleDiv.style.marginTop = '8px';
-          notPossibleDiv.style.color = '#dc2626';
-          notPossibleDiv.style.fontWeight = 'bold';
-          notPossibleDiv.textContent = 'Checken nicht möglich!';
-          solutionDiv.appendChild(document.createElement('br'));
-          solutionDiv.appendChild(notPossibleDiv);
-        }
-        
         userInputs.appendChild(solutionDiv);
       }
     }
