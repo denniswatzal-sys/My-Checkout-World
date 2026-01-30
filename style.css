@@ -860,12 +860,12 @@
     
     .menu-dropdown {
       position: fixed;
-      top: 58px;
+      top: 52px;
       right: 8px;
       background: white;
       border-radius: 8px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      overflow: hidden;
+      overflow: visible;
       z-index: 60;
       min-width: 280px;
     }
@@ -873,13 +873,14 @@
     .menu-dropdown::before {
       content: '';
       position: absolute;
-      top: -8px;
-      right: 8px;
+      top: -10px;
+      right: 18px;
       width: 0;
       height: 0;
-      border-left: 8px solid transparent;
-      border-right: 8px solid transparent;
-      border-bottom: 8px solid #f9fafb;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-bottom: 10px solid white;
+      filter: drop-shadow(0 -2px 2px rgba(0,0,0,0.1));
     }
     
     .menu-header {
