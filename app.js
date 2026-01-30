@@ -1327,6 +1327,48 @@ if (document.readyState === 'loading') {
       generateScore(currentRangeMin, currentRangeMax);
     }
     
+    // Swipe gesture for tutorial navigation
+    let tutorialTouchStartX = 0;
+    let tutorialTouchEndX = 0;
+    let tutorialTouchStartY = 0;
+    let tutorialTouchEndY = 0;
+    
+    const tutorialTooltip = document.getElementById('tutorialTooltip');
+    
+    if (tutorialTooltip) {
+      tutorialTooltip.addEventListener('touchstart', function(e) {
+        tutorialTouchStartX = e.changedTouches[0].screenX;
+        tutorialTouchStartY = e.changedTouches[0].screenY;
+      }, false);
+      
+      tutorialTooltip.addEventListener('touchend', function(e) {
+        tutorialTouchEndX = e.changedTouches[0].screenX;
+        tutorialTouchEndY = e.changedTouches[0].screenY;
+        handleTutorialSwipe();
+      }, false);
+    }
+    
+    function handleTutorialSwipe() {
+      if (!tutorialActive) return;
+      
+      const diffX = tutorialTouchEndX - tutorialTouchStartX;
+      const diffY = tutorialTouchEndY - tutorialTouchStartY;
+      
+      // Check if horizontal swipe is dominant (not vertical scroll)
+      if (Math.abs(diffX) > Math.abs(diffY)) {
+        // Swipe left (next step)
+        if (diffX < -50) {
+          console.log('Swipe left detected - next tutorial step');
+          nextTutorialStep();
+        }
+        // Swipe right (previous step)
+        else if (diffX > 50) {
+          console.log('Swipe right detected - previous tutorial step');
+          prevTutorialStep();
+        }
+      }
+    }
+    
     // Tutorial event listeners
     document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('tutorialClose').addEventListener('click', endTutorial);
