@@ -2242,16 +2242,18 @@ if (document.readyState === 'loading') {
           highlightedFields.push(dartValue);
           createDartboard();
           
-          // Aktualisiere Restwert-Anzeige
-          const userInputsEl = document.getElementById('userInputs');
-          const existingRemaining = userInputsEl.querySelector('.remaining-score');
-          if (existingRemaining) {
-            existingRemaining.textContent = `Restwert: ${currentRemainingScore}`;
-          } else {
-            const remainingDiv = document.createElement('div');
-            remainingDiv.className = 'remaining-score';
-            remainingDiv.textContent = `Restwert: ${currentRemainingScore}`;
-            userInputsEl.appendChild(remainingDiv);
+          // Aktualisiere Restwert-Anzeige (nur wenn aktiviert)
+          if (showRemainingScore) {
+            const userInputsEl = document.getElementById('userInputs');
+            const existingRemaining = userInputsEl.querySelector('.remaining-score');
+            if (existingRemaining) {
+              existingRemaining.textContent = `Restwert: ${currentRemainingScore}`;
+            } else {
+              const remainingDiv = document.createElement('div');
+              remainingDiv.className = 'remaining-score';
+              remainingDiv.textContent = `Restwert: ${currentRemainingScore}`;
+              userInputsEl.appendChild(remainingDiv);
+            }
           }
           
           // Prüfe ob Checkout mit restlichen Darts noch möglich ist
@@ -2374,16 +2376,18 @@ if (document.readyState === 'loading') {
             // Dartboard neu zeichnen mit Highlight
             createDartboard();
             
-            // Aktualisiere Restwert-Anzeige
-            const userInputsEl2 = document.getElementById('userInputs');
-            const existingRemaining2 = userInputsEl2.querySelector('.remaining-score');
-            if (existingRemaining2) {
-              existingRemaining2.textContent = `Restwert: ${currentRemainingScore}`;
-            } else {
-              const remainingDiv2 = document.createElement('div');
-              remainingDiv2.className = 'remaining-score';
-              remainingDiv2.textContent = `Restwert: ${currentRemainingScore}`;
-              userInputsEl2.appendChild(remainingDiv2);
+            // Aktualisiere Restwert-Anzeige (nur wenn aktiviert)
+            if (showRemainingScore) {
+              const userInputsEl2 = document.getElementById('userInputs');
+              const existingRemaining2 = userInputsEl2.querySelector('.remaining-score');
+              if (existingRemaining2) {
+                existingRemaining2.textContent = `Restwert: ${currentRemainingScore}`;
+              } else {
+                const remainingDiv2 = document.createElement('div');
+                remainingDiv2.className = 'remaining-score';
+                remainingDiv2.textContent = `Restwert: ${currentRemainingScore}`;
+                userInputsEl2.appendChild(remainingDiv2);
+              }
             }
             
             if (window.challengeMode) {
@@ -2415,16 +2419,18 @@ if (document.readyState === 'loading') {
           // Dartboard neu zeichnen mit Highlight
           createDartboard();
           
-          // Aktualisiere Restwert-Anzeige
-          const userInputsEl2 = document.getElementById('userInputs');
-          const existingRemaining2 = userInputsEl2.querySelector('.remaining-score');
-          if (existingRemaining2) {
-            existingRemaining2.textContent = `Restwert: ${currentRemainingScore}`;
-          } else {
-            const remainingDiv2 = document.createElement('div');
-            remainingDiv2.className = 'remaining-score';
-            remainingDiv2.textContent = `Restwert: ${currentRemainingScore}`;
-            userInputsEl2.appendChild(remainingDiv2);
+          // Aktualisiere Restwert-Anzeige (nur wenn aktiviert)
+          if (showRemainingScore) {
+            const userInputsEl2 = document.getElementById('userInputs');
+            const existingRemaining2 = userInputsEl2.querySelector('.remaining-score');
+            if (existingRemaining2) {
+              existingRemaining2.textContent = `Restwert: ${currentRemainingScore}`;
+            } else {
+              const remainingDiv2 = document.createElement('div');
+              remainingDiv2.className = 'remaining-score';
+              remainingDiv2.textContent = `Restwert: ${currentRemainingScore}`;
+              userInputsEl2.appendChild(remainingDiv2);
+            }
           }
           
           // WICHTIG: Prüfe ob Checkout mit restlichen Darts noch möglich ist!
@@ -2536,12 +2542,14 @@ if (document.readyState === 'loading') {
             // Dartboard neu zeichnen mit Highlight
             createDartboard();
             
-            // Zeige Restwert-Anzeige (zeigt dass Checkout unmöglich ist)
-            const userInputsEl = document.getElementById('userInputs');
-            const remainingDiv = document.createElement('div');
-            remainingDiv.className = 'remaining-score';
-            remainingDiv.textContent = `Restwert: ${currentRemainingScore}`;
-            userInputsEl.appendChild(remainingDiv);
+            // Zeige Restwert-Anzeige (nur wenn aktiviert)
+            if (showRemainingScore) {
+              const userInputsEl = document.getElementById('userInputs');
+              const remainingDiv = document.createElement('div');
+              remainingDiv.className = 'remaining-score';
+              remainingDiv.textContent = `Restwert: ${currentRemainingScore}`;
+              userInputsEl.appendChild(remainingDiv);
+            }
             
             if (window.challengeMode) {
               challengeStats.wrong++;
@@ -2565,16 +2573,18 @@ if (document.readyState === 'loading') {
           // Dartboard neu zeichnen mit Highlight
           createDartboard();
           
-          // Aktualisiere oder erstelle Restwert-Anzeige
-          const userInputsEl3 = document.getElementById('userInputs');
-          const existingRemaining3 = userInputsEl3.querySelector('.remaining-score');
-          if (existingRemaining3) {
-            existingRemaining3.textContent = `Restwert: ${currentRemainingScore}`;
-          } else {
-            const remainingDiv3 = document.createElement('div');
-            remainingDiv3.className = 'remaining-score';
-            remainingDiv3.textContent = `Restwert: ${currentRemainingScore}`;
-            userInputsEl3.appendChild(remainingDiv3);
+          // Aktualisiere oder erstelle Restwert-Anzeige (nur wenn aktiviert)
+          if (showRemainingScore) {
+            const userInputsEl3 = document.getElementById('userInputs');
+            const existingRemaining3 = userInputsEl3.querySelector('.remaining-score');
+            if (existingRemaining3) {
+              existingRemaining3.textContent = `Restwert: ${currentRemainingScore}`;
+            } else {
+              const remainingDiv3 = document.createElement('div');
+              remainingDiv3.className = 'remaining-score';
+              remainingDiv3.textContent = `Restwert: ${currentRemainingScore}`;
+              userInputsEl3.appendChild(remainingDiv3);
+            }
           }
           
           if (window.challengeMode) {
