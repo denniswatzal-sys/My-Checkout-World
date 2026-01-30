@@ -2297,9 +2297,13 @@ if (document.readyState === 'loading') {
           }
           dartsInErrorState = 0;
           
-          // WICHTIG: Wenn errorStateCheckout leer ist, ist kein Checkout möglich!
-          if (errorStateCheckout.length === 0) {
-            console.log('[DEBUG] Nach Fehlwurf: Kein Checkout möglich → Runde beendet!');
+          console.log(`[DEBUG] Nach Fehlwurf: Restwert ${currentRemainingScore}, Darts übrig: ${dartsLeftAfterThis}, Checkout: ${errorStateCheckout.join(' → ')}`);
+          
+          // WICHTIG: Prüfe ob Checkout mit restlichen Darts wirklich möglich ist
+          // Nutze canCheckoutWithDarts() statt errorStateCheckout.length === 0
+          // um robuster gegen Datenbank-Probleme zu sein
+          if (!canCheckoutWithDarts(currentRemainingScore, dartsLeftAfterThis)) {
+            console.log('[DEBUG] Nach Fehlwurf: Kein Checkout möglich (bestätigt durch canCheckoutWithDarts) → Runde beendet!');
             
             // Vibration und Dartboard-Flash
             vibrateHeavy();
@@ -2463,9 +2467,11 @@ if (document.readyState === 'loading') {
           
           console.log(`Fehlwurf! Restwert: ${currentRemainingScore}, Darts übrig: ${dartsLeftAfterError}, Checkout: ${errorStateCheckout.join(' → ')}`);
           
-          // WICHTIG: Wenn errorStateCheckout leer ist, ist kein Checkout möglich!
-          if (errorStateCheckout.length === 0) {
-            console.log('[DEBUG] Kein Checkout möglich mit verbleibenden Darts → Runde beendet!');
+          // WICHTIG: Prüfe ob Checkout mit restlichen Darts wirklich möglich ist
+          // Nutze canCheckoutWithDarts() statt errorStateCheckout.length === 0
+          // um robuster gegen Datenbank-Probleme zu sein
+          if (!canCheckoutWithDarts(currentRemainingScore, dartsLeftAfterError)) {
+            console.log('[DEBUG] Kein Checkout möglich mit verbleibenden Darts (bestätigt durch canCheckoutWithDarts) → Runde beendet!');
             
             // Score-Card rot färben
             const scoreCard = document.getElementById('scoreCard');
@@ -2652,8 +2658,21 @@ if (document.readyState === 'loading') {
         // Nur noch 1 Dart - muss ein Double sein (oder Bull für 50)
         return (score >= 2 && score <= 40 && score % 2 === 0) || score === 50;
       } else if (dartsLeft === 2) {
-        // 2 Darts - checke 2-Dart-Datenbank
-        return twoDartCheckouts[score] !== undefined;
+        // 2 Darts
+        // SONDERFÄLLE: Diese Scores sind mit 2 Darts mathematisch UNMÖGLICH
+        const impossibleWith2Darts = [99, 102, 103, 105, 106, 108, 109];
+        if (impossibleWith2Darts.includes(score) || score > 110) {
+          return false;
+        }
+        
+        // Prüfe 2-Dart-Datenbank, sonst Fallback auf 3-Dart-DB (erste 2 Darts)
+        if (twoDartCheckouts[score] !== undefined) {
+          return true;
+        } else if (defaultCheckouts[score] !== undefined) {
+          // Wenn es in 3-Dart-DB ist, ist es auch mit 2 Darts checkbar
+          return true;
+        }
+        return false;
       } else if (dartsLeft >= 3) {
         // 3+ Darts - checke 3-Dart-Datenbank
         return defaultCheckouts[score] !== undefined;
