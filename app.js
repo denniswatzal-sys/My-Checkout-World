@@ -2286,6 +2286,11 @@ if (document.readyState === 'loading') {
             console.log('[DEBUG] ✅ CHECKOUT GESCHAFFT!');
             highlightedFields.push(dartValue);
             createDartboard();
+            
+            // WICHTIG: Score-Card Farbe zurücksetzen (war vielleicht rot/orange)
+            const scoreCard = document.getElementById('scoreCard');
+            scoreCard.classList.remove('error', 'warning');
+            
             showFeedback(true);
             
             if (window.challengeMode) {
