@@ -917,7 +917,7 @@ if (document.readyState === 'loading') {
       {
         element: '#btn-training',
         title: '🎯 Training starten',
-        content: 'Diese App soll dir helfen, alle Checkout-wege im Schlaf zu beherrschen.<br><br>Worauf wartest du? Mach dich selbst zum echten <strong>Checkout-Champion</strong>.',
+        content: 'Mit dieser App lernst du, alle Checkoutwege im schlaf zu beherrschen.<br><br>Mach dich selbst zum <strong>Checkout-Champion</strong>.',
         position: 'top',
         screen: 'start'
       },
@@ -938,7 +938,7 @@ if (document.readyState === 'loading') {
       {
         element: '#scoreValue',
         title: '🔓 Checkout-Zahl',
-        content: 'Hier wird dir die zu checkende Zahl vorgegeben. Durch Antippen kannst du sie manuell ändern.<br><br><strong style="color: #16a34a;">Grün:</strong> 3-Dart Finish<br><strong style="color: #3b82f6;">Blau:</strong> 2-Dart Finish<br><strong style="color: #eab308;">Gelb:</strong> Bogey-Zahl<br><br><em>Nur im Freien-Modus:</em><br><strong style="color: #f97316;">Orange:</strong> Fehlwurf / checken möglich<br><strong style="color: #dc2626;">Rot:</strong> Fehlwurf / checken nicht möglich',
+        content: 'Hier wird die zu checkende Zahl vorgegeben. Durch Antippen kannst du sie auch manuell ändern.<br><br><strong style="color: #16a34a;">Grün:</strong> 3-Dart Finish<br><strong style="color: #3b82f6;">Blau:</strong> 2-Dart Finish<br><strong style="color: #eab308;">Gelb:</strong> Bogey-Zahl<br><br><em>Nur im Freien-Modus:</em><br><strong style="color: #f97316;">Orange:</strong> Fehlwurf / checken noch möglich<br><strong style="color: #dc2626;">Rot:</strong> Fehlwurf / checken nicht möglich',
         position: 'bottom',
         screen: 'training'
       },
@@ -1042,7 +1042,7 @@ if (document.readyState === 'loading') {
       {
         element: '.mode-selector',
         title: '🎮 Modus-Tasten',
-        content: 'Mit den Modus-Tasten legst du deine Trainingseinstellungen fest.<br><br><strong>3DF:</strong> Nur 3-Dart Finishes<br><strong>2DF:</strong> Nur 2-Dart Finishes<br><strong>Mix:</strong> Zufällige Mischung aus 3DF / 2DF<br><strong>? / ⬆ / ⬇:</strong> Zufallszahl / Auf- / Absteigend<br>🕊️ <strong>Freier-Modus:</strong> Fehlwürfe AN/AUS<br>🏆 <strong>Herausforderungsmodus:</strong><br>60 Sek. lang zufällige Zahlen von 2-170<br>im Mix-Modus. Wie viele schaffst du?',
+        content: 'Mit den Modus-Tasten legst du deine Trainingseinstellungen fest.<br><br><strong>3DF:</strong> Nur 3-Dart Finishes<br><strong>2DF:</strong> Nur 2-Dart Finishes<br><strong>Mix:</strong> Zufällige Mischung aus 3DF / 2DF<br><strong>? / ⬆ / ⬇:</strong> Reihenfolge zufällig / auf- / absteigend<br><br>🕊️ <strong>Freier-Modus:</strong> Fehlwürfe möglich<br>🏆 <strong>Herausforderungsmodus:</strong><br>60 Sek. lang zufällige Zahlen von 2-170<br>im Mix-Modus. Wie viele schaffst du?',
         position: 'top',
         screen: 'training'
       },
