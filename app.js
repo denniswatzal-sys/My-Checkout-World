@@ -3718,25 +3718,30 @@ if (document.readyState === 'loading') {
       const overlay = document.getElementById('menuOverlay');
       const menuBtn = document.getElementById('menuBtn');
       
-      if (menu.style.display === 'none') {
+      if (menu.style.display === 'none' || !menu.style.display) {
         // Opening menu - update toggle states
         updateNumbersToggle();
         overlay.style.display = 'block';
         menu.style.display = 'block';
         
-        // Position menu dynamically relative to button
-        if (menuBtn) {
-          const btnRect = menuBtn.getBoundingClientRect();
-          const menuRect = menu.getBoundingClientRect();
-          
-          // Position below button, aligned to the right
-          const top = btnRect.bottom + 10;
-          const right = window.innerWidth - btnRect.right;
-          
-          menu.style.top = top + 'px';
-          menu.style.right = right + 'px';
-          menu.style.left = 'auto';
-        }
+        // Position menu dynamically relative to button (after render)
+        setTimeout(() => {
+          if (menuBtn) {
+            const btnRect = menuBtn.getBoundingClientRect();
+            
+            // Position below button, aligned to the right
+            const top = btnRect.bottom + 10;
+            const right = window.innerWidth - btnRect.right;
+            
+            console.log('Menu Button Rect:', btnRect);
+            console.log('Setting menu position - top:', top, 'right:', right);
+            
+            menu.style.top = top + 'px';
+            menu.style.right = right + 'px';
+            menu.style.left = 'auto';
+            menu.style.bottom = 'auto';
+          }
+        }, 0);
       } else {
         overlay.style.display = 'none';
         menu.style.display = 'none';
