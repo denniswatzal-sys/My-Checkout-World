@@ -2377,6 +2377,31 @@ if (document.readyState === 'loading') {
           // Aktualisiere Restwert-Anzeige nach dem Punktabzug
           updateUserInputs();
           
+          console.log(`[DEBUG] Zweiter Fehlwurf! Restwert: ${currentRemainingScore}, isDouble: ${isDartDouble(dartValue)}`);
+          
+          // WICHTIG: Prüfe ob trotz Fehlwurf Checkout erreicht wurde (0 mit Double)
+          if (currentRemainingScore === 0 && isDartDouble(dartValue)) {
+            // Checkout geschafft trotz zweitem Fehlwurf!
+            console.log('[DEBUG] ✅ CHECKOUT GESCHAFFT (nach 2 Fehlwürfen)!');
+            createDartboard();
+            
+            // Score-Card bleibt orange (waren Fehlwürfe, aber erfolgreich beendet)
+            const scoreCard = document.getElementById('scoreCard');
+            scoreCard.classList.remove('error');
+            if (!scoreCard.classList.contains('warning')) {
+              scoreCard.classList.add('warning');
+            }
+            
+            showFeedback(true);
+            
+            if (window.challengeMode) {
+              challengeStats.correct++;
+              updateChallengeStats();
+            }
+            
+            return;
+          }
+          
           // Prüfe ob überkauft oder auf 1 gelandet
           if (currentRemainingScore < 0 || currentRemainingScore === 1) {
             // Überkauft oder unmöglich - Runde beendet, neue Zahl generieren
