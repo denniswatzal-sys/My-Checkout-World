@@ -711,8 +711,8 @@ if (document.readyState === 'loading') {
       currentSequentialScore = null;
       
       document.querySelectorAll('.mode-btn').forEach(btn => {
-        // Don't remove active from challenge button
-        if (!btn.classList.contains('mode-btn-challenge')) {
+        // Don't remove active from challenge button or realistic mode button
+        if (!btn.classList.contains('mode-btn-challenge') && !btn.classList.contains('mode-btn-realistic')) {
           btn.classList.remove('active');
         }
       });
@@ -3009,9 +3009,9 @@ if (document.readyState === 'loading') {
         
         // FORCE: Deaktiviere Realistisch-Modus im Challenge
         realisticMode = false;
-        const realisticToggle = document.getElementById('realisticModeToggle');
-        if (realisticToggle) {
-          realisticToggle.checked = false;
+        const realisticBtn = document.getElementById('realisticModeBtn');
+        if (realisticBtn) {
+          realisticBtn.classList.remove('active');
         }
         
         // Reset realistic mode state
@@ -3174,9 +3174,13 @@ if (document.readyState === 'loading') {
       // Restore realistic mode from localStorage
       const savedRealisticMode = localStorage.getItem('dartTrainerRealisticMode');
       realisticMode = savedRealisticMode === 'true';
-      const realisticToggle = document.getElementById('realisticModeToggle');
-      if (realisticToggle) {
-        realisticToggle.checked = realisticMode;
+      const realisticBtn = document.getElementById('realisticModeBtn');
+      if (realisticBtn) {
+        if (realisticMode) {
+          realisticBtn.classList.add('active');
+        } else {
+          realisticBtn.classList.remove('active');
+        }
       }
       
       // Update menu items
@@ -3274,6 +3278,16 @@ if (document.readyState === 'loading') {
       // Add active only to 3-Darts button
       if (mode3DartsBtn) {
         mode3DartsBtn.classList.add('active');
+      }
+      
+      // Restore realistic mode button appearance based on saved state
+      const realisticBtn = document.getElementById('realisticModeBtn');
+      if (realisticBtn) {
+        if (realisticMode) {
+          realisticBtn.classList.add('active');
+        } else {
+          realisticBtn.classList.remove('active');
+        }
       }
     }
     
