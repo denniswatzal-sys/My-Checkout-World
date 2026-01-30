@@ -3716,11 +3716,27 @@ if (document.readyState === 'loading') {
     function toggleMenu() {
       const menu = document.getElementById('menuDropdown');
       const overlay = document.getElementById('menuOverlay');
+      const menuBtn = document.getElementById('menuBtn');
+      
       if (menu.style.display === 'none') {
         // Opening menu - update toggle states
         updateNumbersToggle();
         overlay.style.display = 'block';
         menu.style.display = 'block';
+        
+        // Position menu dynamically relative to button
+        if (menuBtn) {
+          const btnRect = menuBtn.getBoundingClientRect();
+          const menuRect = menu.getBoundingClientRect();
+          
+          // Position below button, aligned to the right
+          const top = btnRect.bottom + 10;
+          const right = window.innerWidth - btnRect.right;
+          
+          menu.style.top = top + 'px';
+          menu.style.right = right + 'px';
+          menu.style.left = 'auto';
+        }
       } else {
         overlay.style.display = 'none';
         menu.style.display = 'none';
