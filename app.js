@@ -2794,7 +2794,8 @@ if (document.readyState === 'loading') {
     
     function canCheckoutWithDarts(score, dartsLeft) {
       if (dartsLeft <= 0) return false;
-      if (score < 2) return false; // 0 oder 1 nicht checkbar
+      if (score === 0) return true; // 0 = Checkout geschafft!
+      if (score === 1) return false; // 1 nicht checkbar
       if (score > 170) return false; // Über 170 nicht mit 3 Darts checkbar
       
       // Prüfe anhand der Datenbanken
