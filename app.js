@@ -3724,21 +3724,22 @@ if (document.readyState === 'loading') {
         overlay.style.display = 'block';
         menu.style.display = 'block';
         
-        // Position menu dynamically relative to button (after render)
+        // Position menu exactly like tutorial tooltip with 'bottom' position
         setTimeout(() => {
           if (menuBtn) {
             const btnRect = menuBtn.getBoundingClientRect();
+            const menuRect = menu.getBoundingClientRect();
             
-            // Position below button, aligned to the right
-            const top = btnRect.bottom + 10;
-            const right = window.innerWidth - btnRect.right;
+            // Same positioning as tutorial 'bottom'
+            const top = btnRect.bottom + 20;
+            const left = btnRect.left + (btnRect.width / 2) - (menuRect.width / 2);
             
             console.log('Menu Button Rect:', btnRect);
-            console.log('Setting menu position - top:', top, 'right:', right);
+            console.log('Setting menu position - top:', top, 'left:', left);
             
             menu.style.top = top + 'px';
-            menu.style.right = right + 'px';
-            menu.style.left = 'auto';
+            menu.style.left = left + 'px';
+            menu.style.right = 'auto';
             menu.style.bottom = 'auto';
           }
         }, 0);
