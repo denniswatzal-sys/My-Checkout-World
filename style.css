@@ -82,6 +82,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
     }
     
     .mode-btn:not(.mode-btn-realistic):not(.mode-btn-challenge) {
@@ -165,6 +169,10 @@
       cursor: pointer;
       transition: all 0.2s ease;
       text-align: center;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
       /* 3D raised effect - button pops out */
       box-shadow: 
         0 4px 6px rgba(0, 0, 0, 0.3),
@@ -294,6 +302,10 @@
       transition: all 0.2s;
       opacity: 0.4;
       font-size: 18px;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
     }
     
     .dartboard-toggle-ring:hover {
