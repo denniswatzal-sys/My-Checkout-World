@@ -938,7 +938,7 @@ if (document.readyState === 'loading') {
       {
         element: '#scoreValue',
         title: '🔓 Checkout-Zahl',
-        content: 'Hier wird dir die zu checkende Zahl vorgegeben. Durch Antippen kannst du sie auch manuell ändern.<br><br><strong style="color: #16a34a;">Grün:</strong> 3-Dart Finish<br><strong style="color: #3b82f6;">Blau:</strong> 2-Dart Finish<br><strong style="color: #eab308;">Gelb:</strong> Bogey-Zahl<br><br><em>Nur im Freien-Modus:</em><br><strong style="color: #f97316;">Orange:</strong> Fehlwurf / checken möglich<br><strong style="color: #dc2626;">Rot:</strong> Fehlwurf / checken nicht möglich',
+        content: 'Hier wird dir die zu checkende Zahl vorgegeben. Durch Antippen kannst du sie auch manuell ändern.<br><br><strong style="color: #16a34a;">Grün:</strong> 3-Dart-Finish (3DF)<br><strong style="color: #3b82f6;">Blau:</strong> 2-Dart-Finish (2DF)<br><strong style="color: #eab308;">Gelb:</strong> Bogey-Zahl<br><br><strong>Nur im Freien-Modus:</strong><br><strong style="color: #f97316;">Orange:</strong> Fehlwurf / checken möglich<br><strong style="color: #dc2626;">Rot:</strong> Fehlwurf / checken nicht möglich',
         position: 'bottom',
         screen: 'training'
       },
@@ -1042,21 +1042,21 @@ if (document.readyState === 'loading') {
       {
         element: '.mode-selector',
         title: '🎮 Modus-Tasten',
-        content: 'Mit den Modus-Tasten legst du deine Trainingseinstellungen fest.<br><br><strong>3DF:</strong> Nur 3-Dart Finishes<br><strong>2DF:</strong> Nur 2-Dart Finishes<br><strong>Mix:</strong> Zufällige Mischung aus 3DF / 2DF<br><strong>? / ⬆ / ⬇:</strong> Reihenfolge zufällig / auf- / absteigend<br><br>🕊️ <strong>Freier-Modus:</strong> Fehlwürfe möglich<br>🏆 <strong>Herausforderungsmodus:</strong><br>60 Sek. lang zufällige Zahlen von 2-170<br>im Mix-Modus. Wie viele schaffst du?',
+        content: 'Mit den Modus-Tasten legst du deine Trainingseinstellungen fest.<br><br>3DF: Nur 3-Dart-Finishes<br>2DF: Nur 2-Dart-Finishes<br><strong>Mix:</strong> Zufällige Mischung aus 3DF / 2DF<br><strong>? / ⬆ / ⬇:</strong> Reihenfolge zufällig / auf- / absteigend<br><br><span style="display: inline-block; background: #10b981; color: white; padding: 2px 6px; border-radius: 4px; font-size: 16px;">🕊️</span> <strong>Freier-Modus:</strong> Fehlwürfe möglich<br>🏆 <strong>Herausforderungsmodus:</strong><br>60 Sek. lang zufällige Zahlen von 2-170<br>im Mix-Modus. Wie viele schaffst du?',
         position: 'top',
         screen: 'training'
       },
       {
         element: '.range-grid',
         title: '📊 Schnellauswahl-Tasten',
-        content: 'Mit den Schnellauswahl-Tasten wechselst du einfach zwischen den Zahlengruppen. Neugierig, was diese Gruppen so besonders macht?<br><br><strong>Taste antippen:</strong> Bereich auswählen<br><strong>Taste gedrückt halten:</strong> Informationen anzeigen lassen<br><strong>Taste grau:</strong> Keine Einträge in Checkout-Datenbank hinterlegt',
+        content: 'Mit den Schnellauswahl-Tasten wechselst du einfach zwischen den Zahlengruppen.<br><br><strong>Taste gedrückt halten:</strong> Informationen anzeigen lassen<br><strong>Taste antippen:</strong> Bereich auswählen<br><strong>Taste grau:</strong> Keine Einträge in Checkout-Datenbank hinterlegt',
         position: 'top',
         screen: 'training'
       },
       {
         element: '#menuBtn',
         title: '⚙️ Einstellungen',
-        content: '<strong>Taste antippen:</strong> Menü öffnen<br><strong>Taste gedrückt halten:</strong> Aktiviert / deaktiviert Vollbildmodus<br><br><strong>Restwert: AN/AUS</strong> Anzeige des Restwerts nach jedem Dart<br><strong>Zahlenring: AN/AUS</strong> Zahlenring ausblenden, zur Erhöhung der Schwierigkeit<br><strong>Vibration: AN/AUS</strong> Haptische Rückmeldung<br><strong>Hintergrund anpassen:</strong> Individuell einstellbar<br><strong>Zurück zum Startbildschirm:</strong> Taste drücken / oder nach rechts wischen.',
+        content: '<strong>Taste antippen:</strong> Menü öffnen<br><strong>Taste gedrückt halten:</strong> Aktiviert / deaktiviert Vollbildmodus<br><br><strong>Restwert:</strong> Anzeige des Restwerts nach jedem Dart<br><strong>Zahlenring:</strong> Zahlenring ausblenden, zur Erhöhung der Schwierigkeit<br><strong>Vibration:</strong> Haptische Rückmeldung<br><strong>Hintergrund anpassen:</strong> Individuell einstellbar<br><strong>Zurück zum Startbildschirm:</strong> Taste drücken / oder nach rechts wischen.',
         position: 'bottom-left',
         screen: 'training'
       },
