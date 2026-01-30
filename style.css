@@ -860,7 +860,7 @@
     
     .menu-dropdown {
       position: fixed;
-      top: 50px;
+      top: 58px;
       right: 8px;
       background: white;
       border-radius: 8px;
@@ -874,12 +874,14 @@
       content: '';
       position: absolute;
       top: -8px;
-      right: 12px;
+      right: 8px;
       width: 0;
       height: 0;
       border-left: 8px solid transparent;
       border-right: 8px solid transparent;
       border-bottom: 8px solid #f9fafb;
+    }
+    
     }
     
     .menu-header {
