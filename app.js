@@ -1354,16 +1354,16 @@ if (document.readyState === 'loading') {
       const diffX = tutorialTouchEndX - tutorialTouchStartX;
       const diffY = tutorialTouchEndY - tutorialTouchStartY;
       
-      // Check if horizontal swipe is dominant (not vertical scroll)
-      if (Math.abs(diffX) > Math.abs(diffY)) {
-        // Swipe left (next step)
-        if (diffX < -50) {
-          console.log('Swipe left detected - next tutorial step');
+      // Check if vertical swipe is dominant (not horizontal scroll)
+      if (Math.abs(diffY) > Math.abs(diffX)) {
+        // Swipe up (next step)
+        if (diffY < -50) {
+          console.log('Swipe up detected - next tutorial step');
           nextTutorialStep();
         }
-        // Swipe right (previous step)
-        else if (diffX > 50) {
-          console.log('Swipe right detected - previous tutorial step');
+        // Swipe down (previous step)
+        else if (diffY > 50) {
+          console.log('Swipe down detected - previous tutorial step');
           prevTutorialStep();
         }
       }

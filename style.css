@@ -1113,8 +1113,8 @@
     }
     
     .tutorial-tooltip-close {
-      background: #fee2e2;
-      color: #991b1b;
+      background: #e5e7eb;
+      color: #1f2937;
       border: none;
       width: 28px;
       height: 28px;
@@ -1129,7 +1129,7 @@
     }
     
     .tutorial-tooltip-close:hover {
-      background: #fca5a5;
+      background: #d1d5db;
       transform: scale(1.1);
     }
     
