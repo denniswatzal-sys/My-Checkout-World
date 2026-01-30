@@ -2274,6 +2274,13 @@ if (document.readyState === 'loading') {
             return;
           }
           
+          // Checkout noch möglich - Score-Card orange färben (falls noch nicht)
+          const scoreCardWarning2 = document.getElementById('scoreCard');
+          if (!scoreCardWarning2.classList.contains('warning')) {
+            scoreCardWarning2.classList.remove('error'); // Entferne rot falls vorhanden
+            scoreCardWarning2.classList.add('warning'); // Setze orange
+          }
+          
           console.log('[DEBUG] Checkout noch möglich, weitermachen!');
           return;
         } else {
@@ -2431,6 +2438,11 @@ if (document.readyState === 'loading') {
             
             return;
           }
+          
+          // Checkout noch möglich - Score-Card orange färben
+          const scoreCardWarning = document.getElementById('scoreCard');
+          scoreCardWarning.classList.remove('error'); // Entferne rot falls vorhanden
+          scoreCardWarning.classList.add('warning'); // Setze orange
           
           if (window.challengeMode) {
             challengeStats.wrong++;

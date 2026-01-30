@@ -215,6 +215,11 @@
       border-color: #000;
     }
     
+    .score-card.warning {
+      background: #f97316;
+      border-color: #000;
+    }
+    
     .score-title {
       display: none;
     }
