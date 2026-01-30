@@ -232,6 +232,9 @@ let vibrationEnabled = true;
 // Global realistic mode state (loaded from localStorage)
 let realisticMode = false;
 
+// Global show remaining score state (loaded from localStorage)
+let showRemainingScore = false;
+
 // Load vibration setting from localStorage
 try {
   const savedSetting = localStorage.getItem('dartTrainerVibrationEnabled');
@@ -247,6 +250,16 @@ try {
   const savedRealisticMode = localStorage.getItem('dartTrainerRealisticMode');
   if (savedRealisticMode !== null) {
     realisticMode = savedRealisticMode === 'true';
+  }
+} catch (e) {
+  console.error('Could not load realistic mode setting:', e);
+}
+
+// Load show remaining score setting from localStorage
+try {
+  const savedShowRemaining = localStorage.getItem('dartTrainerShowRemainingScore');
+  if (savedShowRemaining !== null) {
+    showRemainingScore = savedShowRemaining === 'true';
   }
 } catch (e) {
   console.error('Could not load realistic mode setting:', e);
@@ -287,6 +300,15 @@ function toggleVibration() {
   }
   
   console.log('Vibration', vibrationEnabled ? 'enabled' : 'disabled');
+}
+
+function toggleShowRemainingScore() {
+  showRemainingScore = !showRemainingScore;
+  localStorage.setItem('dartTrainerShowRemainingScore', showRemainingScore.toString());
+  
+  vibrateMedium();
+  
+  console.log('Show remaining score', showRemainingScore ? 'enabled' : 'disabled');
 }
 
 function toggleRealisticMode() {
@@ -2684,9 +2706,9 @@ if (document.readyState === 'loading') {
     function updateUserInputs() {
       const container = document.getElementById('userInputs');
       
-      // Behalte Lösung und Restwert, lösche nur die Chips
+      // Behalte Lösung, entferne alte Restwert-Anzeige (wird neu berechnet)
       const solution = container.querySelector('.solution-text');
-      const remaining = container.querySelector('.remaining-score');
+      const oldRemaining = container.querySelector('.remaining-score');
       
       if (userInputs.length === 0) {
         // Entferne nur die Chips
@@ -2700,11 +2722,41 @@ if (document.readyState === 'loading') {
           `<div class="user-input-chip">${input}</div>`
         ).join('');
         
-        // Füge am Anfang ein (vor solution und remaining)
-        if (solution || remaining) {
+        // Füge am Anfang ein (vor solution)
+        if (solution) {
           container.insertAdjacentHTML('afterbegin', chipsHTML);
         } else {
           container.innerHTML = chipsHTML;
+        }
+        
+        // Wenn "Restwert anzeigen" aktiviert ist, zeige immer den aktuellen Restwert
+        if (showRemainingScore) {
+          // Entferne alte Restwert-Anzeige
+          if (oldRemaining) {
+            oldRemaining.remove();
+          }
+          
+          // Berechne aktuellen Restwert
+          let pointsScored = 0;
+          userInputs.forEach(dartValue => {
+            pointsScored += calculateDartValue(dartValue);
+          });
+          
+          const remainingScore = currentScore - pointsScored;
+          
+          // Zeige Restwert wenn sinnvoll (nicht überkauft, nicht auf 1)
+          if (remainingScore >= 2) {
+            const remainingDiv = document.createElement('div');
+            remainingDiv.className = 'remaining-score';
+            remainingDiv.textContent = `Restwert: ${remainingScore}`;
+            
+            // Füge nach den Chips ein (vor solution wenn vorhanden)
+            if (solution) {
+              container.insertBefore(remainingDiv, solution);
+            } else {
+              container.appendChild(remainingDiv);
+            }
+          }
         }
       }
     }
@@ -2776,6 +2828,8 @@ if (document.readyState === 'loading') {
         solutionDiv.className = 'solution-text';
         solutionDiv.textContent = `Lösung: ${currentCheckout.join(' → ')}`;
         userInputs.appendChild(solutionDiv);
+        
+        // Restwert wird bereits von updateUserInputs() angezeigt wenn aktiviert
       }
     }
     
