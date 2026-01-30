@@ -2766,12 +2766,8 @@ if (document.readyState === 'loading') {
             remainingDiv.className = 'remaining-score';
             remainingDiv.textContent = `Restwert: ${remainingScore}`;
             
-            // Füge nach den Chips ein (vor solution wenn vorhanden)
-            if (solution) {
-              container.insertBefore(remainingDiv, solution);
-            } else {
-              container.appendChild(remainingDiv);
-            }
+            // Füge immer am Ende ein (NACH der Lösung, falls vorhanden)
+            container.appendChild(remainingDiv);
           }
         }
       }
