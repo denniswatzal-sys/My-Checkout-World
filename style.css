@@ -830,6 +830,14 @@
     }
     
     /* Menu Button on Settings Gear */
+    .menu-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 59;
+      cursor: pointer;
+    }
+    
     .menu-dropdown {
       position: fixed;
       top: 50%;

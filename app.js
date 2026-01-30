@@ -3653,11 +3653,14 @@ if (document.readyState === 'loading') {
     
     function toggleMenu() {
       const menu = document.getElementById('menuDropdown');
+      const overlay = document.getElementById('menuOverlay');
       if (menu.style.display === 'none') {
         // Opening menu - update toggle states
         updateNumbersToggle();
+        overlay.style.display = 'block';
         menu.style.display = 'block';
       } else {
+        overlay.style.display = 'none';
         menu.style.display = 'none';
       }
     }
@@ -3676,6 +3679,7 @@ if (document.readyState === 'loading') {
     }
     
     function closeMenu() {
+      document.getElementById('menuOverlay').style.display = 'none';
       document.getElementById('menuDropdown').style.display = 'none';
     }
     
