@@ -917,7 +917,7 @@ if (document.readyState === 'loading') {
       {
         element: '#btn-training',
         title: '🎯 Training starten',
-        content: 'Mit dieser App lernst du, alle Checkoutwege im schlaf zu beherrschen.<br><br>Mach dich selbst zum <strong>Checkout-Champion</strong>.',
+        content: 'Mit dieser App lernst du, alle Checkout-wege im schlaf zu beherrschen.<br><br>Mach dich zum <strong>Checkout-Champion</strong>.',
         position: 'top',
         screen: 'start'
       },
@@ -938,7 +938,7 @@ if (document.readyState === 'loading') {
       {
         element: '#scoreValue',
         title: '🔓 Checkout-Zahl',
-        content: 'Hier wird die zu checkende Zahl vorgegeben. Durch Antippen kannst du sie auch manuell ändern.<br><br><strong style="color: #16a34a;">Grün:</strong> 3-Dart Finish<br><strong style="color: #3b82f6;">Blau:</strong> 2-Dart Finish<br><strong style="color: #eab308;">Gelb:</strong> Bogey-Zahl<br><br><em>Nur im Freien-Modus:</em><br><strong style="color: #f97316;">Orange:</strong> Fehlwurf / checken noch möglich<br><strong style="color: #dc2626;">Rot:</strong> Fehlwurf / checken nicht möglich',
+        content: 'Hier wird die zu checkende Zahl vorgegeben. Durch Antippen kannst du sie auch manuell ändern.<br><br><strong style="color: #16a34a;">Grün:</strong> 3-Dart Finish<br><strong style="color: #3b82f6;">Blau:</strong> 2-Dart Finish<br><strong style="color: #eab308;">Gelb:</strong> Bogey-Zahl<br><br><em>Nur im Freien-Modus:</em><br><strong style="color: #f97316;">Orange:</strong> Fehlwurf / checken möglich<br><strong style="color: #dc2626;">Rot:</strong> Fehlwurf / checken nicht möglich',
         position: 'bottom',
         screen: 'training'
       },
