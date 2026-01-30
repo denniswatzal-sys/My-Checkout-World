@@ -906,7 +906,7 @@ if (document.readyState === 'loading') {
       {
         element: '#scoreValue',
         title: '🔓 Checkout-Zahl',
-        content: 'Hier wird dir die zu checkende Zahl vorgegeben. Durch Antippen kannst du sie manuell ändern.<br><br><strong style="color: #16a34a;">Grün:</strong> 3-Dart Finish<br><strong style="color: #3b82f6;">Blau:</strong> 2-Dart Finish<br><strong style="color: #eab308;">Gelb:</strong> Bogey-Zahl<br><br><em>Nur im Freien-Modus:</em><br><strong style="color: #f97316;">Orange:</strong> Fehlwurf / checken noch möglich<br><strong style="color: #dc2626;">Rot:</strong> Fehlwurf / checken nicht mehr möglich',
+        content: 'Hier wird dir die zu checkende Zahl vorgegeben. Durch Antippen kannst du sie manuell ändern.<br><br><strong style="color: #16a34a;">Grün:</strong> 3-Dart Finish<br><strong style="color: #3b82f6;">Blau:</strong> 2-Dart Finish<br><strong style="color: #eab308;">Gelb:</strong> Bogey-Zahl<br><br><em>Nur im Freien-Modus:</em><br><strong style="color: #f97316;">Orange:</strong> Fehlwurf / checken möglich<br><strong style="color: #dc2626;">Rot:</strong> Fehlwurf / checken nicht möglich',
         position: 'bottom',
         screen: 'training'
       },
