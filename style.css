@@ -94,6 +94,21 @@
       background: #7c3aed !important;
     }
     
+    .mode-btn-realistic {
+      background: #e5e7eb !important;
+      color: #1f2937 !important;
+      font-size: 18px;
+    }
+    
+    .mode-btn-realistic.active {
+      background: #10b981 !important;
+      color: white !important;
+    }
+    
+    .mode-btn-realistic:active {
+      background: #059669 !important;
+    }
+    
     #generationModeBtn {
       min-width: 50px;
       width: 50px;

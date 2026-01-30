@@ -348,6 +348,44 @@ function toggleRealisticMode() {
   console.log('Realistic Mode', realisticMode ? 'enabled' : 'disabled');
 }
 
+function toggleRealisticModeBtn() {
+  // Im Challenge-Modus ist Realistisch-Modus nicht erlaubt
+  if (window.challengeMode) {
+    return;
+  }
+  
+  realisticMode = !realisticMode;
+  localStorage.setItem('dartTrainerRealisticMode', realisticMode.toString());
+  
+  // Reset error state when toggling
+  if (typeof isInErrorState !== 'undefined') {
+    isInErrorState = false;
+    currentRemainingScore = null;
+    dartsUsedInRound = 0;
+    errorStateCheckout = [];
+    dartsInErrorState = 0;
+  }
+  
+  // Remove error and warning class from score card
+  const scoreCard = document.getElementById('scoreCard');
+  if (scoreCard) {
+    scoreCard.classList.remove('error', 'warning');
+  }
+  
+  // Update button appearance
+  const btn = document.getElementById('realisticModeBtn');
+  if (btn) {
+    if (realisticMode) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  }
+  
+  vibrateMedium();
+  console.log('Realistic Mode', realisticMode ? 'enabled' : 'disabled');
+}
+
 function updateMenuItems() {
   // Update Zahlenring menu item
   const blackRingMenuItem = document.getElementById('blackRingMenuItem');
@@ -359,12 +397,6 @@ function updateMenuItems() {
   const vibrationMenuItem = document.getElementById('vibrationMenuItem');
   if (vibrationMenuItem) {
     vibrationMenuItem.textContent = `Vibration: ${vibrationEnabled ? 'AN' : 'AUS'}`;
-  }
-  
-  // Update Freier-Modus menu item
-  const realisticMenuItem = document.getElementById('realisticModeMenuItem');
-  if (realisticMenuItem) {
-    realisticMenuItem.textContent = `Freier-Modus: ${realisticMode ? 'AN' : 'AUS'}`;
   }
   
   // Update Restwert menu item
@@ -1010,7 +1042,7 @@ if (document.readyState === 'loading') {
       {
         element: '.mode-selector',
         title: '🎮 Modus-Tasten',
-        content: 'Mit den Modus-Tasten legst du deine Trainingseinstellungen fest.<br><br><strong>3 Darts:</strong> Nur 3-Dart Finishes (3DF)<br><strong>2 Darts:</strong> Nur 2-Dart Finishes (2DF)<br><strong>Mix:</strong> Zufällige Mischung aus 3DF / 2DF<br><strong>? / ⬆ / ⬇:</strong> Zufallszahl / Auf- / Absteigend<br><strong>🏆 Herausforderungsmodus:</strong><br>60 Sek. lang zufällige Zahlen von 2-170<br>im Mix-Modus. Wie viele schaffst du?',
+        content: 'Mit den Modus-Tasten legst du deine Trainingseinstellungen fest.<br><br><strong>3DF:</strong> Nur 3-Dart Finishes<br><strong>2DF:</strong> Nur 2-Dart Finishes<br><strong>Mix:</strong> Zufällige Mischung aus 3DF / 2DF<br><strong>? / ⬆ / ⬇:</strong> Zufallszahl / Auf- / Absteigend<br>🕊️ <strong>Freier-Modus:</strong> Fehlwürfe AN/AUS<br>🏆 <strong>Herausforderungsmodus:</strong><br>60 Sek. lang zufällige Zahlen von 2-170<br>im Mix-Modus. Wie viele schaffst du?',
         position: 'top',
         screen: 'training'
       },
@@ -1024,7 +1056,7 @@ if (document.readyState === 'loading') {
       {
         element: '#menuBtn',
         title: '⚙️ Einstellungen',
-        content: '<strong>Taste antippen:</strong> Menü öffnen<br><strong>Taste gedrückt halten:</strong> Aktiviert / deaktiviert Vollbildmodus<br><br><strong>Zahlenring: AN/AUS</strong> Zahlenring ausblenden, zur Erhöhung der Schwierigkeit<br><strong>Vibration: AN/AUS</strong> Haptische Rückmeldung<br><strong>Restwert: AN/AUS</strong> Anzeige des Restwerts nach jedem Dart<br><strong>Freier-Modus: AN/AUS</strong> Fehlwürfe sind möglich<br><strong>Hintergrund anpassen:</strong> Individuell einstellbar<br><strong>Zurück zum Startbildschirm:</strong> Taste drücken / oder nach rechts wischen.',
+        content: '<strong>Taste antippen:</strong> Menü öffnen<br><strong>Taste gedrückt halten:</strong> Aktiviert / deaktiviert Vollbildmodus<br><br><strong>Zahlenring: AN/AUS</strong> Zahlenring ausblenden, zur Erhöhung der Schwierigkeit<br><strong>Vibration: AN/AUS</strong> Haptische Rückmeldung<br><strong>Restwert: AN/AUS</strong> Anzeige des Restwerts nach jedem Dart<br><strong>Hintergrund anpassen:</strong> Individuell einstellbar<br><strong>Zurück zum Startbildschirm:</strong> Taste drücken / oder nach rechts wischen.',
         position: 'top-left',
         screen: 'training'
       },
@@ -3641,6 +3673,16 @@ if (document.readyState === 'loading') {
       
       // Generate new score with current range to ensure consistency
       generateScore(currentRangeMin, currentRangeMax);
+      
+      // Update realistic mode button appearance
+      const realisticBtn = document.getElementById('realisticModeBtn');
+      if (realisticBtn) {
+        if (realisticMode) {
+          realisticBtn.classList.add('active');
+        } else {
+          realisticBtn.classList.remove('active');
+        }
+      }
       
       // Automatically enter fullscreen
       enterFullscreen();

@@ -88,7 +88,6 @@
         <button class="menu-item" id="blackRingMenuItem" onclick="toggleBlackRing(); updateMenuItems();">Zahlenring: AN</button>
         <button class="menu-item" id="vibrationMenuItem" onclick="toggleVibration(); updateMenuItems();">Vibration: AN</button>
         <button class="menu-item" id="showRemainingMenuItem" onclick="toggleShowRemainingScore(); updateMenuItems();">Restwert: AUS</button>
-        <button class="menu-item" id="realisticModeMenuItem" onclick="toggleRealisticMode(); updateMenuItems();">Freier-Modus: AUS</button>
         <button class="menu-item" onclick="showBackgroundModal(); closeMenu();">Hintergrund anpassen</button>
         <button class="menu-item" onclick="goToStart(); closeMenu();">Zurück zum Startbildschirm</button>
       </div>
@@ -120,12 +119,13 @@
 
         <div class="card" id="rangeCard">
           <div class="mode-selector">
-            <button id="mode3DartsBtn" class="mode-btn active" onclick="setMode('3darts', this)">3 Darts</button>
-            <button id="mode2DartsBtn" class="mode-btn" onclick="setMode('2darts', this)">2 Darts</button>
+            <button id="mode3DartsBtn" class="mode-btn active" onclick="setMode('3darts', this)">3DF</button>
+            <button id="mode2DartsBtn" class="mode-btn" onclick="setMode('2darts', this)">2DF</button>
             <button id="modeMixBtn" class="mode-btn" onclick="setMode('mixed', this)">Mix</button>
             <button id="generationModeBtn" class="mode-btn" onclick="cycleGenerationMode()" title="Generierungs-Modus">
               ?
             </button>
+            <button id="realisticModeBtn" class="mode-btn mode-btn-realistic" onclick="toggleRealisticModeBtn()" title="Freier-Modus">🕊️</button>
             <button id="modeChallengeBtn" class="mode-btn mode-btn-challenge" onclick="startChallenge()">🏆</button>
           </div>
           
