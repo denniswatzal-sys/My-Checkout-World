@@ -2201,6 +2201,9 @@ if (document.readyState === 'loading') {
           currentRemainingScore -= dartPoints;
           dartsInErrorState++;
           
+          // Aktualisiere Restwert-Anzeige nach dem Punktabzug
+          updateUserInputs();
+          
           console.log(`[DEBUG] Korrekter Dart im Error-State! Restwert: ${currentRemainingScore}, isDouble: ${isDartDouble(dartValue)}`);
           
           // Prüfe ob Checkout erreicht wurde (genau 0 mit Double)
@@ -2275,6 +2278,9 @@ if (document.readyState === 'loading') {
           
           // Berechne neuen Restwert
           currentRemainingScore -= dartPoints;
+          
+          // Aktualisiere Restwert-Anzeige nach dem Punktabzug
+          updateUserInputs();
           
           // Prüfe ob überkauft oder auf 1 gelandet
           if (currentRemainingScore < 0 || currentRemainingScore === 1) {
@@ -2441,6 +2447,9 @@ if (document.readyState === 'loading') {
           }
           
           currentRemainingScore = currentScore - pointsScored;
+          
+          // Aktualisiere Restwert-Anzeige nach der Berechnung
+          updateUserInputs();
           
           // Hole Checkout für den Restwert aus Datenbank
           // WICHTIG: Wähle die richtige Datenbank basierend auf verbleibenden Darts!
@@ -2817,7 +2826,8 @@ if (document.readyState === 'loading') {
         solutionDiv.textContent = `Lösung: ${currentCheckout.join(' → ')}`;
         userInputs.appendChild(solutionDiv);
         
-        // Restwert wird bereits von updateUserInputs() angezeigt wenn aktiviert
+        // Restwert aktualisieren - damit er NACH der Lösung erscheint
+        updateUserInputs();
       }
     }
     
