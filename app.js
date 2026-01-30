@@ -361,16 +361,16 @@ function updateMenuItems() {
     vibrationMenuItem.textContent = `Vibration: ${vibrationEnabled ? 'AN' : 'AUS'}`;
   }
   
-  // Update Realistisch-Modus menu item
+  // Update Freier-Modus menu item
   const realisticMenuItem = document.getElementById('realisticModeMenuItem');
   if (realisticMenuItem) {
-    realisticMenuItem.textContent = `Realistisch-Modus: ${realisticMode ? 'AN' : 'AUS'}`;
+    realisticMenuItem.textContent = `Freier-Modus: ${realisticMode ? 'AN' : 'AUS'}`;
   }
   
-  // Update Restwert anzeigen menu item
+  // Update Restwert menu item
   const showRemainingMenuItem = document.getElementById('showRemainingMenuItem');
   if (showRemainingMenuItem) {
-    showRemainingMenuItem.textContent = `Restwert anzeigen: ${showRemainingScore ? 'AN' : 'AUS'}`;
+    showRemainingMenuItem.textContent = `Restwert: ${showRemainingScore ? 'AN' : 'AUS'}`;
   }
 }
 
@@ -906,7 +906,7 @@ if (document.readyState === 'loading') {
       {
         element: '#scoreValue',
         title: '🔓 Checkout-Zahl',
-        content: 'Hier siehst du die zu checkende Zahl. Tippe darauf, um sie manuell zu ändern.<br><br><strong style="color: #059669;">Grünes Feld:</strong> 3-Dart Finish<br><strong style="color: #1d4ed8;">Blaues Feld:</strong> 2-Dart Finish<br><strong style="color: #ca8a04;">Gelbes Feld:</strong> Bogey-Zahl',
+        content: 'Hier wird dir die zu checkende Zahl vorgegeben. Durch Antippen kannst du sie manuell ändern.<br><br><strong style="color: #059669;">Grünes Feld:</strong> 3-Dart Finish<br><strong style="color: #1d4ed8;">Blaues Feld:</strong> 2-Dart Finish<br><strong style="color: #ca8a04;">Gelbes Feld:</strong> Bogey-Zahl<br><br><em>Nur im Freien-Modus:</em><br><strong style="color: #f97316;">Oranges Feld:</strong> Nach Fehlwurf checken noch möglich<br><strong style="color: #dc2626;">Rotes Feld:</strong> Nach Fehlwurf checken nicht mehr möglich',
         position: 'bottom',
         screen: 'training'
       },
@@ -1024,7 +1024,7 @@ if (document.readyState === 'loading') {
       {
         element: '#menuBtn',
         title: '⚙️ Einstellungen',
-        content: '<strong>Taste antippen:</strong> Menü öffnen<br><strong>Taste gedrückt halten:</strong> Aktiviert / deaktiviert Vollbildmodus<br><br><strong>Zahlenring ein-/ ausblenden:</strong> Zahlenring ausblenden, zur Erhöhung des Schwierigkeitsgrads.<br><strong>Vibration ein-/ ausschalten:</strong> Haptische Rückmeldung<br><strong>Hintergrund anpassen:</strong> Individuell einstellbar<br><strong>Zurück zum Startbildschirm:</strong> Taste drücken / oder nach rechts wischen.',
+        content: '<strong>Taste antippen:</strong> Menü öffnen<br><strong>Taste gedrückt halten:</strong> Aktiviert / deaktiviert Vollbildmodus<br><br><strong>Zahlenring: AN/AUS</strong> Zahlenring ausblenden, zur Erhöhung der Schwierigkeit<br><strong>Vibration: AN/AUS</strong> Haptische Rückmeldung<br><strong>Restwert: AN/AUS</strong> Anzeige des Restwerts nach jedem Dart<br><strong>Freier-Modus: AN/AUS</strong> Fehlwürfe sind möglich<br><strong>Hintergrund anpassen:</strong> Individuell einstellbar<br><strong>Zurück zum Startbildschirm:</strong> Taste drücken / oder nach rechts wischen.',
         position: 'top-left',
         screen: 'training'
       },
