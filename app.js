@@ -3724,17 +3724,18 @@ if (document.readyState === 'loading') {
         overlay.style.display = 'block';
         menu.style.display = 'block';
         
-        // Position menu exactly like tutorial tooltip with 'bottom' position
+        // Position menu exactly like tutorial tooltip with 'bottom-left' position
         setTimeout(() => {
           if (menuBtn) {
             const btnRect = menuBtn.getBoundingClientRect();
             const menuRect = menu.getBoundingClientRect();
             
-            // Same positioning as tutorial 'bottom'
+            // Same positioning as tutorial 'bottom-left'
             const top = btnRect.bottom + 20;
-            const left = btnRect.left + (btnRect.width / 2) - (menuRect.width / 2);
+            const left = btnRect.right - menuRect.width + 30 - (btnRect.width / 2);
             
             console.log('Menu Button Rect:', btnRect);
+            console.log('Menu Rect width:', menuRect.width);
             console.log('Setting menu position - top:', top, 'left:', left);
             
             menu.style.top = top + 'px';
