@@ -306,6 +306,9 @@ function toggleShowRemainingScore() {
   showRemainingScore = !showRemainingScore;
   localStorage.setItem('dartTrainerShowRemainingScore', showRemainingScore.toString());
   
+  // Update menu item text
+  updateMenuItems();
+  
   vibrateMedium();
   
   console.log('Show remaining score', showRemainingScore ? 'enabled' : 'disabled');
@@ -314,10 +317,6 @@ function toggleShowRemainingScore() {
 function toggleRealisticMode() {
   // Im Challenge-Modus ist Realistisch-Modus nicht erlaubt
   if (window.challengeMode) {
-    const realisticToggle = document.getElementById('realisticModeToggle');
-    if (realisticToggle) {
-      realisticToggle.checked = false;
-    }
     return;
   }
   
@@ -339,8 +338,25 @@ function toggleRealisticMode() {
     scoreCard.classList.remove('error');
   }
   
+  // Update menu item text
+  updateMenuItems();
+  
   vibrateMedium();
   console.log('Realistic Mode', realisticMode ? 'enabled' : 'disabled');
+}
+
+function updateMenuItems() {
+  // Update Realistisch-Modus menu item
+  const realisticMenuItem = document.getElementById('realisticModeMenuItem');
+  if (realisticMenuItem) {
+    realisticMenuItem.textContent = `Realistisch-Modus: ${realisticMode ? 'AN' : 'AUS'}`;
+  }
+  
+  // Update Restwert anzeigen menu item
+  const showRemainingMenuItem = document.getElementById('showRemainingMenuItem');
+  if (showRemainingMenuItem) {
+    showRemainingMenuItem.textContent = `Restwert anzeigen: ${showRemainingScore ? 'AN' : 'AUS'}`;
+  }
 }
 
 // Start loading when DOM is ready
@@ -2969,6 +2985,9 @@ if (document.readyState === 'loading') {
         errorStateCheckout = [];
         dartsInErrorState = 0;
         
+        // Update menu items
+        updateMenuItems();
+        
         // Update hint range
         currentHintRange = '2-170';
         if (hintVisible) {
@@ -3123,6 +3142,9 @@ if (document.readyState === 'loading') {
       if (realisticToggle) {
         realisticToggle.checked = realisticMode;
       }
+      
+      // Update menu items
+      updateMenuItems();
       
       // Update hint range
       currentHintRange = '2-170';
@@ -4315,3 +4337,8 @@ if (document.readyState === 'loading') {
         }
       }
     }
+
+// Initialize menu items on page load
+document.addEventListener('DOMContentLoaded', function() {
+  updateMenuItems();
+});

@@ -86,7 +86,8 @@
         </div>
         <button class="menu-item" onclick="toggleBlackRing(); closeMenu();">Zahlenring ein-/ ausblenden</button>
         <button class="menu-item" onclick="toggleVibration(); closeMenu();">Vibration ein-/ ausschalten</button>
-        <button class="menu-item" onclick="toggleShowRemainingScore(); closeMenu();">Restwert anzeigen</button>
+        <button class="menu-item" id="realisticModeMenuItem" onclick="toggleRealisticMode(); updateMenuItems();">Realistisch-Modus: AUS</button>
+        <button class="menu-item" id="showRemainingMenuItem" onclick="toggleShowRemainingScore(); updateMenuItems();">Restwert anzeigen: AUS</button>
         <button class="menu-item" onclick="showBackgroundModal(); closeMenu();">Hintergrund anpassen</button>
         <button class="menu-item" onclick="goToStart(); closeMenu();">Zurück zum Startbildschirm</button>
       </div>
