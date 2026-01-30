@@ -294,6 +294,9 @@ function toggleVibration() {
   vibrationEnabled = !vibrationEnabled;
   localStorage.setItem('dartTrainerVibrationEnabled', vibrationEnabled.toString());
   
+  // Update menu item text
+  updateMenuItems();
+  
   // Give haptic feedback if turning ON
   if (vibrationEnabled) {
     vibrateMedium();
@@ -346,6 +349,18 @@ function toggleRealisticMode() {
 }
 
 function updateMenuItems() {
+  // Update Zahlenring menu item
+  const blackRingMenuItem = document.getElementById('blackRingMenuItem');
+  if (blackRingMenuItem) {
+    blackRingMenuItem.textContent = `Zahlenring: ${numbersVisible ? 'AN' : 'AUS'}`;
+  }
+  
+  // Update Vibration menu item
+  const vibrationMenuItem = document.getElementById('vibrationMenuItem');
+  if (vibrationMenuItem) {
+    vibrationMenuItem.textContent = `Vibration: ${vibrationEnabled ? 'AN' : 'AUS'}`;
+  }
+  
   // Update Realistisch-Modus menu item
   const realisticMenuItem = document.getElementById('realisticModeMenuItem');
   if (realisticMenuItem) {
@@ -3657,6 +3672,7 @@ if (document.readyState === 'loading') {
     function toggleBlackRing() {
       numbersVisible = !numbersVisible;
       createDartboard();
+      updateMenuItems();
     }
     
     function updateNumbersToggle() {
