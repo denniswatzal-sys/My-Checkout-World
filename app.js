@@ -2255,6 +2255,11 @@ if (document.readyState === 'loading') {
             
             console.log('[DEBUG] Checkout nicht mehr möglich → warte auf Klick');
             
+            // Score-Card rot färben (Checkout nicht mehr möglich)
+            const scoreCard3 = document.getElementById('scoreCard');
+            scoreCard3.classList.remove('warning'); // Entferne orange
+            scoreCard3.classList.add('error'); // Setze rot
+            
             if (window.challengeMode) {
               challengeStats.wrong++;
               updateChallengeStats();
@@ -2407,6 +2412,11 @@ if (document.readyState === 'loading') {
             // Checkout nicht mehr möglich → Runde beendet
             // User kann durch Klick auf Container oder Dartboard weitergehen
             console.log('[DEBUG] Nach Fehlwurf: Checkout nicht mehr möglich → warte auf Klick');
+            
+            // Score-Card rot färben (Checkout nicht mehr möglich)
+            const scoreCard2 = document.getElementById('scoreCard');
+            scoreCard2.classList.remove('warning'); // Entferne orange
+            scoreCard2.classList.add('error'); // Setze rot
             
             if (window.challengeMode) {
               challengeStats.wrong++;
