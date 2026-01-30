@@ -938,7 +938,7 @@ if (document.readyState === 'loading') {
       {
         element: '#scoreValue',
         title: '🔓 Checkout-Zahl',
-        content: 'Hier wird die zu checkende Zahl vorgegeben. Durch Antippen kannst du sie auch manuell ändern.<br><br><strong style="color: #16a34a;">Grün:</strong> 3-Dart Finish<br><strong style="color: #3b82f6;">Blau:</strong> 2-Dart Finish<br><strong style="color: #eab308;">Gelb:</strong> Bogey-Zahl<br><br><em>Nur im Freien-Modus:</em><br><strong style="color: #f97316;">Orange:</strong> Fehlwurf / checken möglich<br><strong style="color: #dc2626;">Rot:</strong> Fehlwurf / checken nicht möglich',
+        content: 'Hier wird dir die zu checkende Zahl vorgegeben. Durch Antippen kannst du sie auch manuell ändern.<br><br><strong style="color: #16a34a;">Grün:</strong> 3-Dart Finish<br><strong style="color: #3b82f6;">Blau:</strong> 2-Dart Finish<br><strong style="color: #eab308;">Gelb:</strong> Bogey-Zahl<br><br><em>Nur im Freien-Modus:</em><br><strong style="color: #f97316;">Orange:</strong> Fehlwurf / checken möglich<br><strong style="color: #dc2626;">Rot:</strong> Fehlwurf / checken nicht möglich',
         position: 'bottom',
         screen: 'training'
       },
@@ -1056,7 +1056,7 @@ if (document.readyState === 'loading') {
       {
         element: '#menuBtn',
         title: '⚙️ Einstellungen',
-        content: '<strong>Taste antippen:</strong> Menü öffnen<br><strong>Taste gedrückt halten:</strong> Aktiviert / deaktiviert Vollbildmodus<br><br><strong>Zahlenring: AN/AUS</strong> Zahlenring ausblenden, zur Erhöhung der Schwierigkeit<br><strong>Vibration: AN/AUS</strong> Haptische Rückmeldung<br><strong>Restwert: AN/AUS</strong> Anzeige des Restwerts nach jedem Dart<br><strong>Hintergrund anpassen:</strong> Individuell einstellbar<br><strong>Zurück zum Startbildschirm:</strong> Taste drücken / oder nach rechts wischen.',
+        content: '<strong>Taste antippen:</strong> Menü öffnen<br><strong>Taste gedrückt halten:</strong> Aktiviert / deaktiviert Vollbildmodus<br><br><strong>Restwert: AN/AUS</strong> Anzeige des Restwerts nach jedem Dart<br><strong>Zahlenring: AN/AUS</strong> Zahlenring ausblenden, zur Erhöhung der Schwierigkeit<br><strong>Vibration: AN/AUS</strong> Haptische Rückmeldung<br><strong>Hintergrund anpassen:</strong> Individuell einstellbar<br><strong>Zurück zum Startbildschirm:</strong> Taste drücken / oder nach rechts wischen.',
         position: 'top-left',
         screen: 'training'
       },
@@ -4408,6 +4408,88 @@ if (document.readyState === 'loading') {
         }
       }
     }
+
+// Long-press detection for mode buttons to show tutorial
+document.addEventListener('DOMContentLoaded', function() {
+  const modeButtons = document.querySelectorAll('.mode-btn');
+  let pressTimer;
+  
+  modeButtons.forEach(button => {
+    // Start timer on touch/mouse down
+    button.addEventListener('touchstart', function(e) {
+      pressTimer = setTimeout(() => {
+        // After 1 second, open tutorial step 10 (mode-selector)
+        if (!tutorialActive) {
+          // Switch to training screen if not already there
+          const mainApp = document.getElementById('mainApp');
+          const startScreen = document.getElementById('startScreen');
+          if (mainApp.style.display === 'none') {
+            startScreen.style.display = 'none';
+            mainApp.style.display = 'block';
+          }
+          
+          // Start tutorial at step 10
+          tutorialActive = true;
+          currentTutorialStep = 10;
+          
+          // Show tutorial overlay and step
+          const overlay = document.getElementById('tutorialOverlay');
+          if (overlay) {
+            overlay.classList.add('active');
+          }
+          showTutorialStep(10);
+          
+          vibrateLight();
+        }
+      }, 1000);
+    }, { passive: true });
+    
+    button.addEventListener('mousedown', function(e) {
+      pressTimer = setTimeout(() => {
+        // After 1 second, open tutorial step 10 (mode-selector)
+        if (!tutorialActive) {
+          // Switch to training screen if not already there
+          const mainApp = document.getElementById('mainApp');
+          const startScreen = document.getElementById('startScreen');
+          if (mainApp.style.display === 'none') {
+            startScreen.style.display = 'none';
+            mainApp.style.display = 'block';
+          }
+          
+          // Start tutorial at step 10
+          tutorialActive = true;
+          currentTutorialStep = 10;
+          
+          // Show tutorial overlay and step
+          const overlay = document.getElementById('tutorialOverlay');
+          if (overlay) {
+            overlay.classList.add('active');
+          }
+          showTutorialStep(10);
+          
+          vibrateLight();
+        }
+      }, 1000);
+    });
+    
+    // Cancel timer on touch/mouse end or leave
+    button.addEventListener('touchend', function(e) {
+      clearTimeout(pressTimer);
+    }, { passive: true });
+    
+    button.addEventListener('touchcancel', function(e) {
+      clearTimeout(pressTimer);
+    }, { passive: true });
+    
+    button.addEventListener('mouseup', function(e) {
+      clearTimeout(pressTimer);
+    });
+    
+    button.addEventListener('mouseleave', function(e) {
+      clearTimeout(pressTimer);
+    });
+  });
+});
 
 // Initialize menu items on page load
 document.addEventListener('DOMContentLoaded', function() {
