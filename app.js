@@ -1057,7 +1057,7 @@ if (document.readyState === 'loading') {
         element: '#menuBtn',
         title: '⚙️ Einstellungen',
         content: '<strong>Taste antippen:</strong> Menü öffnen<br><strong>Taste gedrückt halten:</strong> Aktiviert / deaktiviert Vollbildmodus<br><br><strong>Restwert: AN/AUS</strong> Anzeige des Restwerts nach jedem Dart<br><strong>Zahlenring: AN/AUS</strong> Zahlenring ausblenden, zur Erhöhung der Schwierigkeit<br><strong>Vibration: AN/AUS</strong> Haptische Rückmeldung<br><strong>Hintergrund anpassen:</strong> Individuell einstellbar<br><strong>Zurück zum Startbildschirm:</strong> Taste drücken / oder nach rechts wischen.',
-        position: 'top-left',
+        position: 'bottom-left',
         screen: 'training'
       },
       {
