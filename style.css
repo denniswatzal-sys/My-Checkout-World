@@ -35,6 +35,7 @@
     .app-container {
       padding: 12px;
       padding-top: 12px;
+      position: relative;
     }
     
     .card {
