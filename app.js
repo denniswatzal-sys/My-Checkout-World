@@ -2287,9 +2287,13 @@ if (document.readyState === 'loading') {
             highlightedFields.push(dartValue);
             createDartboard();
             
-            // WICHTIG: Score-Card Farbe zurücksetzen (war vielleicht rot/orange)
+            // Score-Card bleibt orange (war Fehlwurf, aber erfolgreich beendet)
+            // Nur 'error' (rot) entfernen falls vorhanden
             const scoreCard = document.getElementById('scoreCard');
-            scoreCard.classList.remove('error', 'warning');
+            scoreCard.classList.remove('error');
+            if (!scoreCard.classList.contains('warning')) {
+              scoreCard.classList.add('warning'); // Orange setzen falls noch nicht
+            }
             
             showFeedback(true);
             
