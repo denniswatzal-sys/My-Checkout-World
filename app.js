@@ -335,10 +335,10 @@ function toggleRealisticMode() {
     dartsInErrorState = 0;
   }
   
-  // Remove error class from score card
+  // Remove error and warning class from score card
   const scoreCard = document.getElementById('scoreCard');
   if (scoreCard) {
-    scoreCard.classList.remove('error');
+    scoreCard.classList.remove('error', 'warning');
   }
   
   // Update menu item text
@@ -668,7 +668,7 @@ if (document.readyState === 'loading') {
         dartsInErrorState = 0;
         const scoreCard = document.getElementById('scoreCard');
         if (scoreCard) {
-          scoreCard.classList.remove('error');
+          scoreCard.classList.remove('error', 'warning');
         }
       }
       
@@ -2080,8 +2080,8 @@ if (document.readyState === 'loading') {
       const isStell = stellZahlen.includes(currentScore);
       const scoreCard = document.getElementById('scoreCard');
       
-      // Remove all classes including error
-      scoreCard.classList.remove('stell', 'twodarts', 'error');
+      // Remove all classes including error and warning
+      scoreCard.classList.remove('stell', 'twodarts', 'error', 'warning');
       
       // Reset realistic mode state
       if (realisticMode) {
@@ -2360,6 +2360,11 @@ if (document.readyState === 'loading') {
           if (!canCheckoutWithDarts(currentRemainingScore, dartsLeftAfterThis)) {
             console.log('[DEBUG] Nach Fehlwurf: Kein Checkout möglich (bestätigt durch canCheckoutWithDarts) → Runde beendet!');
             
+            // Score-Card rot färben (Checkout nicht mehr möglich)
+            const scoreCard = document.getElementById('scoreCard');
+            scoreCard.classList.remove('warning'); // Entferne warning
+            scoreCard.classList.add('error');
+            
             // Vibration und Dartboard-Flash
             vibrateHeavy();
             
@@ -2532,8 +2537,9 @@ if (document.readyState === 'loading') {
           if (!canCheckoutWithDarts(currentRemainingScore, dartsLeftAfterError)) {
             console.log('[DEBUG] Kein Checkout möglich mit verbleibenden Darts (bestätigt durch canCheckoutWithDarts) → Runde beendet!');
             
-            // Score-Card rot färben
+            // Score-Card rot färben (Checkout nicht mehr möglich)
             const scoreCard = document.getElementById('scoreCard');
+            scoreCard.classList.remove('warning'); // Entferne warning falls vorhanden
             scoreCard.classList.add('error');
             
             // Zeige Feedback
@@ -2563,9 +2569,10 @@ if (document.readyState === 'loading') {
             return;
           }
           
-          // Score-Card rot färben
+          // Score-Card orange färben (Fehlwurf, aber Checkout noch möglich)
           const scoreCard = document.getElementById('scoreCard');
-          scoreCard.classList.add('error');
+          scoreCard.classList.remove('error'); // Entferne error falls vorhanden
+          scoreCard.classList.add('warning');
           
           // Zeige Feedback mit Restwert
           showFeedback(false);
