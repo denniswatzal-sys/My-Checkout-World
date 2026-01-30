@@ -2776,7 +2776,8 @@ if (document.readyState === 'loading') {
         }
         
         // Wenn "Restwert anzeigen" aktiviert ist, zeige immer den aktuellen Restwert
-        if (showRemainingScore) {
+        // ABER: Im Challenge-Modus wird der Restwert NICHT angezeigt
+        if (showRemainingScore && !window.challengeMode) {
           // Entferne alte Restwert-Anzeige
           if (oldRemaining) {
             oldRemaining.remove();
