@@ -3281,7 +3281,9 @@ if (document.readyState === 'loading') {
         mode3DartsBtn.classList.add('active');
       }
       
-      // Restore realistic mode button appearance based on saved state
+      // Restore realistic mode from localStorage
+      const savedRealisticMode = localStorage.getItem('dartTrainerRealisticMode');
+      realisticMode = savedRealisticMode === 'true';
       const realisticBtn = document.getElementById('realisticModeBtn');
       if (realisticBtn) {
         if (realisticMode) {
@@ -3290,6 +3292,9 @@ if (document.readyState === 'loading') {
           realisticBtn.classList.remove('active');
         }
       }
+      
+      // Update menu items
+      updateMenuItems();
     }
     
     function startLearnMode() {
