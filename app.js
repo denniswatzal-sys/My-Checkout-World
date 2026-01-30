@@ -2242,20 +2242,6 @@ if (document.readyState === 'loading') {
           highlightedFields.push(dartValue);
           createDartboard();
           
-          // Aktualisiere Restwert-Anzeige (nur wenn aktiviert)
-          if (showRemainingScore) {
-            const userInputsEl = document.getElementById('userInputs');
-            const existingRemaining = userInputsEl.querySelector('.remaining-score');
-            if (existingRemaining) {
-              existingRemaining.textContent = `Restwert: ${currentRemainingScore}`;
-            } else {
-              const remainingDiv = document.createElement('div');
-              remainingDiv.className = 'remaining-score';
-              remainingDiv.textContent = `Restwert: ${currentRemainingScore}`;
-              userInputsEl.appendChild(remainingDiv);
-            }
-          }
-          
           // Prüfe ob Checkout mit restlichen Darts noch möglich ist
           const dartsLeft = maxDartsForRound - dartsUsedInRound;
           console.log(`[DEBUG] Prüfe Checkout-Möglichkeit: Restwert ${currentRemainingScore}, Darts übrig: ${dartsLeft}`);
@@ -2381,20 +2367,6 @@ if (document.readyState === 'loading') {
             // Dartboard neu zeichnen mit Highlight
             createDartboard();
             
-            // Aktualisiere Restwert-Anzeige (nur wenn aktiviert)
-            if (showRemainingScore) {
-              const userInputsEl2 = document.getElementById('userInputs');
-              const existingRemaining2 = userInputsEl2.querySelector('.remaining-score');
-              if (existingRemaining2) {
-                existingRemaining2.textContent = `Restwert: ${currentRemainingScore}`;
-              } else {
-                const remainingDiv2 = document.createElement('div');
-                remainingDiv2.className = 'remaining-score';
-                remainingDiv2.textContent = `Restwert: ${currentRemainingScore}`;
-                userInputsEl2.appendChild(remainingDiv2);
-              }
-            }
-            
             if (window.challengeMode) {
               challengeStats.wrong++;
               updateChallengeStats();
@@ -2423,20 +2395,6 @@ if (document.readyState === 'loading') {
           
           // Dartboard neu zeichnen mit Highlight
           createDartboard();
-          
-          // Aktualisiere Restwert-Anzeige (nur wenn aktiviert)
-          if (showRemainingScore) {
-            const userInputsEl2 = document.getElementById('userInputs');
-            const existingRemaining2 = userInputsEl2.querySelector('.remaining-score');
-            if (existingRemaining2) {
-              existingRemaining2.textContent = `Restwert: ${currentRemainingScore}`;
-            } else {
-              const remainingDiv2 = document.createElement('div');
-              remainingDiv2.className = 'remaining-score';
-              remainingDiv2.textContent = `Restwert: ${currentRemainingScore}`;
-              userInputsEl2.appendChild(remainingDiv2);
-            }
-          }
           
           // WICHTIG: Prüfe ob Checkout mit restlichen Darts noch möglich ist!
           if (!canCheckoutWithDarts(currentRemainingScore, dartsLeftAfterThis)) {
@@ -2548,15 +2506,6 @@ if (document.readyState === 'loading') {
             // Dartboard neu zeichnen mit Highlight
             createDartboard();
             
-            // Zeige Restwert-Anzeige (nur wenn aktiviert)
-            if (showRemainingScore) {
-              const userInputsEl = document.getElementById('userInputs');
-              const remainingDiv = document.createElement('div');
-              remainingDiv.className = 'remaining-score';
-              remainingDiv.textContent = `Restwert: ${currentRemainingScore}`;
-              userInputsEl.appendChild(remainingDiv);
-            }
-            
             if (window.challengeMode) {
               challengeStats.wrong++;
               updateChallengeStats();
@@ -2579,20 +2528,6 @@ if (document.readyState === 'loading') {
           
           // Dartboard neu zeichnen mit Highlight
           createDartboard();
-          
-          // Aktualisiere oder erstelle Restwert-Anzeige (nur wenn aktiviert)
-          if (showRemainingScore) {
-            const userInputsEl3 = document.getElementById('userInputs');
-            const existingRemaining3 = userInputsEl3.querySelector('.remaining-score');
-            if (existingRemaining3) {
-              existingRemaining3.textContent = `Restwert: ${currentRemainingScore}`;
-            } else {
-              const remainingDiv3 = document.createElement('div');
-              remainingDiv3.className = 'remaining-score';
-              remainingDiv3.textContent = `Restwert: ${currentRemainingScore}`;
-              userInputsEl3.appendChild(remainingDiv3);
-            }
-          }
           
           if (window.challengeMode) {
             challengeStats.wrong++;
@@ -2784,13 +2719,22 @@ if (document.readyState === 'loading') {
             oldRemaining.remove();
           }
           
-          // Berechne aktuellen Restwert
-          let pointsScored = 0;
-          userInputs.forEach(dartValue => {
-            pointsScored += calculateDartValue(dartValue);
-          });
+          // Bestimme den Restwert:
+          // Im Realistisch-Modus und Error-State: Verwende currentRemainingScore
+          // Ansonsten: Berechne aus currentScore - pointsScored
+          let remainingScore;
           
-          const remainingScore = currentScore - pointsScored;
+          if (realisticMode && typeof currentRemainingScore !== 'undefined' && currentRemainingScore !== null) {
+            // Im Realistisch-Modus: Verwende den gespeicherten Restwert
+            remainingScore = currentRemainingScore;
+          } else {
+            // Normal-Modus: Berechne Restwert
+            let pointsScored = 0;
+            userInputs.forEach(dartValue => {
+              pointsScored += calculateDartValue(dartValue);
+            });
+            remainingScore = currentScore - pointsScored;
+          }
           
           // Zeige Restwert wenn sinnvoll (nicht überkauft, nicht auf 1)
           if (remainingScore >= 2) {
