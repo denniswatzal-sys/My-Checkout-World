@@ -210,11 +210,6 @@
       border-color: #000;
     }
     
-    .score-card.warning {
-      background: #f97316;
-      border-color: #000;
-    }
-    
     .score-card.error {
       background: #dc2626;
       border-color: #000;
