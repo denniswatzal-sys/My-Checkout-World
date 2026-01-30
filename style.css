@@ -83,6 +83,10 @@
       justify-content: center;
     }
     
+    .mode-btn:not(.mode-btn-realistic):not(.mode-btn-challenge) {
+      flex: 1;
+    }
+    
     .mode-btn.active {
       background: #065f46;
       color: white;
