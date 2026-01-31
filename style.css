@@ -47,7 +47,7 @@
     }
     
     #rangeCard {
-      background: white;
+      background: transparent;
       border: none;
       position: relative;
     }
@@ -358,13 +358,13 @@
     }
     
     .remaining-score {
-      width: 100%;
+      display: inline-block;
       text-align: center;
       font-size: 14px;
       font-weight: 700;
       color: #1e40af;
       margin-top: 6px;
-      padding: 6px;
+      padding: 8px 12px;
       background: #dbeafe;
       border-radius: 6px;
       border: 1px solid #3b82f6;

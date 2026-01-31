@@ -2846,9 +2846,14 @@ if (document.readyState === 'loading') {
     function updateUserInputs() {
       const container = document.getElementById('userInputs');
       
-      // Behalte Lösung, entferne alte Restwert-Anzeige (wird neu berechnet)
-      const solution = container.querySelector('.solution-text');
+      // WICHTIG: Alte Restwert-Anzeige IMMER zuerst entfernen (auch wenn showRemainingScore=false)
       const oldRemaining = container.querySelector('.remaining-score');
+      if (oldRemaining) {
+        oldRemaining.remove();
+      }
+      
+      // Behalte Lösung
+      const solution = container.querySelector('.solution-text');
       
       if (userInputs.length === 0) {
         // Entferne nur die Chips
@@ -2872,11 +2877,6 @@ if (document.readyState === 'loading') {
         // Wenn "Restwert anzeigen" aktiviert ist, zeige immer den aktuellen Restwert
         // ABER: Im Challenge-Modus wird der Restwert NICHT angezeigt
         if (showRemainingScore && !window.challengeMode) {
-          // Entferne alte Restwert-Anzeige
-          if (oldRemaining) {
-            oldRemaining.remove();
-          }
-          
           // Bestimme den Restwert:
           // Im Realistisch-Modus und Error-State: Verwende currentRemainingScore
           // Ansonsten: Berechne aus currentScore - pointsScored
