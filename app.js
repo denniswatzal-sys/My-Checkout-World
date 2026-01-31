@@ -395,10 +395,10 @@ function updateMenuItems() {
     showRemainingMenuItem.textContent = `Restwert: ${showRemainingScore ? 'AN' : 'AUS'}`;
   }
   
-  // Update Freies spielen menu item
+  // Update Freies Spiel menu item
   const realisticModeMenuItem = document.getElementById('realisticModeMenuItem');
   if (realisticModeMenuItem) {
-    realisticModeMenuItem.textContent = `Freies spielen: ${realisticMode ? 'AN' : 'AUS'}`;
+    realisticModeMenuItem.textContent = `Freies Spiel: ${realisticMode ? 'AN' : 'AUS'}`;
     
     // Deaktiviere im Lernmodus
     if (window.learnModeActive) {
@@ -818,8 +818,13 @@ if (document.readyState === 'loading') {
         outerRing.classList.remove('flash-correct', 'flash-wrong');
       }
       
-      // Cycle through modes: random -> ascending -> descending -> repeat -> random
+      // Cycle through modes: random -> repeat -> ascending -> descending -> random
       if (generationMode === 'random') {
+        generationMode = 'repeat';
+        const btn = document.getElementById('generationModeBtn');
+        btn.textContent = '🔁';
+        // Keep current score for repeat mode
+      } else if (generationMode === 'repeat') {
         generationMode = 'ascending';
         const btn = document.getElementById('generationModeBtn');
         btn.textContent = '⬆️';
@@ -833,11 +838,6 @@ if (document.readyState === 'loading') {
         // Set to null to trigger starting at last score in generateScore
         currentSequentialScore = null;
         currentSequentialMode = null;
-      } else if (generationMode === 'descending') {
-        generationMode = 'repeat';
-        const btn = document.getElementById('generationModeBtn');
-        btn.textContent = '🔁';
-        // Keep current score for repeat mode
       } else {
         generationMode = 'random';
         const btn = document.getElementById('generationModeBtn');
@@ -1000,22 +1000,22 @@ if (document.readyState === 'loading') {
     const tutorialSteps = [
       {
         element: '#btn-tutorial',
-        title: 'Erwischt...',
-        content: 'Schon witzig: Hätte hier <strong>Bedienungsanleitung</strong> gestanden, hättest du sicher nicht getippt, oder? 😅<br><br>Na gut – wenn du schon da bist, erkläre ich dir kurz die wichtigsten Funktionen.',
+        title: '🫵 Erwischt...',
+        content: 'Schon witzig: Hätte hier <strong>Bedienungsanleitung</strong> gestanden, hättest du sicher nicht getippt, oder? 😅<br><br>Na gut – wenn du schon da bist, erkläre ich dir kurz die wichtigsten Funktionen und warum es mich überhaupt gibt.',
         position: 'top',
         screen: 'start'
       },
       {
         element: '#btn-training',
         title: '🎯 Willkommen in deiner Trainingsarena',
-        content: 'Dart ist mehr als werfen – es ist Kopfsache. Wer sicher rechnet, verschafft sich einen klaren Vorteil. Denn je weniger du am Board überlegen musst, desto klarer bleibt dein Fokus – und desto einfacher wird das Spiel.<br><br>Ob du 2 oder 3 Darts zum Checken hast, macht einen entscheidenden Unterschied. Gute Spieler wissen: Nicht jeder Checkout-Weg ist gleich sinnvoll. In dieser App lernst du, warum – und wie du dein Spiel mit der richtigen Strategie auf das nächste Level bringst.<br><br>Starte hier deinen Weg zum <strong>Checkout-Champion</strong>.',
-        position: 'top',
+        content: 'Dart ist mehr als werfen – es ist Kopfsache. Wer sicher rechnet, verschafft sich einen klaren Vorteil. Denn je weniger du am Board überlegen musst, desto klarer bleibt dein Fokus – und desto einfacher wird das Spiel.<br><br>Ob du zwei oder drei Darts zum Checken hast, macht einen entscheidenden Unterschied. Gute Spieler wissen: Nicht jeder Checkout-Weg ist gleich sinnvoll. In dieser App lernst du, warum – und wie du dein Spiel mit der richtigen Strategie auf das nächste Level bringst.<br><br>Starte hier deinen Weg zum<br><strong>Checkout-Champion</strong>.',
+        position: 'center',
         screen: 'start'
       },
       {
         element: '#btn-checkouts',
         title: '📊 Checkouts',
-        content: 'Hier findest du die Checkout-Datenbank – unterteilt in 3-Dart- und 2-Dart-Finishes.<br><br>Du bevorzugst andere Wege? Kein Problem - Lege hier einfach deine eigenen Checkouts fest.',
+        content: 'Hier findest du deine Checkout-Datenbank – unterteilt in 3-Dart- und 2-Dart-Finishes.<br><br>Du bevorzugst andere Wege? Kein Problem - Lege hier einfach deine eigenen Checkouts fest.',
         position: 'top',
         screen: 'start'
       },
@@ -1029,7 +1029,7 @@ if (document.readyState === 'loading') {
       {
         element: '#scoreValue',
         title: '🔓 Checkout-Zahl',
-        content: 'Hier wird dir die zu checkende Zahl angezeigt.<br>Durch Antippen kannst du sie manuell ändern.<br><br><strong style="color: #16a34a;">Grün</strong> – 3-Dart-Finish (3DF)<br><strong style="color: #3b82f6;">Blau</strong> – 2-Dart-Finish (2DF)<br><strong style="color: #eab308;">Gelb</strong> – Bogey-Zahl<br><br><strong>Nur im freien Spiel:</strong><br><strong style="color: #f97316;">Orange</strong> – Fehlwurf / Checken noch möglich<br><strong style="color: #dc2626;">Rot</strong> – Fehlwurf / Checken nicht mehr möglich',
+        content: 'Hier wird dir die zu checkende Zahl angezeigt. Durch Antippen kannst du sie manuell ändern.<br><br><strong style="color: #16a34a;">Grün</strong> – 3-Dart-Finish (3DF)<br><strong style="color: #3b82f6;">Blau</strong> – 2-Dart-Finish (2DF)<br><strong style="color: #eab308;">Gelb</strong> – Bogey-Zahl<br><br><strong>Nur im freien Spiel:</strong><br><strong style="color: #f97316;">Orange</strong> – Checken noch möglich<br><strong style="color: #dc2626;">Rot</strong> – Checken nicht mehr möglich',
         position: 'bottom',
         screen: 'training'
       },
@@ -1069,7 +1069,7 @@ if (document.readyState === 'loading') {
       {
         element: '#userInputs',
         title: '✅ Richtige Lösung',
-        content: 'Bei <strong>korrekter</strong> Eingabe wird die Box <strong style="color: #059669;">grün</strong> – und die nächste Zahl wird automatisch generiert.',
+        content: 'Bei <strong>korrekter</strong> Eingabe wird die Box <strong style="color: #059669;">grün</strong> und die nächste Zahl wird automatisch generiert.',
         position: 'top',
         screen: 'training',
         setup: () => {
@@ -1133,7 +1133,7 @@ if (document.readyState === 'loading') {
       {
         element: '.mode-selector',
         title: '🎮 Modus-Tasten',
-        content: 'Mit den Modus-Tasten legst du deine Trainingseinstellungen fest.<br><br><strong>3DF</strong> – Nur 3-Dart-Finishes<br><strong>2DF</strong> – Nur 2-Dart-Finishes<br><strong>Mix</strong> – Mischung aus 3DF / 2DF<br><br><strong>Reihenfolge</strong><br>🔀 zufällig<br>⬆️ aufsteigend<br>⬇️ absteigend<br>🔁 gleichbleibend<br><br>🏆 <strong>Herausforderungsmodus</strong><br>60 Sekunden. Zufällige Zahlen von 2-170.<br>Wie viele Checkouts schaffst du? 🔥',
+        content: 'Mit den Modus-Tasten legst du deine Trainingseinstellungen fest.<br><br><strong>3DF</strong> – Nur 3-Dart-Finishes<br><strong>2DF</strong> – Nur 2-Dart-Finishes<br><strong>Mix</strong> – Mischung aus 3DF / 2DF<br><br><strong>Reihenfolge</strong><br>🔀 zufällig<br>🔁 gleichbleibend<br>⬆️ aufsteigend<br>⬇️ absteigend<br><br>🏆 <strong>Herausforderungsmodus</strong><br>60 Sekunden. Zufällige Zahlen von 2-170.<br>Wie viele Checkouts schaffst du? 🔥',
         position: 'top',
         screen: 'training'
       },
@@ -1147,14 +1147,14 @@ if (document.readyState === 'loading') {
       {
         element: '#menuBtn',
         title: '⚙️ Einstellungen',
-        content: '<strong>Taste gedrückt halten</strong> – Vollbildmodus aktivieren<br><strong>Taste antippen</strong> – Menü öffnen<br><br>Im Menü kannst du weitere Optionen einstellen, wie <strong>Freies Spiel (Fehlwürfe erlaubt), Restwert anzeigen, Zahlenring ausblenden, Vibration ausschalten und Hintergrund anpassen</strong>.',
+        content: 'Im Menü kannst du weitere Optionen einstellen, wie <em>Freies Spiel (Fehlwürfe erlaubt), Restwert anzeigen, Zahlenring ausblenden, Vibration ausschalten</em> und <em>Hintergrund anpassen</em>.<br><br><strong>Taste gedrückt halten</strong> – Vollbildmodus<br><strong>Taste antippen</strong> – Menü öffnen',
         position: 'top-right',
         screen: 'training'
       },
       {
         element: '#dartboard',
         title: '🏁 Das Ende der Fahnenstange',
-        content: 'Du hast alle wichtigen Funktionen kennengelernt.<br>Jetzt bist du bereit!<br><br>Viel Erfolg – und vor allem: Viel Spaß beim Training! 🎯',
+        content: 'Du hast alle wichtigen Funktionen kennengelernt. Jetzt bist du bereit!<br><br>Viel Erfolg – und vor allem: Viel Spaß beim Training! 🎯',
         position: 'center',
         screen: 'training'
       }
