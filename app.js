@@ -509,6 +509,7 @@ if (document.readyState === 'loading') {
     // Generation mode: 'random', 'ascending', 'descending'
     let generationMode = 'random';
     let currentSequentialScore = null; // Track current position in sequential mode
+    let currentSequentialMode = null; // Track current mode ('2darts'/'3darts') in mixed sequential mode
     
     // Helper function to clear anti-repetition history (call when changing range/mode)
     function clearAntiRepetitionHistory() {
@@ -744,6 +745,7 @@ if (document.readyState === 'loading') {
       
       // Reset sequential score when changing dart mode
       currentSequentialScore = null;
+      currentSequentialMode = null;
       
       document.querySelectorAll('.mode-btn').forEach(btn => {
         // Don't remove active from challenge button
@@ -823,12 +825,14 @@ if (document.readyState === 'loading') {
         btn.textContent = '⬆️';
         // Set to null to trigger starting at first score in generateScore
         currentSequentialScore = null;
+        currentSequentialMode = null;
       } else if (generationMode === 'ascending') {
         generationMode = 'descending';
         const btn = document.getElementById('generationModeBtn');
         btn.textContent = '⬇️';
         // Set to null to trigger starting at last score in generateScore
         currentSequentialScore = null;
+        currentSequentialMode = null;
       } else if (generationMode === 'descending') {
         generationMode = 'repeat';
         const btn = document.getElementById('generationModeBtn');
@@ -839,6 +843,7 @@ if (document.readyState === 'loading') {
         const btn = document.getElementById('generationModeBtn');
         btn.textContent = '🔀';
         currentSequentialScore = null;
+        currentSequentialMode = null;
         clearAntiRepetitionHistory();
       }
       
@@ -1789,6 +1794,7 @@ if (document.readyState === 'loading') {
       // Reset sequential score to null so generateScore starts at beginning/end
       if (generationMode !== 'random') {
         currentSequentialScore = null;
+        currentSequentialMode = null;
       }
       
       window.learnModeActive = false;
@@ -2065,17 +2071,48 @@ if (document.readyState === 'loading') {
       // For mixed mode, get ALL available scores (both 2DF and 3DF)
       // Then decide 2DF vs 3DF based on the selected score
       let availableScores;
+      let availableScoreModes; // For sequential mode: array of {score, mode}
       
       if (currentMode === 'mixed') {
-        // Combine all scores from both 2DF and 3DF checkouts in the range
-        const twoDF_Scores = Object.keys(twoDartCheckouts).map(Number).filter(s => s >= min && s <= max);
-        const threeDF_Scores = Object.keys(defaultCheckouts).map(Number).filter(s => s >= min && s <= max);
-        
-        // Use Set to get unique scores (some scores exist in both)
-        const allScores = new Set([...twoDF_Scores, ...threeDF_Scores]);
-        availableScores = Array.from(allScores).sort((a, b) => a - b);
-        
-        console.log(`[Mixed Mode] Available scores: ${availableScores.length} (2DF: ${twoDF_Scores.length}, 3DF: ${threeDF_Scores.length})`);
+        // For Sequential mode: Create list of score+mode combinations
+        if (generationMode === 'ascending' || generationMode === 'descending') {
+          const twoDF_Scores = Object.keys(twoDartCheckouts).map(Number).filter(s => s >= min && s <= max);
+          const threeDF_Scores = Object.keys(defaultCheckouts).map(Number).filter(s => s >= min && s <= max);
+          
+          // Create combinations: For each unique score, add 3DF first, then 2DF if exists
+          const allScoresSet = new Set([...twoDF_Scores, ...threeDF_Scores]);
+          const sortedScores = Array.from(allScoresSet).sort((a, b) => a - b);
+          
+          availableScoreModes = [];
+          sortedScores.forEach(score => {
+            // Always add 3DF first (if exists)
+            if (threeDF_Scores.includes(score)) {
+              availableScoreModes.push({score, mode: '3darts'});
+            }
+            // Then add 2DF (if exists)
+            if (twoDF_Scores.includes(score)) {
+              availableScoreModes.push({score, mode: '2darts'});
+            }
+          });
+          
+          // For descending, reverse the list
+          if (generationMode === 'descending') {
+            availableScoreModes.reverse();
+          }
+          
+          // Extract just scores for compatibility with existing code
+          availableScores = availableScoreModes.map(sm => sm.score);
+          
+          console.log(`[Mixed Sequential] Score+Mode combinations: ${availableScoreModes.length}`);
+        } else {
+          // For Random/Repeat mode: Use simple score list
+          const twoDF_Scores = Object.keys(twoDartCheckouts).map(Number).filter(s => s >= min && s <= max);
+          const threeDF_Scores = Object.keys(defaultCheckouts).map(Number).filter(s => s >= min && s <= max);
+          const allScores = new Set([...twoDF_Scores, ...threeDF_Scores]);
+          availableScores = Array.from(allScores).sort((a, b) => a - b);
+          
+          console.log(`[Mixed Mode] Available scores: ${availableScores.length} (2DF: ${twoDF_Scores.length}, 3DF: ${threeDF_Scores.length})`);
+        }
       } else {
         // For 2darts or 3darts mode, use the appropriate checkout database
         currentCheckouts = currentMode === '2darts' ? twoDartCheckouts : defaultCheckouts;
@@ -2117,7 +2154,11 @@ if (document.readyState === 'loading') {
       
       // SEQUENTIAL MODE LOGIC (ascending or descending)
       else if (generationMode === 'ascending' || generationMode === 'descending') {
-        availableScores.sort((a, b) => generationMode === 'ascending' ? a - b : b - a);
+        // For non-mixed modes, sort normally
+        if (currentMode !== 'mixed') {
+          availableScores.sort((a, b) => generationMode === 'ascending' ? a - b : b - a);
+        }
+        // For mixed mode, availableScoreModes is already sorted
         
         // If no current sequential score, set a dummy value to trigger proper start
         if (currentSequentialScore === null) {
@@ -2128,16 +2169,45 @@ if (document.readyState === 'loading') {
           } else {
             currentSequentialScore = Math.max(...availableScores) + 1; // One after first (which is highest in descending)
           }
+          currentSequentialMode = null;
         }
         
         // Find next score in sequence
-        const currentIndex = availableScores.indexOf(currentSequentialScore);
+        let currentIndex = -1;
+        
+        if (currentMode === 'mixed' && availableScoreModes) {
+          // For mixed mode: Find index by matching BOTH score and mode
+          currentIndex = availableScoreModes.findIndex(sm => 
+            sm.score === currentSequentialScore && sm.mode === currentSequentialMode
+          );
+        } else {
+          // For non-mixed mode: Find index by score only
+          currentIndex = availableScores.indexOf(currentSequentialScore);
+        }
         
         if (currentIndex === -1) {
           // Not found in current range - start at beginning
-          currentScore = availableScores[0];
-          currentSequentialScore = currentScore;
-        } else if (currentIndex === availableScores.length - 1) {
+          if (currentMode === 'mixed' && availableScoreModes) {
+            currentScore = availableScoreModes[0].score;
+            currentSequentialScore = availableScoreModes[0].score;
+            currentSequentialMode = availableScoreModes[0].mode;
+            
+            // Set checkouts based on mode
+            if (availableScoreModes[0].mode === '2darts') {
+              currentCheckouts = twoDartCheckouts;
+              maxDartsForRound = 2;
+              trackingMode = '2darts';
+            } else {
+              currentCheckouts = defaultCheckouts;
+              maxDartsForRound = 3;
+              trackingMode = '3darts';
+            }
+          } else {
+            currentScore = availableScores[0];
+            currentSequentialScore = currentScore;
+            currentSequentialMode = null;
+          }
+        } else if (currentIndex === (availableScoreModes ? availableScoreModes.length : availableScores.length) - 1) {
           // Reached end of current range - switch to next range
           console.log('[Sequential] End of range reached, switching to next range');
           
@@ -2169,14 +2239,55 @@ if (document.readyState === 'loading') {
               rangeButtons.forEach(b => b.classList.remove('active-range'));
               nextBtn.classList.add('active-range');
               
-              // Get scores from new range and start at beginning
-              const nextRangeScores = Object.keys(currentCheckouts).map(Number)
-                .filter(s => s >= nextMin && s <= nextMax)
-                .sort((a, b) => a - b);
+              // Get scores from new range
+              let nextRangeScores;
+              let nextRangeScoreModes;
               
-              if (nextRangeScores.length > 0) {
-                currentScore = nextRangeScores[0];
-                currentSequentialScore = currentScore;
+              if (currentMode === 'mixed') {
+                // For mixed mode sequential, get ALL score+mode combinations from new range
+                const twoDF = Object.keys(twoDartCheckouts).map(Number).filter(s => s >= nextMin && s <= nextMax);
+                const threeDF = Object.keys(defaultCheckouts).map(Number).filter(s => s >= nextMin && s <= nextMax);
+                
+                const allScoresSet = new Set([...twoDF, ...threeDF]);
+                const sortedScores = Array.from(allScoresSet).sort((a, b) => a - b);
+                
+                nextRangeScoreModes = [];
+                sortedScores.forEach(score => {
+                  // Always add 3DF first (if exists)
+                  if (threeDF.includes(score)) {
+                    nextRangeScoreModes.push({score, mode: '3darts'});
+                  }
+                  // Then add 2DF (if exists)
+                  if (twoDF.includes(score)) {
+                    nextRangeScoreModes.push({score, mode: '2darts'});
+                  }
+                });
+                
+                if (nextRangeScoreModes.length > 0) {
+                  currentScore = nextRangeScoreModes[0].score;
+                  currentSequentialScore = nextRangeScoreModes[0].score;
+                  currentSequentialMode = nextRangeScoreModes[0].mode;
+                  
+                  // Set checkouts based on mode
+                  if (nextRangeScoreModes[0].mode === '2darts') {
+                    currentCheckouts = twoDartCheckouts;
+                    maxDartsForRound = 2;
+                  } else {
+                    currentCheckouts = defaultCheckouts;
+                    maxDartsForRound = 3;
+                  }
+                }
+              } else {
+                // For 2darts or 3darts mode, use current checkout database
+                nextRangeScores = Object.keys(currentCheckouts).map(Number)
+                  .filter(s => s >= nextMin && s <= nextMax)
+                  .sort((a, b) => a - b);
+                
+                if (nextRangeScores.length > 0) {
+                  currentScore = nextRangeScores[0];
+                  currentSequentialScore = currentScore;
+                  currentSequentialMode = null;
+                }
               }
             }
           } else { // descending
@@ -2208,24 +2319,88 @@ if (document.readyState === 'loading') {
               prevBtn.classList.add('active-range');
               
               // Get scores from new range and start at end
-              const prevRangeScores = Object.keys(currentCheckouts).map(Number)
-                .filter(s => s >= prevMin && s <= prevMax)
-                .sort((a, b) => b - a);
+              let prevRangeScores;
+              let prevRangeScoreModes;
               
-              if (prevRangeScores.length > 0) {
-                currentScore = prevRangeScores[0];
-                currentSequentialScore = currentScore;
+              if (currentMode === 'mixed') {
+                // For mixed mode sequential, get ALL score+mode combinations from new range
+                const twoDF = Object.keys(twoDartCheckouts).map(Number).filter(s => s >= prevMin && s <= prevMax);
+                const threeDF = Object.keys(defaultCheckouts).map(Number).filter(s => s >= prevMin && s <= prevMax);
+                
+                const allScoresSet = new Set([...twoDF, ...threeDF]);
+                const sortedScores = Array.from(allScoresSet).sort((a, b) => a - b);
+                
+                prevRangeScoreModes = [];
+                sortedScores.forEach(score => {
+                  // Always add 3DF first (if exists)
+                  if (threeDF.includes(score)) {
+                    prevRangeScoreModes.push({score, mode: '3darts'});
+                  }
+                  // Then add 2DF (if exists)
+                  if (twoDF.includes(score)) {
+                    prevRangeScoreModes.push({score, mode: '2darts'});
+                  }
+                });
+                
+                // For descending, reverse the list
+                prevRangeScoreModes.reverse();
+                
+                if (prevRangeScoreModes.length > 0) {
+                  currentScore = prevRangeScoreModes[0].score;
+                  currentSequentialScore = prevRangeScoreModes[0].score;
+                  currentSequentialMode = prevRangeScoreModes[0].mode;
+                  
+                  // Set checkouts based on mode
+                  if (prevRangeScoreModes[0].mode === '2darts') {
+                    currentCheckouts = twoDartCheckouts;
+                    maxDartsForRound = 2;
+                  } else {
+                    currentCheckouts = defaultCheckouts;
+                    maxDartsForRound = 3;
+                  }
+                }
+              } else {
+                // For 2darts or 3darts mode, use current checkout database
+                prevRangeScores = Object.keys(currentCheckouts).map(Number)
+                  .filter(s => s >= prevMin && s <= prevMax)
+                  .sort((a, b) => b - a);
+                
+                if (prevRangeScores.length > 0) {
+                  currentScore = prevRangeScores[0];
+                  currentSequentialScore = currentScore;
+                  currentSequentialMode = null;
+                }
               }
             }
           }
         } else {
           // Go to next score in current range
-          currentScore = availableScores[currentIndex + 1];
-          currentSequentialScore = currentScore;
+          if (currentMode === 'mixed' && availableScoreModes) {
+            const nextEntry = availableScoreModes[currentIndex + 1];
+            currentScore = nextEntry.score;
+            currentSequentialScore = nextEntry.score;
+            currentSequentialMode = nextEntry.mode;
+            
+            // Set checkouts based on mode
+            if (nextEntry.mode === '2darts') {
+              currentCheckouts = twoDartCheckouts;
+              maxDartsForRound = 2;
+              trackingMode = '2darts';
+            } else {
+              currentCheckouts = defaultCheckouts;
+              maxDartsForRound = 3;
+              trackingMode = '3darts';
+            }
+          } else {
+            currentScore = availableScores[currentIndex + 1];
+            currentSequentialScore = currentScore;
+            currentSequentialMode = null;
+          }
         }
         
-        // For mixed mode, determine if selected score uses 2DF or 3DF
-        if (currentMode === 'mixed') {
+        // For non-mixed mode, determine if selected score uses 2DF or 3DF
+        if (currentMode === 'mixed' && !availableScoreModes) {
+          // This is for Random/Repeat mode in mixed - already handled above for Sequential
           if (twoDartCheckouts[currentScore]) {
             currentCheckouts = twoDartCheckouts;
             maxDartsForRound = 2;
@@ -3240,6 +3415,7 @@ if (document.readyState === 'loading') {
         // FORCE: Always use random mode in challenge
         generationMode = 'random';
         currentSequentialScore = null;
+        currentSequentialMode = null;
         document.getElementById('generationModeBtn').textContent = '🔀';
         
         // FORCE: Set to Mix mode and 2-170 range
