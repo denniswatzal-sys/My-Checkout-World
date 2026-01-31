@@ -2028,21 +2028,28 @@ if (document.readyState === 'loading') {
     }
     
     function generateScore(min, max) {
-      // For mixed mode, randomly choose 2 or 3 darts
+      // For mixed mode, get ALL available scores (both 2DF and 3DF)
+      // Then decide 2DF vs 3DF based on the selected score
+      let availableScores;
+      
       if (currentMode === 'mixed') {
-        const useTwoDarts = Math.random() > 0.5;
-        currentCheckouts = useTwoDarts ? twoDartCheckouts : defaultCheckouts;
-        maxDartsForRound = useTwoDarts ? 2 : 3;
+        // Combine all scores from both 2DF and 3DF checkouts in the range
+        const twoDF_Scores = Object.keys(twoDartCheckouts).map(Number).filter(s => s >= min && s <= max);
+        const threeDF_Scores = Object.keys(defaultCheckouts).map(Number).filter(s => s >= min && s <= max);
+        
+        // Use Set to get unique scores (some scores exist in both)
+        const allScores = new Set([...twoDF_Scores, ...threeDF_Scores]);
+        availableScores = Array.from(allScores).sort((a, b) => a - b);
+        
+        console.log(`[Mixed Mode] Available scores: ${availableScores.length} (2DF: ${twoDF_Scores.length}, 3DF: ${threeDF_Scores.length})`);
+      } else {
+        // For 2darts or 3darts mode, use the appropriate checkout database
+        currentCheckouts = currentMode === '2darts' ? twoDartCheckouts : defaultCheckouts;
+        availableScores = Object.keys(currentCheckouts).map(Number).filter(s => s >= min && s <= max);
       }
       
       // Determine current mode for tracking
       let trackingMode = currentMode;
-      if (currentMode === 'mixed') {
-        trackingMode = currentCheckouts === twoDartCheckouts ? '2darts' : '3darts';
-      }
-      
-      // Get all available scores in range
-      let availableScores = Object.keys(currentCheckouts).map(Number).filter(s => s >= min && s <= max);
       
       if (availableScores.length === 0) {
         return;
@@ -2059,8 +2066,19 @@ if (document.readyState === 'loading') {
           currentScore = availableScores[0];
           console.log('[Repeat Mode] Initialized with score:', currentScore);
         }
-        // Jump to UI update (skip random/sequential logic)
-        // We'll handle this by not setting currentScore in the logic below
+        
+        // For mixed mode, determine if score uses 2DF or 3DF
+        if (currentMode === 'mixed') {
+          if (twoDartCheckouts[currentScore]) {
+            currentCheckouts = twoDartCheckouts;
+            maxDartsForRound = 2;
+            trackingMode = '2darts';
+          } else {
+            currentCheckouts = defaultCheckouts;
+            maxDartsForRound = 3;
+            trackingMode = '3darts';
+          }
+        }
       }
       
       // SEQUENTIAL MODE LOGIC (ascending or descending)
@@ -2172,6 +2190,19 @@ if (document.readyState === 'loading') {
           currentSequentialScore = currentScore;
         }
         
+        // For mixed mode, determine if selected score uses 2DF or 3DF
+        if (currentMode === 'mixed') {
+          if (twoDartCheckouts[currentScore]) {
+            currentCheckouts = twoDartCheckouts;
+            maxDartsForRound = 2;
+            trackingMode = '2darts';
+          } else {
+            currentCheckouts = defaultCheckouts;
+            maxDartsForRound = 3;
+            trackingMode = '3darts';
+          }
+        }
+        
         console.log(`[Sequential ${generationMode}] Selected score: ${currentScore} (${trackingMode})`);
       } 
       // RANDOM MODE LOGIC (with anti-repetition)
@@ -2182,6 +2213,11 @@ if (document.readyState === 'loading') {
         const maxBlacklistSize = availableScores.length > 20 
           ? Math.min(10, availableScores.length - 1) 
           : Math.max(1, Math.floor(availableScores.length * 0.4));
+        
+        // For mixed mode, use 'mixed' as tracking mode for blacklist
+        if (currentMode === 'mixed') {
+          trackingMode = 'mixed';
+        }
         
         console.log(`[Anti-Repetition] Available scores: ${availableScores.length}, Max blacklist: ${maxBlacklistSize}, Mode: ${trackingMode}`);
         
@@ -2204,10 +2240,23 @@ if (document.readyState === 'loading') {
         // Select random score from filtered list
         currentScore = filteredScores[Math.floor(Math.random() * filteredScores.length)];
         
+        // For mixed mode, determine if selected score uses 2DF or 3DF AFTER selection
+        if (currentMode === 'mixed') {
+          if (twoDartCheckouts[currentScore]) {
+            currentCheckouts = twoDartCheckouts;
+            maxDartsForRound = 2;
+            trackingMode = '2darts'; // Update for logging
+          } else {
+            currentCheckouts = defaultCheckouts;
+            maxDartsForRound = 3;
+            trackingMode = '3darts'; // Update for logging
+          }
+        }
+        
         console.log(`[Anti-Repetition] Selected score: ${currentScore} (${trackingMode})`);
         
-        // Add to recently generated list
-        recentlyGenerated.push({ score: currentScore, mode: trackingMode });
+        // Add to recently generated list with 'mixed' mode to prevent immediate repetition
+        recentlyGenerated.push({ score: currentScore, mode: currentMode === 'mixed' ? 'mixed' : trackingMode });
         
         // Trim the list to max blacklist size (keep only most recent)
         if (recentlyGenerated.length > maxBlacklistSize * 2) { // *2 because we track both 2DF and 3DF
@@ -2819,6 +2868,10 @@ if (document.readyState === 'loading') {
               // Deactivate learn mode FIRST
               window.learnModeActive = false;
               
+              // IMPORTANT: Re-enable Freies spielen button IMMEDIATELY
+              console.log('Calling updateMenuItems IMMEDIATELY - learnModeActive:', window.learnModeActive);
+              updateMenuItems();
+              
               setTimeout(() => {
                 // Reset to 3-Dart mode
                 currentMode = '3darts';
@@ -2859,10 +2912,6 @@ if (document.readyState === 'loading') {
                 updateHintText();
                 
                 updateProblemBadge();
-                
-                // IMPORTANT: Re-enable Freies spielen button AFTER learnModeActive is false
-                console.log('Calling updateMenuItems - learnModeActive:', window.learnModeActive);
-                updateMenuItems();
                 
                 generateScore(2, 170);
               }, 500);
