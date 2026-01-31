@@ -107,6 +107,10 @@
       background: #059669 !important;
     }
     
+    #generationModeBtn {
+      margin-right: 4px;
+    }
+    
     .stats-row {
       display: flex;
       justify-content: space-between;

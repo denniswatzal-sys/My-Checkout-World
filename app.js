@@ -312,6 +312,9 @@ function toggleShowRemainingScore() {
   // Update menu item text
   updateMenuItems();
   
+  // Update display immediately
+  updateUserInputs();
+  
   vibrateMedium();
   
   console.log('Show remaining score', showRemainingScore ? 'enabled' : 'disabled');
@@ -340,6 +343,9 @@ function toggleRealisticMode() {
   if (scoreCard) {
     scoreCard.classList.remove('error', 'warning');
   }
+  
+  // Update display immediately
+  updateUserInputs();
   
   // Update menu item text
   updateMenuItems();
@@ -3019,7 +3025,7 @@ if (document.readyState === 'loading') {
         // FORCE: Always use random mode in challenge
         generationMode = 'random';
         currentSequentialScore = null;
-        document.getElementById('generationModeBtn').textContent = '?';
+        document.getElementById('generationModeBtn').textContent = '🔀';
         
         // FORCE: Set to Mix mode and 2-170 range
         currentMode = 'mixed';
@@ -3247,6 +3253,12 @@ if (document.readyState === 'loading') {
         mode3DartsBtn.classList.add('active');
       }
       
+      // Reset generation mode button to random symbol
+      const genModeBtn = document.getElementById('generationModeBtn');
+      if (genModeBtn && generationMode === 'random') {
+        genModeBtn.textContent = '🔀';
+      }
+      
       // Show leaderboard with current entry
       openLeaderboard(entry);
     }
@@ -3313,6 +3325,12 @@ if (document.readyState === 'loading') {
       // Add active only to 3-Darts button
       if (mode3DartsBtn) {
         mode3DartsBtn.classList.add('active');
+      }
+      
+      // Reset generation mode button to random symbol
+      const genModeBtn = document.getElementById('generationModeBtn');
+      if (genModeBtn && generationMode === 'random') {
+        genModeBtn.textContent = '🔀';
       }
       
       // Restore realistic mode from localStorage
