@@ -858,7 +858,7 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       overflow: visible;
       z-index: 60;
-      min-width: 220px;
+      min-width: 180px;
     }
     
     .menu-dropdown::before {
@@ -918,13 +918,14 @@
       padding: 10px 16px;
       border: none;
       background: white;
-      width: 100%;
+      display: block;
       text-align: left;
       cursor: pointer;
       font-size: 14px;
       font-weight: 600;
       color: #1f2937;
       border-bottom: 1px solid #e5e7eb;
+      white-space: nowrap;
     }
     
     .menu-item:last-child {
