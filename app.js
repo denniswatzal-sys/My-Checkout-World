@@ -742,19 +742,19 @@ if (document.readyState === 'loading') {
       if (generationMode === 'random') {
         generationMode = 'ascending';
         const btn = document.getElementById('generationModeBtn');
-        btn.textContent = '⬆';
+        btn.textContent = '⬆️';
         // Set to null to trigger starting at first score in generateScore
         currentSequentialScore = null;
       } else if (generationMode === 'ascending') {
         generationMode = 'descending';
         const btn = document.getElementById('generationModeBtn');
-        btn.textContent = '⬇';
+        btn.textContent = '⬇️';
         // Set to null to trigger starting at last score in generateScore
         currentSequentialScore = null;
       } else {
         generationMode = 'random';
         const btn = document.getElementById('generationModeBtn');
-        btn.textContent = '?';
+        btn.textContent = '🔀';
         currentSequentialScore = null;
         clearAntiRepetitionHistory();
       }
@@ -1011,7 +1011,7 @@ if (document.readyState === 'loading') {
       {
         element: '.mode-selector',
         title: '🎮 Modus-Tasten',
-        content: 'Mit den Modus-Tasten legst du deine Trainingseinstellungen fest.<br><br><strong>3DF:</strong> Nur 3-Dart-Finishes<br><strong>2DF:</strong> Nur 2-Dart-Finishes<br><strong>Mix:</strong> Zufällige Mischung aus 3DF / 2DF<br><strong>? / ⬆ / ⬇:</strong> Reihenfolge zufällig / auf- / absteigend<br><br>🏆 <strong>Herausforderungsmodus:</strong><br>60 Sek. lang zufällige Zahlen von 2-170<br>im Mix-Modus. Wie viele schaffst du?',
+        content: 'Mit den Modus-Tasten legst du deine Trainingseinstellungen fest.<br><br><strong>3DF:</strong> Nur 3-Dart-Finishes<br><strong>2DF:</strong> Nur 2-Dart-Finishes<br><strong>Mix:</strong> Zufällige Mischung aus 3DF / 2DF<br><strong>🔀 / ⬆️ / ⬇️:</strong> Reihenfolge zufällig / auf- / absteigend<br><br>🏆 <strong>Herausforderungsmodus:</strong><br>60 Sek. lang zufällige Zahlen von 2-170<br>im Mix-Modus. Wie viele schaffst du?',
         position: 'top',
         screen: 'training'
       },
