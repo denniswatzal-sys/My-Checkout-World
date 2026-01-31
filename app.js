@@ -844,8 +844,42 @@ if (document.readyState === 'loading') {
       
       console.log('Generation mode changed to:', generationMode, 'Starting score:', currentSequentialScore);
       
+      // Always switch to 2-170 range when changing generation mode
+      currentRangeMin = 2;
+      currentRangeMax = 170;
+      
+      const btn2_170 = document.querySelector('.range-btn.bg-blue-500');
+      
+      // Remove active-range from all buttons
+      document.querySelectorAll('.range-btn').forEach(btn => {
+        btn.classList.remove('active-range');
+      });
+      
+      // Activate 2-170 button
+      if (btn2_170) {
+        btn2_170.classList.add('active-range');
+        console.log('Switched to 2-170 range after generation mode change');
+      }
+      
+      // Update hint range
+      currentHintRange = '2-170';
+      if (hintVisible) {
+        updateHintText();
+      }
+      
+      // Deactivate learn mode if active
+      if (window.learnModeActive) {
+        window.learnModeActive = false;
+        const learnBtn = document.getElementById('learnBtn');
+        if (learnBtn) {
+          learnBtn.classList.remove('active-range');
+          learnBtn.style.borderColor = '#b91c1c';
+        }
+        updateMenuItems(); // Re-enable Freies spielen
+      }
+      
       // Generate new score with the new mode
-      generateScore(currentRangeMin, currentRangeMax);
+      generateScore(2, 170);
     }
     
     function updateRangeButtonsFor2Dart() {
