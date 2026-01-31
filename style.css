@@ -1219,7 +1219,7 @@
     
     .tutorial-tooltip[data-position="top-right"]::before {
       bottom: -24px;
-      right: 50px;
+      right: 10px;
       border-top-color: #059669;
     }
     
