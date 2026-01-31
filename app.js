@@ -3764,9 +3764,9 @@ if (document.readyState === 'loading') {
             const btnRect = menuBtn.getBoundingClientRect();
             const menuRect = menu.getBoundingClientRect();
             
-            // Position menu above button, aligned to the right
+            // Position menu above button, shifted more to the left
             const top = btnRect.top - menuRect.height - 20;
-            const left = btnRect.right - menuRect.width + 30;
+            const left = btnRect.right - menuRect.width - 10;
             
             console.log('Menu Button Rect:', btnRect);
             console.log('Menu Rect width:', menuRect.width);
