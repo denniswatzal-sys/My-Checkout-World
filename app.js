@@ -1925,28 +1925,15 @@ if (document.readyState === 'loading') {
         updateScoreTitle();
         createDartboard();
         
-        // Find and activate the correct range button
-        const rangeButtons = document.querySelectorAll('.range-btn[data-min]');
-        let foundButton = null;
+        // Always switch to 2-170 range when manually entering a score
+        const btn2_170 = document.querySelector('.range-btn.bg-blue-500');
         
-        rangeButtons.forEach(btn => {
-          const min = parseInt(btn.dataset.min);
-          const max = parseInt(btn.dataset.max);
-          if (score >= min && score <= max) {
-            foundButton = btn;
-          }
-        });
-        
-        // Set the range and activate button WITHOUT generating new score
-        if (foundButton) {
-          const min = parseInt(foundButton.dataset.min);
-          const max = parseInt(foundButton.dataset.max);
-          
+        if (btn2_170) {
           // Set flag BEFORE calling setRange
           manualScoreActive = true;
           
-          // This will NOT generate a new score because of the flag
-          setRange(min, max, foundButton);
+          // Always use 2-170 range
+          setRange(2, 170, btn2_170);
         }
         
         console.log('Manual score set successfully:', score, 'Mode:', currentMode, 'Checkout:', checkout);
@@ -2838,6 +2825,7 @@ if (document.readyState === 'loading') {
                 updateHintText();
                 
                 updateProblemBadge();
+                updateMenuItems(); // Re-enable Freies spielen button
                 generateScore(2, 170);
               }, 500);
             }
@@ -3524,6 +3512,7 @@ if (document.readyState === 'loading') {
         // This shouldn't happen anymore since we handle it in handleDartClick
         window.learnModeActive = false;
         updateProblemBadge();
+        updateMenuItems(); // Re-enable Freies spielen button
         generateScore(currentRangeMin, currentRangeMax);
         return;
       }
