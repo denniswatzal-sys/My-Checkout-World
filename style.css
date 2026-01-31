@@ -88,7 +88,7 @@
       -ms-user-select: none;
     }
     
-    .mode-btn:not(.mode-btn-realistic):not(.mode-btn-challenge) {
+    .mode-btn:not(.mode-btn-challenge) {
       flex: 1;
     }
     
@@ -101,22 +101,11 @@
       background: #8b5cf6 !important;
       color: white !important;
       font-size: 18px;
+      flex: 1;
     }
     
     .mode-btn-challenge:active {
       background: #7c3aed !important;
-    }
-    
-    .mode-btn-realistic {
-      background: #e5e7eb !important;
-      color: #1f2937 !important;
-      font-size: 18px;
-      margin-left: 16px;
-    }
-    
-    .mode-btn-realistic.active {
-      background: #10b981 !important;
-      color: white !important;
     }
     
     .mode-btn-realistic:active {

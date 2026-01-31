@@ -348,43 +348,6 @@ function toggleRealisticMode() {
   console.log('Realistic Mode', realisticMode ? 'enabled' : 'disabled');
 }
 
-function toggleRealisticModeBtn() {
-  // Im Challenge-Modus ist Realistisch-Modus nicht erlaubt
-  if (window.challengeMode) {
-    return;
-  }
-  
-  realisticMode = !realisticMode;
-  localStorage.setItem('dartTrainerRealisticMode', realisticMode.toString());
-  
-  // Reset error state when toggling
-  if (typeof isInErrorState !== 'undefined') {
-    isInErrorState = false;
-    currentRemainingScore = null;
-    dartsUsedInRound = 0;
-    errorStateCheckout = [];
-    dartsInErrorState = 0;
-  }
-  
-  // Remove error and warning class from score card
-  const scoreCard = document.getElementById('scoreCard');
-  if (scoreCard) {
-    scoreCard.classList.remove('error', 'warning');
-  }
-  
-  // Update button appearance
-  const btn = document.getElementById('realisticModeBtn');
-  if (btn) {
-    if (realisticMode) {
-      btn.classList.add('active');
-    } else {
-      btn.classList.remove('active');
-    }
-  }
-  
-  vibrateMedium();
-  console.log('Realistic Mode', realisticMode ? 'enabled' : 'disabled');
-}
 
 function updateMenuItems() {
   // Update Zahlenring menu item
@@ -403,6 +366,12 @@ function updateMenuItems() {
   const showRemainingMenuItem = document.getElementById('showRemainingMenuItem');
   if (showRemainingMenuItem) {
     showRemainingMenuItem.textContent = `Restwert: ${showRemainingScore ? 'AN' : 'AUS'}`;
+  }
+  
+  // Update Freier-Modus menu item
+  const realisticModeMenuItem = document.getElementById('realisticModeMenuItem');
+  if (realisticModeMenuItem) {
+    realisticModeMenuItem.textContent = `Freier-Modus: ${realisticMode ? 'AN' : 'AUS'}`;
   }
 }
 
@@ -711,8 +680,8 @@ if (document.readyState === 'loading') {
       currentSequentialScore = null;
       
       document.querySelectorAll('.mode-btn').forEach(btn => {
-        // Don't remove active from challenge button or realistic mode button
-        if (!btn.classList.contains('mode-btn-challenge') && !btn.classList.contains('mode-btn-realistic')) {
+        // Don't remove active from challenge button
+        if (!btn.classList.contains('mode-btn-challenge')) {
           btn.classList.remove('active');
         }
       });
@@ -1042,7 +1011,7 @@ if (document.readyState === 'loading') {
       {
         element: '.mode-selector',
         title: '🎮 Modus-Tasten',
-        content: 'Mit den Modus-Tasten legst du deine Trainingseinstellungen fest.<br><br><strong>3DF:</strong> Nur 3-Dart-Finishes<br><strong>2DF:</strong> Nur 2-Dart-Finishes<br><strong>Mix:</strong> Zufällige Mischung aus 3DF / 2DF<br><strong>? / ⬆ / ⬇:</strong> Reihenfolge zufällig / auf- / absteigend<br><br><span style="display: inline-block; background: #10b981; color: white; padding: 2px 6px; border-radius: 4px; font-size: 16px;">🕊️</span> <strong>Freier-Modus:</strong> Fehlwürfe möglich<br>🏆 <strong>Herausforderungsmodus:</strong><br>60 Sek. lang zufällige Zahlen von 2-170<br>im Mix-Modus. Wie viele schaffst du?',
+        content: 'Mit den Modus-Tasten legst du deine Trainingseinstellungen fest.<br><br><strong>3DF:</strong> Nur 3-Dart-Finishes<br><strong>2DF:</strong> Nur 2-Dart-Finishes<br><strong>Mix:</strong> Zufällige Mischung aus 3DF / 2DF<br><strong>? / ⬆ / ⬇:</strong> Reihenfolge zufällig / auf- / absteigend<br><br>🏆 <strong>Herausforderungsmodus:</strong><br>60 Sek. lang zufällige Zahlen von 2-170<br>im Mix-Modus. Wie viele schaffst du?',
         position: 'top',
         screen: 'training'
       },
@@ -1056,7 +1025,7 @@ if (document.readyState === 'loading') {
       {
         element: '#menuBtn',
         title: '⚙️ Einstellungen',
-        content: '<strong>Taste antippen:</strong> Menü öffnen<br><strong>Taste gedrückt halten:</strong> Aktiviert / deaktiviert Vollbildmodus<br><br><strong>Restwert:</strong> Anzeigen lassen nach jedem Dart<br><strong>Zahlenring:</strong> Zahlenring ausblenden, zur Erhöhung der Schwierigkeit<br><strong>Vibration:</strong> Haptische Rückmeldung<br><strong>Hintergrund anpassen:</strong> Individuell einstellbar<br><strong>Zurück zum Startbildschirm:</strong> Taste drücken / oder nach rechts wischen.',
+        content: '<strong>Taste antippen:</strong> Menü öffnen<br><strong>Taste gedrückt halten:</strong> Aktiviert / deaktiviert Vollbildmodus<br><br><strong>Restwert:</strong> Anzeigen lassen nach jedem Dart<br><strong>Zahlenring:</strong> Zahlenring ausblenden, zur Erhöhung der Schwierigkeit<br><strong>Vibration:</strong> Haptische Rückmeldung<br><strong>Freier-Modus:</strong> Fehlwürfe möglich<br><strong>Hintergrund anpassen:</strong> Individuell einstellbar<br><strong>Zurück zum Startbildschirm:</strong> Taste drücken / oder nach rechts wischen.',
         position: 'bottom-left',
         screen: 'training'
       },
@@ -3087,10 +3056,6 @@ if (document.readyState === 'loading') {
         
         // FORCE: Deaktiviere Realistisch-Modus im Challenge
         realisticMode = false;
-        const realisticBtn = document.getElementById('realisticModeBtn');
-        if (realisticBtn) {
-          realisticBtn.classList.remove('active');
-        }
         
         // Reset realistic mode state
         isInErrorState = false;
@@ -3252,14 +3217,6 @@ if (document.readyState === 'loading') {
       // Restore realistic mode from localStorage
       const savedRealisticMode = localStorage.getItem('dartTrainerRealisticMode');
       realisticMode = savedRealisticMode === 'true';
-      const realisticBtn = document.getElementById('realisticModeBtn');
-      if (realisticBtn) {
-        if (realisticMode) {
-          realisticBtn.classList.add('active');
-        } else {
-          realisticBtn.classList.remove('active');
-        }
-      }
       
       // Update menu items
       updateMenuItems();
@@ -3361,14 +3318,6 @@ if (document.readyState === 'loading') {
       // Restore realistic mode from localStorage
       const savedRealisticMode = localStorage.getItem('dartTrainerRealisticMode');
       realisticMode = savedRealisticMode === 'true';
-      const realisticBtn = document.getElementById('realisticModeBtn');
-      if (realisticBtn) {
-        if (realisticMode) {
-          realisticBtn.classList.add('active');
-        } else {
-          realisticBtn.classList.remove('active');
-        }
-      }
       
       // Update menu items
       updateMenuItems();
@@ -3770,16 +3719,6 @@ if (document.readyState === 'loading') {
       
       // Generate new score with current range to ensure consistency
       generateScore(currentRangeMin, currentRangeMax);
-      
-      // Update realistic mode button appearance
-      const realisticBtn = document.getElementById('realisticModeBtn');
-      if (realisticBtn) {
-        if (realisticMode) {
-          realisticBtn.classList.add('active');
-        } else {
-          realisticBtn.classList.remove('active');
-        }
-      }
       
       // Automatically enter fullscreen
       enterFullscreen();
