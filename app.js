@@ -1032,7 +1032,7 @@ if (document.readyState === 'loading') {
         element: '#menuBtn',
         title: '⚙️ Einstellungen',
         content: '<strong>Taste antippen:</strong> Menü öffnen<br><strong>Taste gedrückt halten:</strong> Aktiviert / deaktiviert Vollbildmodus<br><br><strong>Freies spielen:</strong> Fehlwürfe möglich<br><strong>Restwert:</strong> Anzeigen lassen nach jedem Dart<br><strong>Zahlenring:</strong> Zahlenring ausblenden, zur Erhöhung der Schwierigkeit<br><strong>Vibration:</strong> Haptische Rückmeldung<br><strong>Hintergrund anpassen:</strong> Individuell einstellbar<br><strong>Zurück zum Startbildschirm:</strong> Taste drücken / oder nach rechts wischen.',
-        position: 'top-left',
+        position: 'top-right',
         screen: 'training'
       },
       {
@@ -3758,15 +3758,15 @@ if (document.readyState === 'loading') {
         overlay.style.display = 'block';
         menu.style.display = 'block';
         
-        // Position menu exactly like tutorial tooltip with 'bottom-left' position
+        // Position menu above the button (top-right position)
         setTimeout(() => {
           if (menuBtn) {
             const btnRect = menuBtn.getBoundingClientRect();
             const menuRect = menu.getBoundingClientRect();
             
-            // Same positioning as tutorial 'bottom-left'
-            const top = btnRect.bottom + 20;
-            const left = btnRect.right - menuRect.width + 30 - (btnRect.width / 2);
+            // Position menu above button, aligned to the right
+            const top = btnRect.top - menuRect.height - 20;
+            const left = btnRect.right - menuRect.width + 30;
             
             console.log('Menu Button Rect:', btnRect);
             console.log('Menu Rect width:', menuRect.width);
