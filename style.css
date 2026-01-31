@@ -108,10 +108,8 @@
     }
     
     #generationModeBtn {
-      height: 38px;
       font-size: 20px;
       font-weight: 900;
-      padding: 0;
       transform: scaleX(1.3);
     }
     

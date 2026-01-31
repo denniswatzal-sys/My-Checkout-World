@@ -368,10 +368,10 @@ function updateMenuItems() {
     showRemainingMenuItem.textContent = `Restwert: ${showRemainingScore ? 'AN' : 'AUS'}`;
   }
   
-  // Update Freier-Modus menu item
+  // Update Freies spielen menu item
   const realisticModeMenuItem = document.getElementById('realisticModeMenuItem');
   if (realisticModeMenuItem) {
-    realisticModeMenuItem.textContent = `Freier-Modus: ${realisticMode ? 'AN' : 'AUS'}`;
+    realisticModeMenuItem.textContent = `Freies spielen: ${realisticMode ? 'AN' : 'AUS'}`;
   }
 }
 
@@ -907,7 +907,7 @@ if (document.readyState === 'loading') {
       {
         element: '#scoreValue',
         title: '🔓 Checkout-Zahl',
-        content: 'Hier wird dir die zu checkende Zahl vorgegeben. Durch Antippen kannst du sie auch manuell ändern.<br><br><strong style="color: #16a34a;">Grün:</strong> 3-Dart-Finish (3DF)<br><strong style="color: #3b82f6;">Blau:</strong> 2-Dart-Finish (2DF)<br><strong style="color: #eab308;">Gelb:</strong> Bogey-Zahl<br><br><strong>Nur im Freien-Modus:</strong><br><strong style="color: #f97316;">Orange:</strong> Fehlwurf / checken möglich<br><strong style="color: #dc2626;">Rot:</strong> Fehlwurf / checken nicht möglich',
+        content: 'Hier wird dir die zu checkende Zahl vorgegeben. Durch Antippen kannst du sie auch manuell ändern.<br><br><strong style="color: #16a34a;">Grün:</strong> 3-Dart-Finish (3DF)<br><strong style="color: #3b82f6;">Blau:</strong> 2-Dart-Finish (2DF)<br><strong style="color: #eab308;">Gelb:</strong> Bogey-Zahl<br><br><strong>Nur beim freien Spielen:</strong><br><strong style="color: #f97316;">Orange:</strong> Fehlwurf / checken möglich<br><strong style="color: #dc2626;">Rot:</strong> Fehlwurf / checken nicht möglich',
         position: 'bottom',
         screen: 'training'
       },
@@ -1025,7 +1025,7 @@ if (document.readyState === 'loading') {
       {
         element: '#menuBtn',
         title: '⚙️ Einstellungen',
-        content: '<strong>Taste antippen:</strong> Menü öffnen<br><strong>Taste gedrückt halten:</strong> Aktiviert / deaktiviert Vollbildmodus<br><br><strong>Freier-Modus:</strong> Fehlwürfe möglich<br><strong>Restwert:</strong> Anzeigen lassen nach jedem Dart<br><strong>Zahlenring:</strong> Zahlenring ausblenden, zur Erhöhung der Schwierigkeit<br><strong>Vibration:</strong> Haptische Rückmeldung<br><strong>Hintergrund anpassen:</strong> Individuell einstellbar<br><strong>Zurück zum Startbildschirm:</strong> Taste drücken / oder nach rechts wischen.',
+        content: '<strong>Taste antippen:</strong> Menü öffnen<br><strong>Taste gedrückt halten:</strong> Aktiviert / deaktiviert Vollbildmodus<br><br><strong>Freies spielen:</strong> Fehlwürfe möglich<br><strong>Restwert:</strong> Anzeigen lassen nach jedem Dart<br><strong>Zahlenring:</strong> Zahlenring ausblenden, zur Erhöhung der Schwierigkeit<br><strong>Vibration:</strong> Haptische Rückmeldung<br><strong>Hintergrund anpassen:</strong> Individuell einstellbar<br><strong>Zurück zum Startbildschirm:</strong> Taste drücken / oder nach rechts wischen.',
         position: 'bottom-left',
         screen: 'training'
       },
