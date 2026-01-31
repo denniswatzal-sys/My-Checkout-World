@@ -1008,14 +1008,14 @@ if (document.readyState === 'loading') {
       {
         element: '#btn-training',
         title: '🎯 Willkommen in deiner Trainingsarena',
-        content: 'Dart ist mehr als werfen – es ist Kopfsache. Wer sicher rechnet, verschafft sich einen klaren Vorteil. Denn je weniger du am Board überlegen musst, desto klarer bleibt dein Fokus – und desto einfacher wird das Spiel.<br><br>Ob du zwei oder drei Darts zum Checken hast, macht einen entscheidenden Unterschied. Gute Spieler wissen: Nicht jeder Checkout-Weg ist gleich sinnvoll. In dieser App lernst du, warum – und wie du dein Spiel mit der richtigen Strategie auf das nächste Level bringst.<br><br>Starte hier deinen Weg zum<br><strong>Checkout-Champion</strong>.',
+        content: 'Dart ist mehr als nur werfen – es ist Kopfsache. Wer sicher rechnet, verschafft sich einen klaren Vorteil. Denn je weniger du am Board überlegen musst, desto klarer bleibt dein Fokus – und desto einfacher wird das Spiel.<br><br>Ob du zwei oder drei Darts zum Checken hast, macht einen entscheidenden Unterschied. Gute Spieler wissen: Nicht jeder Checkout-Weg ist gleich sinnvoll. In dieser App lernst du, warum – und wie du dein Spiel mit der richtigen Strategie auf das nächste Level bringst.<br><br>Starte hier deinen Weg zum<br><strong>Checkout-Champion</strong>.',
         position: 'center',
         screen: 'start'
       },
       {
         element: '#btn-checkouts',
         title: '📊 Checkouts',
-        content: 'Hier findest du deine Checkout-Datenbank – unterteilt in 3-Dart- und 2-Dart-Finishes.<br><br>Du bevorzugst andere Wege? Kein Problem - Lege hier einfach deine eigenen Checkouts fest.',
+        content: 'Hier findest du deine Checkout-Datenbank – unterteilt in 3-Dart- und<br>2-Dart-Finishes.<br><br>Du bevorzugst andere Wege? Kein Problem - Lege hier einfach deine eigenen Checkouts fest.',
         position: 'top',
         screen: 'start'
       },
@@ -1126,7 +1126,7 @@ if (document.readyState === 'loading') {
       {
         element: '#learnBtn',
         title: '📖 Lernbereich',
-        content: 'Beantwortest du eine Zahl dann dreimal hintereinander richtig, wird sie aus dem Lernbereich wieder entfernt.<br><br><strong>Taste gedrückt halten</strong> – Zahlen manuell löschen<br><strong>Taste antippen</strong> – Lernbereich betreten',
+        content: 'Beantwortest du eine Zahl dann dreimal hintereinander richtig, wird sie aus dem Lernbereich wieder entfernt.<br><br><strong>Taste gedrückt halten</strong> – Zahlen löschen<br><strong>Taste antippen</strong> – Lernbereich betreten',
         position: 'top-right',
         screen: 'training'
       },
@@ -1140,14 +1140,14 @@ if (document.readyState === 'loading') {
       {
         element: '.range-grid',
         title: '📊 Schnellauswahl-Tasten',
-        content: 'Mit den Schnellauswahl-Tasten wechselst du schnell zwischen den Zahlengruppen. Neugierig, was diese Gruppen besonders macht?<br><br><strong>Taste gedrückt halten</strong> – Informationen anzeigen<br><strong>Taste antippen</strong> – Bereich auswählen<br><strong>Taste grau</strong> – Keine Einträge in der Checkout-Datenbank hinterlegt',
+        content: 'Mit den Schnellauswahl-Tasten wechselst du schnell zwischen den Zahlengruppen. Neugierig, was diese Gruppen besonders macht?<br><br><strong>Taste gedrückt halten</strong> – Infos zeigen<br><strong>Taste antippen</strong> – Bereich auswählen<br><strong>Taste grau</strong> – Keine Einträge in der Checkout-Datenbank hinterlegt',
         position: 'top',
         screen: 'training'
       },
       {
         element: '#menuBtn',
         title: '⚙️ Einstellungen',
-        content: 'Im Menü kannst du weitere Optionen einstellen, wie <em>Freies Spiel (Fehlwürfe erlaubt), Restwert anzeigen, Zahlenring ausblenden, Vibration ausschalten</em> und <em>Hintergrund anpassen</em>.<br><br><strong>Taste gedrückt halten</strong> – Vollbildmodus<br><strong>Taste antippen</strong> – Menü öffnen',
+        content: 'Im Einstellungsmenü findest du zusätzliche Optionen wie <em>Freies Spiel (Fehlwürfe erlaubt), Restwert anzeigen, Zahlenring ausblenden, Vibration ausschalten</em> und <em>Hintergrund anpassen</em>.<br><br><strong>Taste gedrückt halten</strong> – Vollbildmodus<br><strong>Taste antippen</strong> – Menü öffnen',
         position: 'top-right',
         screen: 'training'
       },
