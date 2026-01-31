@@ -326,6 +326,11 @@ function toggleRealisticMode() {
     return;
   }
   
+  // Im Lernmodus ist Realistisch-Modus nicht erlaubt
+  if (window.learnModeActive) {
+    return;
+  }
+  
   realisticMode = !realisticMode;
   localStorage.setItem('dartTrainerRealisticMode', realisticMode.toString());
   
@@ -394,6 +399,17 @@ function updateMenuItems() {
   const realisticModeMenuItem = document.getElementById('realisticModeMenuItem');
   if (realisticModeMenuItem) {
     realisticModeMenuItem.textContent = `Freies spielen: ${realisticMode ? 'AN' : 'AUS'}`;
+    
+    // Deaktiviere im Lernmodus
+    if (window.learnModeActive) {
+      realisticModeMenuItem.style.opacity = '0.5';
+      realisticModeMenuItem.style.cursor = 'not-allowed';
+      realisticModeMenuItem.disabled = true;
+    } else {
+      realisticModeMenuItem.style.opacity = '1';
+      realisticModeMenuItem.style.cursor = 'pointer';
+      realisticModeMenuItem.disabled = false;
+    }
   }
 }
 
@@ -691,6 +707,16 @@ if (document.readyState === 'loading') {
       feedback = null;
       highlightedFields = [];
       
+      // Deaktiviere Lernmodus wenn Modus gewechselt wird
+      if (window.learnModeActive) {
+        window.learnModeActive = false;
+        const learnBtn = document.getElementById('learnBtn');
+        if (learnBtn) {
+          learnBtn.classList.remove('active-range');
+          learnBtn.style.borderColor = '#b91c1c';
+        }
+      }
+      
       // Reset score card colors
       const scoreCard = document.getElementById('scoreCard');
       if (scoreCard) {
@@ -741,6 +767,7 @@ if (document.readyState === 'loading') {
           document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active-range'));
           btn2_170.classList.add('active-range');
         }
+        updateMenuItems();
         generateScore(2, 170);
         return;
       } else if (mode === '3darts') {
@@ -754,6 +781,7 @@ if (document.readyState === 'loading') {
           document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active-range'));
           btn2_170.classList.add('active-range');
         }
+        updateMenuItems();
         generateScore(2, 170);
         return;
       } else if (mode === 'mixed') {
@@ -770,10 +798,12 @@ if (document.readyState === 'loading') {
           document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active-range'));
           btn2_170.classList.add('active-range');
         }
+        updateMenuItems();
         generateScore(2, 170);
         return;
       }
       
+      updateMenuItems();
       updateScoreTitle();
     }
     
@@ -786,7 +816,7 @@ if (document.readyState === 'loading') {
         outerRing.classList.remove('flash-correct', 'flash-wrong');
       }
       
-      // Cycle through modes: random -> ascending -> descending -> random
+      // Cycle through modes: random -> ascending -> descending -> repeat -> random
       if (generationMode === 'random') {
         generationMode = 'ascending';
         const btn = document.getElementById('generationModeBtn');
@@ -799,6 +829,11 @@ if (document.readyState === 'loading') {
         btn.textContent = '⬇️';
         // Set to null to trigger starting at last score in generateScore
         currentSequentialScore = null;
+      } else if (generationMode === 'descending') {
+        generationMode = 'repeat';
+        const btn = document.getElementById('generationModeBtn');
+        btn.textContent = '🔁';
+        // Keep current score for repeat mode
       } else {
         generationMode = 'random';
         const btn = document.getElementById('generationModeBtn');
@@ -1726,6 +1761,9 @@ if (document.readyState === 'loading') {
       currentRangeMin = min;
       currentRangeMax = max;
       
+      // Update menu items (re-enable Freies spielen)
+      updateMenuItems();
+      
       // Update hint range
       currentHintRange = `${min}-${max}`;
       if (hintVisible) {
@@ -1998,8 +2036,23 @@ if (document.readyState === 'loading') {
         return;
       }
       
+      // REPEAT MODE LOGIC - keep the same score
+      if (generationMode === 'repeat') {
+        // If currentScore is already set and valid in range, keep it
+        if (currentScore && availableScores.includes(currentScore)) {
+          // Keep the same score - skip to UI update at the end
+          console.log('[Repeat Mode] Keeping score:', currentScore);
+        } else {
+          // No valid score yet - pick the first available one
+          currentScore = availableScores[0];
+          console.log('[Repeat Mode] Initialized with score:', currentScore);
+        }
+        // Jump to UI update (skip random/sequential logic)
+        // We'll handle this by not setting currentScore in the logic below
+      }
+      
       // SEQUENTIAL MODE LOGIC (ascending or descending)
-      if (generationMode === 'ascending' || generationMode === 'descending') {
+      else if (generationMode === 'ascending' || generationMode === 'descending') {
         availableScores.sort((a, b) => generationMode === 'ascending' ? a - b : b - a);
         
         // If no current sequential score, set a dummy value to trigger proper start
@@ -3300,9 +3353,10 @@ if (document.readyState === 'loading') {
         mode3DartsBtn.classList.add('active');
       }
       
-      // Reset generation mode button to random symbol
+      // Reset generation mode to random after challenge
+      generationMode = 'random';
       const genModeBtn = document.getElementById('generationModeBtn');
-      if (genModeBtn && generationMode === 'random') {
+      if (genModeBtn) {
         genModeBtn.textContent = '🔀';
       }
       
@@ -3374,9 +3428,10 @@ if (document.readyState === 'loading') {
         mode3DartsBtn.classList.add('active');
       }
       
-      // Reset generation mode button to random symbol
+      // Reset generation mode to random after challenge
+      generationMode = 'random';
       const genModeBtn = document.getElementById('generationModeBtn');
-      if (genModeBtn && generationMode === 'random') {
+      if (genModeBtn) {
         genModeBtn.textContent = '🔀';
       }
       
@@ -3392,6 +3447,28 @@ if (document.readyState === 'loading') {
       const count = Object.keys(problemScores).length;
       if (count === 0) {
         return;
+      }
+      
+      // CRITICAL: Deaktiviere Realistisch-Modus im Lernbereich
+      if (realisticMode) {
+        realisticMode = false;
+        localStorage.setItem('dartTrainerRealisticMode', 'false');
+        
+        // Reset error-state variables
+        isInErrorState = false;
+        currentRemainingScore = null;
+        dartsUsedInRound = 0;
+        errorStateCheckout = [];
+        dartsInErrorState = 0;
+        
+        // Remove error classes from score card
+        const scoreCard = document.getElementById('scoreCard');
+        if (scoreCard) {
+          scoreCard.classList.remove('error', 'warning');
+        }
+        
+        // Update menu items to reflect change
+        updateMenuItems();
       }
       
       // Switch to Mix mode for learn mode
@@ -3426,6 +3503,9 @@ if (document.readyState === 'loading') {
       
       // Enable learn mode
       window.learnModeActive = true;
+      
+      // Update menu to disable Freies spielen
+      updateMenuItems();
       
       // Generate a score from problem list
       generateLearnScore();
