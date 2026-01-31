@@ -1029,7 +1029,7 @@ if (document.readyState === 'loading') {
       {
         element: '#scoreValue',
         title: '🔓 Checkout-Zahl',
-        content: 'Hier wird dir die zu checkende Zahl angezeigt. Durch Antippen kannst du sie manuell ändern.<br><br><strong style="color: #16a34a;">Grün</strong> – 3-Dart-Finish (3DF)<br><strong style="color: #3b82f6;">Blau</strong> – 2-Dart-Finish (2DF)<br><strong style="color: #eab308;">Gelb</strong> – Bogey-Zahl<br><br><strong>Nur im freien Spiel:</strong><br><strong style="color: #f97316;">Orange</strong> – Checken noch möglich<br><strong style="color: #dc2626;">Rot</strong> – Checken nicht mehr möglich',
+        content: 'Hier wird dir die zu checkende Zahl angezeigt. Durch Antippen kannst du sie auch manuell ändern.<br><br><strong style="color: #16a34a;">Grün</strong> – 3-Dart-Finish (3DF)<br><strong style="color: #3b82f6;">Blau</strong> – 2-Dart-Finish (2DF)<br><strong style="color: #eab308;">Gelb</strong> – Bogey-Zahl<br><br><strong>Nur im freien Spiel:</strong><br><strong style="color: #f97316;">Orange</strong> – Checken noch möglich<br><strong style="color: #dc2626;">Rot</strong> – Checken nicht mehr möglich',
         position: 'bottom',
         screen: 'training'
       },
@@ -1140,7 +1140,7 @@ if (document.readyState === 'loading') {
       {
         element: '.range-grid',
         title: '📊 Schnellauswahl-Tasten',
-        content: 'Mit den Schnellauswahl-Tasten wechselst du schnell zwischen den Zahlengruppen. Neugierig, was diese Gruppen besonders macht?<br><br><strong>Taste gedrückt halten</strong> – Infos zeigen<br><strong>Taste antippen</strong> – Bereich auswählen<br><strong>Taste grau</strong> – Keine Einträge in der Checkout-Datenbank hinterlegt',
+        content: 'Mit den Schnellauswahl-Tasten wechselst du schnell zwischen den Zahlengruppen. Neugierig, was diese Gruppen besonders macht?<br><br><strong>Taste gedrückt halten</strong> – Infos anzeigen<br><strong>Taste antippen</strong> – Bereich auswählen<br><strong>Taste grau</strong> – Keine Einträge in der Checkout-Datenbank hinterlegt',
         position: 'top',
         screen: 'training'
       },
@@ -2768,6 +2768,53 @@ if (document.readyState === 'loading') {
           // Hole neues Checkout für den neuen Restwert
           // WICHTIG: Wähle die richtige Datenbank basierend auf verbleibenden Darts!
           const dartsLeftAfterThis = maxDartsForRound - dartsUsedInRound;
+          
+          // WICHTIG: Wenn alle Darts aufgebraucht sind, Runde beenden
+          if (dartsLeftAfterThis === 0) {
+            console.log('[DEBUG] Alle Darts aufgebraucht! Checkout nicht geschafft → Runde beendet');
+            
+            // Score-Card rot färben (Checkout nicht geschafft)
+            const scoreCard = document.getElementById('scoreCard');
+            scoreCard.classList.remove('warning');
+            scoreCard.classList.add('error');
+            
+            // Vibration und Dartboard-Flash
+            vibrateHeavy();
+            
+            const outerRing = document.getElementById('dartboard-outer-ring');
+            if (outerRing) {
+              outerRing.classList.remove('flash-correct', 'flash-wrong', 'challenge-mode');
+              void outerRing.offsetWidth;
+              if (window.challengeMode) {
+                outerRing.classList.add('challenge-mode');
+              }
+              outerRing.classList.add('flash-wrong');
+            }
+            
+            // Dartboard neu zeichnen mit Highlight
+            createDartboard();
+            
+            // Zeige Feedback
+            showFeedback(false);
+            
+            if (window.challengeMode) {
+              challengeStats.wrong++;
+              updateChallengeStats();
+            } else {
+              // Add to problem scores
+              const actualMode = currentCheckouts === twoDartCheckouts ? '2darts' : '3darts';
+              problemScores[currentScore] = { count: 0, mode: actualMode };
+              localStorage.setItem('problemScores', JSON.stringify(problemScores));
+              updateProblemBadge();
+            }
+            
+            // Beende Error-State
+            isInErrorState = false;
+            feedback = 'wrong';
+            
+            return;
+          }
+          
           if (dartsLeftAfterThis === 1) {
             // Nur 1 Dart übrig
             // SONDERFALL: Bei Restwert 50 ist Bull immer erlaubt
@@ -2930,6 +2977,40 @@ if (document.readyState === 'loading') {
           // Hole Checkout für den Restwert aus Datenbank
           // WICHTIG: Wähle die richtige Datenbank basierend auf verbleibenden Darts!
           const dartsLeftAfterError = maxDartsForRound - dartsUsedInRound;
+          
+          // WICHTIG: Wenn alle Darts aufgebraucht sind, Runde beenden
+          if (dartsLeftAfterError === 0) {
+            console.log('[DEBUG] Alle Darts aufgebraucht nach erstem Fehlwurf! Checkout nicht geschafft → Runde beendet');
+            
+            // Score-Card rot färben (Checkout nicht geschafft)
+            const scoreCard = document.getElementById('scoreCard');
+            scoreCard.classList.remove('warning');
+            scoreCard.classList.add('error');
+            
+            // Zeige Feedback
+            showFeedback(false);
+            
+            // Dartboard neu zeichnen mit Highlight
+            createDartboard();
+            
+            if (window.challengeMode) {
+              challengeStats.wrong++;
+              updateChallengeStats();
+            } else {
+              // Add to problem scores
+              const actualMode = currentCheckouts === twoDartCheckouts ? '2darts' : '3darts';
+              problemScores[currentScore] = { count: 0, mode: actualMode };
+              localStorage.setItem('problemScores', JSON.stringify(problemScores));
+              updateProblemBadge();
+            }
+            
+            // Beende Error-State
+            isInErrorState = false;
+            feedback = 'wrong';
+            
+            return;
+          }
+          
           if (dartsLeftAfterError === 1) {
             // Nur 1 Dart übrig
             // SONDERFALL: Bei Restwert 50 ist Bull immer erlaubt
@@ -3170,13 +3251,17 @@ if (document.readyState === 'loading') {
           return false;
         }
         
-        // Prüfe 2-Dart-Datenbank, sonst Fallback auf 3-Dart-DB (erste 2 Darts)
+        // Prüfe 2-Dart-Datenbank
         if (twoDartCheckouts[score] !== undefined) {
           return true;
-        } else if (defaultCheckouts[score] !== undefined) {
-          // Wenn es in 3-Dart-DB ist, ist es auch mit 2 Darts checkbar
+        }
+        
+        // Prüfe 3-Dart-Datenbank - ABER nur wenn das Checkout auch wirklich mit 2 Darts machbar ist
+        // (d.h. das Array hat maximal 2 Einträge)
+        if (defaultCheckouts[score] !== undefined && defaultCheckouts[score].length <= 2) {
           return true;
         }
+        
         return false;
       } else if (dartsLeft >= 3) {
         // 3+ Darts - checke 3-Dart-Datenbank
