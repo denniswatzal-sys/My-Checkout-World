@@ -2847,9 +2847,14 @@ if (document.readyState === 'loading') {
       const container = document.getElementById('userInputs');
       
       // WICHTIG: Alte Restwert-Anzeige IMMER zuerst entfernen (auch wenn showRemainingScore=false)
+      // Entferne alte Restwerte sowohl im Container (alte Version) als auch außerhalb (neue Version)
       const oldRemaining = container.querySelector('.remaining-score');
       if (oldRemaining) {
         oldRemaining.remove();
+      }
+      const oldRemainingOuter = container.parentElement.querySelector('.remaining-score-outer');
+      if (oldRemainingOuter) {
+        oldRemainingOuter.remove();
       }
       
       // Behalte Lösung
@@ -2897,11 +2902,11 @@ if (document.readyState === 'loading') {
           // Zeige Restwert wenn sinnvoll (nicht überkauft, nicht auf 1)
           if (remainingScore >= 2) {
             const remainingDiv = document.createElement('div');
-            remainingDiv.className = 'remaining-score';
+            remainingDiv.className = 'remaining-score-outer';
             remainingDiv.textContent = `Restwert: ${remainingScore}`;
             
-            // Füge immer am Ende ein (NACH der Lösung, falls vorhanden)
-            container.appendChild(remainingDiv);
+            // Füge NACH dem userInputs Container ein (als Sibling, nicht Child)
+            container.parentElement.insertBefore(remainingDiv, container.nextSibling);
           }
         }
       }
