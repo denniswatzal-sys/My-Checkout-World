@@ -1007,43 +1007,43 @@ if (document.readyState === 'loading') {
       },
       {
         element: '#btn-training',
-        title: '🎯 Training starten',
-        content: 'Mit dieser App lernst du, alle Checkout-wege im schlaf zu beherrschen.<br><br>Mach dich zum <strong>Checkout-Champion</strong>.',
+        title: '🎯 Willkommen in deiner Trainingsarena',
+        content: 'Dart ist mehr als werfen – es ist Kopfsache. Wer sicher rechnet, verschafft sich einen klaren Vorteil. Denn je weniger du am Board überlegen musst, desto klarer bleibt dein Fokus – und desto einfacher wird das Spiel.<br><br>Ob du 2 oder 3 Darts zum Checken hast, macht einen entscheidenden Unterschied. Gute Spieler wissen: Nicht jeder Checkout-Weg ist gleich sinnvoll. In dieser App lernst du, warum – und wie du dein Spiel mit der richtigen Strategie auf das nächste Level bringst.<br><br>Starte hier deinen Weg zum <strong>Checkout-Champion</strong>.',
         position: 'top',
         screen: 'start'
       },
       {
         element: '#btn-checkouts',
         title: '📊 Checkouts',
-        content: 'Hier findest du die Checkout-Datenbank, aufgeteilt in 3-Dart und 2-Dart-Finishes.<br><br>Du bevorzugst andere Wege? Kein Problem - Lege hier einfach deine eigenen Checkouts fest.',
+        content: 'Hier findest du die Checkout-Datenbank – unterteilt in 3-Dart- und 2-Dart-Finishes.<br><br>Du bevorzugst andere Wege? Kein Problem - Lege hier einfach deine eigenen Checkouts fest.',
         position: 'top',
         screen: 'start'
       },
       {
         element: '#btn-leaderboard',
         title: '🏆 Bestenliste',
-        content: 'Hier siehst du deine Rekorde aus dem Herausforderungsmodus. Wie gut bist du wirklich unter Druck? Finde es heraus!',
+        content: 'Hier siehst du deine Rekorde aus dem Herausforderungsmodus. Wie gut bist du wirklich unter Druck? Finde es heraus! 🔥',
         position: 'top',
         screen: 'start'
       },
       {
         element: '#scoreValue',
         title: '🔓 Checkout-Zahl',
-        content: 'Hier wird dir die zu checkende Zahl vorgegeben. Durch Antippen kannst du sie auch manuell ändern.<br><br><strong style="color: #16a34a;">Grün:</strong> 3-Dart-Finish (3DF)<br><strong style="color: #3b82f6;">Blau:</strong> 2-Dart-Finish (2DF)<br><strong style="color: #eab308;">Gelb:</strong> Bogey-Zahl<br><br><strong>Nur beim freien Spielen:</strong><br><strong style="color: #f97316;">Orange:</strong> Fehlwurf / checken möglich<br><strong style="color: #dc2626;">Rot:</strong> Fehlwurf / checken nicht möglich',
+        content: 'Hier wird dir die zu checkende Zahl angezeigt.<br>Durch Antippen kannst du sie manuell ändern.<br><br><strong style="color: #16a34a;">Grün</strong> – 3-Dart-Finish (3DF)<br><strong style="color: #3b82f6;">Blau</strong> – 2-Dart-Finish (2DF)<br><strong style="color: #eab308;">Gelb</strong> – Bogey-Zahl<br><br><strong>Nur im freien Spiel:</strong><br><strong style="color: #f97316;">Orange</strong> – Fehlwurf / Checken noch möglich<br><strong style="color: #dc2626;">Rot</strong> – Fehlwurf / Checken nicht mehr möglich',
         position: 'bottom',
         screen: 'training'
       },
       {
         element: '#dartboard',
         title: '🎯 Dartboard',
-        content: 'Du sollst 170 Punkte checken?! Kein Problem – hier ist es genauso leicht wie am echten Board! Triff (klick) <strong>T20 · T20 · BULL</strong> und angel dir den <strong>BIG FISH</strong> 🎣',
+        content: 'Du musst 170 Punkte checken?! Kein Problem – hier ist es genauso leicht wie am echten Board! Triff (klick) <strong>T20 · T20 · BULL</strong> und schnapp dir den <strong>BIG FISH</strong> 🎣',
         position: 'bottom',
         screen: 'training'
       },
       {
         element: '#userInputs',
         title: '📝 Eingaben-Box',
-        content: 'Hier siehst du deine <em>getroffenen</em> Felder.',
+        content: 'Hier siehst du, welche Felder du <em>getroffen</em> hast.',
         position: 'top',
         screen: 'training',
         setup: () => {
@@ -1069,7 +1069,7 @@ if (document.readyState === 'loading') {
       {
         element: '#userInputs',
         title: '✅ Richtige Lösung',
-        content: 'Wenn deine Eingabe <strong>korrekt</strong> ist, färbt sich die Box <strong style="color: #059669;">grün</strong> und es wird automatisch die nächste Zahl generiert.',
+        content: 'Bei <strong>korrekter</strong> Eingabe wird die Box <strong style="color: #059669;">grün</strong> – und die nächste Zahl wird automatisch generiert.',
         position: 'top',
         screen: 'training',
         setup: () => {
@@ -1094,7 +1094,7 @@ if (document.readyState === 'loading') {
       {
         element: '#userInputs',
         title: '❌ Falsche Lösung',
-        content: 'Wenn deine Eingabe <strong>falsch</strong> ist, färbt sich die Box <strong style="color: #dc2626;">rot</strong> und die richtige Lösung wird darunter angezeigt.<br><br>Die falsche Zahl wird automatisch in deinen <strong>Lernbereich</strong> aufgenommen, damit du sie später gezielt üben kannst.',
+        content: 'Ist deine Eingabe <strong>falsch</strong>, färbt sich die Box <strong style="color: #dc2626;">rot</strong> und die richtige Lösung wird angezeigt.<br><br>Die falsche Zahl wird automatisch in deinen <strong>Lernbereich</strong> aufgenommen, damit du sie später gezielt üben kannst.',
         position: 'top',
         screen: 'training',
         setup: () => {
@@ -1126,35 +1126,35 @@ if (document.readyState === 'loading') {
       {
         element: '#learnBtn',
         title: '📖 Lernbereich',
-        content: 'Beantwortest du eine Zahl dann dreimal hintereinander richtig, wird sie aus dem Lernbereich wieder entfernt.<br><br><strong>Taste antippen:</strong> Lernbereich betreten<br><strong>Taste gedrückt halten:</strong> Zahlen löschen',
+        content: 'Beantwortest du eine Zahl dann dreimal hintereinander richtig, wird sie aus dem Lernbereich wieder entfernt.<br><br><strong>Taste gedrückt halten</strong> – Zahlen manuell löschen<br><strong>Taste antippen</strong> – Lernbereich betreten',
         position: 'top-right',
         screen: 'training'
       },
       {
         element: '.mode-selector',
         title: '🎮 Modus-Tasten',
-        content: 'Mit den Modus-Tasten legst du deine Trainingseinstellungen fest.<br><br><strong>3DF:</strong> Nur 3-Dart-Finishes<br><strong>2DF:</strong> Nur 2-Dart-Finishes<br><strong>Mix:</strong> Zufällige Mischung aus 3DF / 2DF<br><strong>🔀 / ⬆️ / ⬇️:</strong> Reihenfolge zufällig / auf- / absteigend<br><br>🏆 <strong>Herausforderungsmodus:</strong><br>60 Sek. lang zufällige Zahlen von 2-170<br>im Mix-Modus. Wie viele schaffst du?',
+        content: 'Mit den Modus-Tasten legst du deine Trainingseinstellungen fest.<br><br><strong>3DF</strong> – Nur 3-Dart-Finishes<br><strong>2DF</strong> – Nur 2-Dart-Finishes<br><strong>Mix</strong> – Mischung aus 3DF / 2DF<br><br><strong>Reihenfolge</strong><br>🔀 zufällig<br>⬆️ aufsteigend<br>⬇️ absteigend<br>🔁 gleichbleibend<br><br>🏆 <strong>Herausforderungsmodus</strong><br>60 Sekunden. Zufällige Zahlen von 2-170.<br>Wie viele Checkouts schaffst du? 🔥',
         position: 'top',
         screen: 'training'
       },
       {
         element: '.range-grid',
         title: '📊 Schnellauswahl-Tasten',
-        content: 'Mit den Schnellauswahl-Tasten wechselst du einfach zwischen den Zahlengruppen. Neugierig, was diese Gruppen so besonders macht?<br><br><strong>Taste gedrückt halten:</strong> Informationen anzeigen lassen<br><strong>Taste antippen:</strong> Bereich auswählen<br><strong>Taste grau:</strong> Keine Einträge in Checkout-Datenbank hinterlegt',
+        content: 'Mit den Schnellauswahl-Tasten wechselst du schnell zwischen den Zahlengruppen. Neugierig, was diese Gruppen besonders macht?<br><br><strong>Taste gedrückt halten</strong> – Informationen anzeigen<br><strong>Taste antippen</strong> – Bereich auswählen<br><strong>Taste grau</strong> – Keine Einträge in der Checkout-Datenbank hinterlegt',
         position: 'top',
         screen: 'training'
       },
       {
         element: '#menuBtn',
         title: '⚙️ Einstellungen',
-        content: '<strong>Antippen:</strong> Menü öffnen<br><strong>Gedrückt halten:</strong> Vollbild<br><br>Im Menü findest du weitere Optionen wie Freies spielen, Restwert, Zahlenring, Vibration und Hintergrund.',
+        content: '<strong>Taste gedrückt halten</strong> – Vollbildmodus aktivieren<br><strong>Taste antippen</strong> – Menü öffnen<br><br>Im Menü kannst du weitere Optionen einstellen, wie <strong>Freies Spiel (Fehlwürfe erlaubt), Restwert anzeigen, Zahlenring ausblenden, Vibration ausschalten und Hintergrund anpassen</strong>.',
         position: 'top-right',
         screen: 'training'
       },
       {
         element: '#dartboard',
         title: '🏁 Das Ende der Fahnenstange',
-        content: 'Du hast alle wichtigen Funktionen kennengelernt. Jetzt bist du bereit! Viel Erfolg und vor allem: Viel Spaß beim Trainieren! 🎯',
+        content: 'Du hast alle wichtigen Funktionen kennengelernt.<br>Jetzt bist du bereit!<br><br>Viel Erfolg – und vor allem: Viel Spaß beim Training! 🎯',
         position: 'center',
         screen: 'training'
       }
