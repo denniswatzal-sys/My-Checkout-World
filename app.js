@@ -329,19 +329,35 @@ function toggleRealisticMode() {
   realisticMode = !realisticMode;
   localStorage.setItem('dartTrainerRealisticMode', realisticMode.toString());
   
-  // Reset error state when toggling
-  if (typeof isInErrorState !== 'undefined') {
-    isInErrorState = false;
-    currentRemainingScore = null;
-    dartsUsedInRound = 0;
-    errorStateCheckout = [];
-    dartsInErrorState = 0;
-  }
+  // CRITICAL: Reset ALL error-state variables
+  isInErrorState = false;
+  currentRemainingScore = null;
+  dartsUsedInRound = 0;
+  errorStateCheckout = [];
+  dartsInErrorState = 0;
+  feedback = null;
+  highlightedFields = [];
   
   // Remove error and warning class from score card
   const scoreCard = document.getElementById('scoreCard');
   if (scoreCard) {
     scoreCard.classList.remove('error', 'warning');
+  }
+  
+  // Reset userInputs display
+  const userInputsContainer = document.getElementById('userInputs');
+  if (userInputsContainer) {
+    userInputsContainer.classList.remove('correct', 'wrong');
+    const existingSolution = userInputsContainer.querySelector('.solution-text');
+    if (existingSolution) {
+      existingSolution.remove();
+    }
+  }
+  
+  // Reset dartboard flash
+  const outerRing = document.getElementById('dartboard-outer-ring');
+  if (outerRing) {
+    outerRing.classList.remove('flash-correct', 'flash-wrong');
   }
   
   // Update display immediately
@@ -666,17 +682,35 @@ if (document.readyState === 'loading') {
         maxDartsForRound = 3; // Will be updated dynamically in generateScore
       }
       
-      // Reset realistic mode state when changing modes
-      if (realisticMode) {
-        isInErrorState = false;
-        currentRemainingScore = null;
-        dartsUsedInRound = 0;
-        errorStateCheckout = [];
-        dartsInErrorState = 0;
-        const scoreCard = document.getElementById('scoreCard');
-        if (scoreCard) {
-          scoreCard.classList.remove('error', 'warning');
+      // CRITICAL: Reset ALL state variables when changing modes
+      isInErrorState = false;
+      currentRemainingScore = null;
+      dartsUsedInRound = 0;
+      errorStateCheckout = [];
+      dartsInErrorState = 0;
+      feedback = null;
+      highlightedFields = [];
+      
+      // Reset score card colors
+      const scoreCard = document.getElementById('scoreCard');
+      if (scoreCard) {
+        scoreCard.classList.remove('error', 'warning');
+      }
+      
+      // Reset userInputs display
+      const userInputsContainer = document.getElementById('userInputs');
+      if (userInputsContainer) {
+        userInputsContainer.classList.remove('correct', 'wrong');
+        const existingSolution = userInputsContainer.querySelector('.solution-text');
+        if (existingSolution) {
+          existingSolution.remove();
         }
+      }
+      
+      // Reset dartboard flash
+      const outerRing = document.getElementById('dartboard-outer-ring');
+      if (outerRing) {
+        outerRing.classList.remove('flash-correct', 'flash-wrong');
       }
       
       // Clear anti-repetition history when switching modes
@@ -744,6 +778,14 @@ if (document.readyState === 'loading') {
     }
     
     function cycleGenerationMode() {
+      // Reset state when changing generation mode
+      feedback = null;
+      highlightedFields = [];
+      const outerRing = document.getElementById('dartboard-outer-ring');
+      if (outerRing) {
+        outerRing.classList.remove('flash-correct', 'flash-wrong');
+      }
+      
       // Cycle through modes: random -> ascending -> descending -> random
       if (generationMode === 'random') {
         generationMode = 'ascending';

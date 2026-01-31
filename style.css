@@ -97,6 +97,7 @@
       background: #8b5cf6 !important;
       color: white !important;
       font-size: 18px;
+      margin-left: 12px;
     }
     
     .mode-btn-challenge:active {
@@ -108,7 +109,7 @@
     }
     
     #generationModeBtn {
-      margin-right: 24px;
+      margin-right: 12px;
     }
     
     .stats-row {
