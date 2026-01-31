@@ -1582,10 +1582,10 @@ if (document.readyState === 'loading') {
         const rangeCard = document.querySelector('#rangeCard');
         if (rangeCard) {
           rangeCard.style.background = 'transparent';
-          rangeCard.style.border = 'none';
+          rangeCard.style.border = '1px solid white';
         }
         localStorage.setItem('dartTrainerFieldCustom', 'transparent');
-        localStorage.setItem('dartTrainerFieldBorder', 'none');
+        localStorage.setItem('dartTrainerFieldBorder', '1px solid white');
       }
     }
     
@@ -2214,6 +2214,12 @@ if (document.readyState === 'loading') {
       const userInputsEl = document.getElementById('userInputs');
       userInputsEl.innerHTML = '';
       userInputsEl.classList.remove('correct', 'wrong');
+      
+      // CRITICAL: Remove remaining score box (it's a sibling, not a child of userInputs)
+      const remainingScoreOuter = userInputsEl.parentElement.querySelector('.remaining-score-outer');
+      if (remainingScoreOuter) {
+        remainingScoreOuter.remove();
+      }
       
       // Remove glow from outer ring when generating new score
       const outerRing = document.getElementById('dartboard-outer-ring');
