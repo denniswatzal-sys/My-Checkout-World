@@ -1926,14 +1926,39 @@ if (document.readyState === 'loading') {
         createDartboard();
         
         // Always switch to 2-170 range when manually entering a score
+        currentRangeMin = 2;
+        currentRangeMax = 170;
+        
+        // Deactivate learn mode if active
+        if (window.learnModeActive) {
+          window.learnModeActive = false;
+          const learnBtn = document.getElementById('learnBtn');
+          if (learnBtn) {
+            learnBtn.classList.remove('active-range');
+            learnBtn.style.borderColor = '#b91c1c';
+          }
+          updateMenuItems(); // Re-enable Freies spielen
+        }
+        
         const btn2_170 = document.querySelector('.range-btn.bg-blue-500');
         
+        // Remove active-range from all buttons
+        document.querySelectorAll('.range-btn').forEach(btn => {
+          btn.classList.remove('active-range');
+        });
+        
+        // Activate 2-170 button
         if (btn2_170) {
-          // Set flag BEFORE calling setRange
-          manualScoreActive = true;
-          
-          // Always use 2-170 range
-          setRange(2, 170, btn2_170);
+          btn2_170.classList.add('active-range');
+          console.log('Switched to 2-170 range after manual score entry');
+        } else {
+          console.warn('2-170 button not found!');
+        }
+        
+        // Update hint range
+        currentHintRange = '2-170';
+        if (hintVisible) {
+          updateHintText();
         }
         
         console.log('Manual score set successfully:', score, 'Mode:', currentMode, 'Checkout:', checkout);
@@ -2790,9 +2815,11 @@ if (document.readyState === 'loading') {
             // Check if all problems are solved while in learn mode
             if (window.learnModeActive && Object.keys(problemScores).length === 0) {
               console.log('All problems solved! Switching to 2-170.');
+              
+              // Deactivate learn mode FIRST
+              window.learnModeActive = false;
+              
               setTimeout(() => {
-                window.learnModeActive = false;
-                
                 // Reset to 3-Dart mode
                 currentMode = '3darts';
                 currentCheckouts = defaultCheckouts;
@@ -2805,6 +2832,13 @@ if (document.readyState === 'loading') {
                 if (mode3DartsBtn) mode3DartsBtn.classList.add('active');
                 if (mode2DartsBtn) mode2DartsBtn.classList.remove('active');
                 if (modeMixBtn) modeMixBtn.classList.remove('active');
+                
+                // Reset learn button
+                const learnBtn = document.getElementById('learnBtn');
+                if (learnBtn) {
+                  learnBtn.classList.remove('active-range');
+                  learnBtn.style.borderColor = '#b91c1c';
+                }
                 
                 // Update range buttons for 3-Dart
                 updateRangeButtonsFor3Dart();
@@ -2825,7 +2859,11 @@ if (document.readyState === 'loading') {
                 updateHintText();
                 
                 updateProblemBadge();
-                updateMenuItems(); // Re-enable Freies spielen button
+                
+                // IMPORTANT: Re-enable Freies spielen button AFTER learnModeActive is false
+                console.log('Calling updateMenuItems - learnModeActive:', window.learnModeActive);
+                updateMenuItems();
+                
                 generateScore(2, 170);
               }, 500);
             }
