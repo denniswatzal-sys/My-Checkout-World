@@ -1032,7 +1032,7 @@ if (document.readyState === 'loading') {
         element: '#menuBtn',
         title: '⚙️ Einstellungen',
         content: '<strong>Taste antippen:</strong> Menü öffnen<br><strong>Taste gedrückt halten:</strong> Aktiviert / deaktiviert Vollbildmodus<br><br><strong>Freies spielen:</strong> Fehlwürfe möglich<br><strong>Restwert:</strong> Anzeigen lassen nach jedem Dart<br><strong>Zahlenring:</strong> Zahlenring ausblenden, zur Erhöhung der Schwierigkeit<br><strong>Vibration:</strong> Haptische Rückmeldung<br><strong>Hintergrund anpassen:</strong> Individuell einstellbar<br><strong>Zurück zum Startbildschirm:</strong> Taste drücken / oder nach rechts wischen.',
-        position: 'bottom-left',
+        position: 'top-left',
         screen: 'training'
       },
       {
