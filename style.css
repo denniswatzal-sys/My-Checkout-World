@@ -1067,6 +1067,11 @@
       transition: all 0.3s ease;
     }
     
+    /* WICHTIG: menuBtn muss absolute bleiben, auch mit spotlight */
+    #menuBtn.tutorial-spotlight {
+      position: absolute !important;
+    }
+    
     .tutorial-tooltip {
       position: fixed;
       background: white;
