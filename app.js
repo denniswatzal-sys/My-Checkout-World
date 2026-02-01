@@ -1008,7 +1008,7 @@ if (document.readyState === 'loading') {
       {
         element: '#btn-training',
         title: '🎯 Willkommen in deiner Trainingsarena',
-        content: 'Dart ist mehr als nur werfen – es ist Kopfsache. Wer sicher rechnet, verschafft sich einen klaren Vorteil. Denn je weniger du am Board überlegen musst, desto klarer bleibt dein Fokus – und desto einfacher wird das Spiel.<br><br>Ob du zwei oder drei Darts zum Checken hast, macht einen entscheidenden Unterschied. Gute Spieler wissen: Nicht jeder Checkout-Weg ist gleich sinnvoll. In dieser App lernst du, warum – und wie du dein Spiel mit der richtigen Strategie auf das nächste Level bringst.<br><br>Starte hier deinen Weg zum<br><strong>Checkout-Champion</strong>.',
+        content: 'Dart ist mehr als nur werfen – es ist Kopfsache. Wer sicher rechnet, verschafft sich einen klaren Vorteil. Denn je weniger du am Board überlegen musst, desto klarer bleibt dein Fokus – und desto einfacher wird das Spiel.<br><br>Ob du zwei oder drei Darts zum Checken hast, macht einen entscheidenden Unterschied. Gute Spieler wissen: Nicht jeder Checkout-Weg ist gleich sinnvoll. In dieser App lernst du, warum – und wie du dein Spiel mit der richtigen Strategie auf das nächste Level bringst.<br><br>Werde zum <strong>Checkout-Champion</strong>.',
         position: 'center',
         screen: 'start'
       },
@@ -1153,7 +1153,7 @@ if (document.readyState === 'loading') {
       },
       {
         element: '#dartboard',
-        title: '🏁 Das Ende der Fahnenstange',
+        title: '🏁 Ende der Fahnenstange',
         content: 'Du hast alle wichtigen Funktionen kennengelernt. Jetzt bist du bereit!<br><br>Viel Erfolg – und vor allem: Viel Spaß beim Training! 🎯',
         position: 'center',
         screen: 'training'
