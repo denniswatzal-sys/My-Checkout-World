@@ -2530,6 +2530,12 @@ if (document.readyState === 'loading') {
       // Haptic feedback for dartboard clicks
       vibrateMedium();
       
+      // Fade out range-grid when user starts training
+      const rangeGrid = document.querySelector('.range-grid');
+      if (rangeGrid) {
+        rangeGrid.style.opacity = '0.25';
+      }
+      
       // Wenn Feedback für falsche Antwort angezeigt wird, nächste Aufgabe bei Klick auf Dartscheibe
       // (Richtige Antworten gehen automatisch weiter)
       if (feedback === 'wrong') {
@@ -4846,6 +4852,24 @@ if (document.readyState === 'loading') {
       btn.addEventListener('touchend', handleRangeBtnRelease);
       btn.addEventListener('touchcancel', cancelRangeBtnPress);
     });
+    
+    // Range-grid: Make fully visible when user clicks on it
+    const rangeGrid = document.querySelector('.range-grid');
+    if (rangeGrid) {
+      rangeGrid.addEventListener('click', function(e) {
+        // Only restore opacity if clicking on the grid itself or buttons
+        // (not if event bubbled from somewhere else)
+        if (e.target === rangeGrid || e.target.classList.contains('range-btn') || e.target.closest('.range-btn')) {
+          rangeGrid.style.opacity = '1.0';
+          
+          // After 3 seconds of no interaction, fade back to default
+          clearTimeout(window.rangeGridFadeTimer);
+          window.rangeGridFadeTimer = setTimeout(() => {
+            rangeGrid.style.opacity = '0.7';
+          }, 3000);
+        }
+      });
+    }
     
     // Initialize
     generateScore(2, 170);
