@@ -14,7 +14,7 @@
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: url('Hintergrund6.jpg') center/cover no-repeat fixed;
+      background: url('Hintergrund1.jpg') center/cover no-repeat fixed;
       min-height: 100vh;
       overflow-x: hidden;
       position: relative;
@@ -665,7 +665,7 @@
       display: flex;
       align-items: flex-start;
       justify-content: center;
-      background: url('Hintergrund6.jpg') center/cover no-repeat fixed;
+      background: url('Hintergrund1.jpg') center/cover no-repeat fixed;
       padding-top: 8vh;
       position: relative;
     }
@@ -1364,7 +1364,7 @@
     .loading-screen {
       position: fixed;
       inset: 0;
-      background: url('Hintergrund6.jpg') center/cover no-repeat;
+      background: url('Hintergrund1.jpg') center/cover no-repeat;
       display: flex;
       align-items: center;
       justify-content: center;
