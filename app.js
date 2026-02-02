@@ -4741,15 +4741,50 @@ if (document.readyState === 'loading') {
       // Remove any existing onclick
       learnBtn.onclick = null;
       
+      // Add activation handler wrapper
+      function learnBtnActivationWrapper(originalHandler) {
+        return function(e) {
+          // If container is dimmed (inactive), block the event
+          if (window.rangeCardDimming && !window.rangeCardActive) {
+            e.stopPropagation();
+            e.preventDefault();
+            
+            // Restore visibility
+            const rangeCard = document.getElementById('rangeCard');
+            if (rangeCard) {
+              rangeCard.style.transition = 'none';
+              rangeCard.style.opacity = '1.0';
+              window.rangeCardDimming = false;
+              window.rangeCardActive = true;
+              console.log('[DEBUG] RangeCard restored to 100% via learnBtn (first click - button not active yet)');
+              
+              setTimeout(() => {
+                rangeCard.style.transition = 'opacity 3s ease';
+              }, 50);
+            }
+            
+            return false;
+          }
+          
+          // If active, call original handler
+          return originalHandler.call(this, e);
+        };
+      }
+      
+      // Wrap handlers
+      const wrappedStart = learnBtnActivationWrapper(startLearnBtnPress);
+      const wrappedRelease = learnBtnActivationWrapper(handleLearnBtnRelease);
+      const wrappedCancel = learnBtnActivationWrapper(cancelLearnBtnPress);
+      
       // Mouse events
-      learnBtn.addEventListener('mousedown', startLearnBtnPress);
-      learnBtn.addEventListener('mouseup', handleLearnBtnRelease);
-      learnBtn.addEventListener('mouseleave', cancelLearnBtnPress);
+      learnBtn.addEventListener('mousedown', wrappedStart);
+      learnBtn.addEventListener('mouseup', wrappedRelease);
+      learnBtn.addEventListener('mouseleave', wrappedCancel);
       
       // Touch events for mobile
-      learnBtn.addEventListener('touchstart', startLearnBtnPress);
-      learnBtn.addEventListener('touchend', handleLearnBtnRelease);
-      learnBtn.addEventListener('touchcancel', cancelLearnBtnPress);
+      learnBtn.addEventListener('touchstart', wrappedStart);
+      learnBtn.addEventListener('touchend', wrappedRelease);
+      learnBtn.addEventListener('touchcancel', wrappedCancel);
     } else {
       console.error('Learn button not found!');
     }
@@ -4761,15 +4796,50 @@ if (document.readyState === 'loading') {
       // Remove any existing onclick
       menuBtn.onclick = null;
       
+      // Add activation handler wrapper
+      function menuBtnActivationWrapper(originalHandler) {
+        return function(e) {
+          // If container is dimmed (inactive), block the event
+          if (window.rangeCardDimming && !window.rangeCardActive) {
+            e.stopPropagation();
+            e.preventDefault();
+            
+            // Restore visibility
+            const rangeCard = document.getElementById('rangeCard');
+            if (rangeCard) {
+              rangeCard.style.transition = 'none';
+              rangeCard.style.opacity = '1.0';
+              window.rangeCardDimming = false;
+              window.rangeCardActive = true;
+              console.log('[DEBUG] RangeCard restored to 100% via menuBtn (first click - button not active yet)');
+              
+              setTimeout(() => {
+                rangeCard.style.transition = 'opacity 3s ease';
+              }, 50);
+            }
+            
+            return false;
+          }
+          
+          // If active, call original handler
+          return originalHandler.call(this, e);
+        };
+      }
+      
+      // Wrap handlers
+      const wrappedStart = menuBtnActivationWrapper(startMenuBtnPress);
+      const wrappedRelease = menuBtnActivationWrapper(handleMenuBtnRelease);
+      const wrappedCancel = menuBtnActivationWrapper(cancelMenuBtnPress);
+      
       // Mouse events
-      menuBtn.addEventListener('mousedown', startMenuBtnPress);
-      menuBtn.addEventListener('mouseup', handleMenuBtnRelease);
-      menuBtn.addEventListener('mouseleave', cancelMenuBtnPress);
+      menuBtn.addEventListener('mousedown', wrappedStart);
+      menuBtn.addEventListener('mouseup', wrappedRelease);
+      menuBtn.addEventListener('mouseleave', wrappedCancel);
       
       // Touch events for mobile
-      menuBtn.addEventListener('touchstart', startMenuBtnPress);
-      menuBtn.addEventListener('touchend', handleMenuBtnRelease);
-      menuBtn.addEventListener('touchcancel', cancelMenuBtnPress);
+      menuBtn.addEventListener('touchstart', wrappedStart);
+      menuBtn.addEventListener('touchend', wrappedRelease);
+      menuBtn.addEventListener('touchcancel', wrappedCancel);
     } else {
       console.error('Menu button not found!');
     }
@@ -4862,8 +4932,8 @@ if (document.readyState === 'loading') {
     // RangeCard: First click restores visibility, second click enables buttons
     const rangeCard = document.getElementById('rangeCard');
     if (rangeCard) {
-      // Use capture phase to intercept clicks before they reach buttons
-      rangeCard.addEventListener('click', function(e) {
+      // Function to handle activation click
+      function handleActivationClick(e) {
         // If container is dimmed (inactive), first click only restores visibility
         if (window.rangeCardDimming && !window.rangeCardActive) {
           // Stop event from reaching buttons
@@ -4885,9 +4955,14 @@ if (document.readyState === 'loading') {
           return false;
         }
         
-        // If already active, clicks pass through normally to buttons
+        // If already active, events pass through normally to buttons
         console.log('[DEBUG] RangeCard active - buttons functional');
-      }, true);  // Use capture phase
+      }
+      
+      // Use capture phase for all interactive events
+      rangeCard.addEventListener('click', handleActivationClick, true);
+      rangeCard.addEventListener('mousedown', handleActivationClick, true);
+      rangeCard.addEventListener('touchstart', handleActivationClick, true);
     }
     
     // Initialize
