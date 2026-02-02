@@ -2071,13 +2071,6 @@ if (document.readyState === 'loading') {
     }
     
     function generateScore(min, max) {
-      // Reset rangeCard opacity for new task
-      const rangeCard = document.getElementById('rangeCard');
-      if (rangeCard) {
-        rangeCard.style.opacity = '1.0';
-        window.rangeCardDimming = false;
-      }
-      
       // For mixed mode, get ALL available scores (both 2DF and 3DF)
       // Then decide 2DF vs 3DF based on the selected score
       let availableScores;
@@ -3921,13 +3914,6 @@ if (document.readyState === 'loading') {
     }
     
     function generateLearnScore() {
-      // Reset rangeCard opacity for new task
-      const rangeCard = document.getElementById('rangeCard');
-      if (rangeCard) {
-        rangeCard.style.opacity = '1.0';
-        window.rangeCardDimming = false;
-      }
-      
       const scores = Object.keys(problemScores).map(Number);
       
       if (scores.length === 0) {
