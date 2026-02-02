@@ -526,6 +526,9 @@ if (document.readyState === 'loading') {
     window.challengeMode = false;
     window.challengeTimer = null;
     
+    // RangeCard dimming state
+    window.rangeCardActive = true;  // Container is active at start
+    
     let challengeStats = { correct: 0, wrong: 0 };
     
     let leaderboard = [];
@@ -2534,8 +2537,9 @@ if (document.readyState === 'loading') {
       const rangeCard = document.getElementById('rangeCard');
       if (rangeCard && !window.rangeCardDimming) {
         window.rangeCardDimming = true;  // Prevent further clicks from resetting
-        rangeCard.style.opacity = '0.2';
-        console.log('[DEBUG] RangeCard dimming to 20% (3-second smooth transition)');
+        window.rangeCardActive = false;  // Mark as inactive (needs activation click)
+        rangeCard.style.opacity = '0.1';
+        console.log('[DEBUG] RangeCard dimming to 10% (3-second smooth transition)');
       }
       
       // Wenn Feedback für falsche Antwort angezeigt wird, nächste Aufgabe bei Klick auf Dartscheibe
@@ -4855,21 +4859,35 @@ if (document.readyState === 'loading') {
       btn.addEventListener('touchcancel', cancelRangeBtnPress);
     });
     
-    // RangeCard: Make fully visible when user clicks on it
+    // RangeCard: First click restores visibility, second click enables buttons
     const rangeCard = document.getElementById('rangeCard');
     if (rangeCard) {
+      // Use capture phase to intercept clicks before they reach buttons
       rangeCard.addEventListener('click', function(e) {
-        // Temporarily disable transition for instant return
-        rangeCard.style.transition = 'none';
-        rangeCard.style.opacity = '1.0';
-        window.rangeCardDimming = false;  // Reset flag to allow dimming again
-        console.log('[DEBUG] RangeCard instantly restored to 100%');
+        // If container is dimmed (inactive), first click only restores visibility
+        if (window.rangeCardDimming && !window.rangeCardActive) {
+          // Stop event from reaching buttons
+          e.stopPropagation();
+          e.preventDefault();
+          
+          // Temporarily disable transition for instant return
+          rangeCard.style.transition = 'none';
+          rangeCard.style.opacity = '1.0';
+          window.rangeCardDimming = false;
+          window.rangeCardActive = true;  // Mark as active for next click
+          console.log('[DEBUG] RangeCard restored to 100% (first click - buttons not active yet)');
+          
+          // Re-enable transition after a brief moment
+          setTimeout(() => {
+            rangeCard.style.transition = 'opacity 3s ease';
+          }, 50);
+          
+          return false;
+        }
         
-        // Re-enable transition after a brief moment
-        setTimeout(() => {
-          rangeCard.style.transition = 'opacity 3s ease';
-        }, 50);
-      });
+        // If already active, clicks pass through normally to buttons
+        console.log('[DEBUG] RangeCard active - buttons functional');
+      }, true);  // Use capture phase
     }
     
     // Initialize
