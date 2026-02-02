@@ -1745,7 +1745,7 @@ if (document.readyState === 'loading') {
     function loadBackground() {
       // Load custom background
       const savedBg = localStorage.getItem('dartTrainerBackgroundCustom');
-      const backgroundToUse = savedBg || 'url(Hintergrund1.jpg)';
+      const backgroundToUse = savedBg || "url('Hintergrund1.jpg') center/cover no-repeat fixed";
       
       document.body.style.background = backgroundToUse;
       const startScreen = document.querySelector('.start-screen');
