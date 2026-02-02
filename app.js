@@ -4590,6 +4590,8 @@ if (document.readyState === 'loading') {
     function handleMenuBtnRelease(e) {
       e.preventDefault();
       
+      console.log('[DEBUG MenuBtn] Release - dimming:', window.rangeCardDimming, 'active:', window.rangeCardActive);
+      
       // Reset button style
       const btn = document.getElementById('menuBtn');
       if (btn) {
@@ -4604,6 +4606,7 @@ if (document.readyState === 'loading') {
       
       // ACTIVATION CHECK: If container is dimmed, only restore visibility
       if (window.rangeCardDimming && !window.rangeCardActive) {
+        console.log('[DEBUG MenuBtn] Container dimmed - blocking menu opening');
         const rangeCard = document.getElementById('rangeCard');
         if (rangeCard) {
           rangeCard.style.transition = 'none';
@@ -4621,11 +4624,14 @@ if (document.readyState === 'loading') {
         return;  // Don't open menu on first click
       }
       
+      console.log('[DEBUG MenuBtn] Container active - allowing menu to open');
+      
       // Check if long-press was triggered
       if (menuBtnLongPressTriggered) {
         // Long press already handled in setTimeout - do nothing
       } else {
         // Short click - open menu (only if container is active)
+        console.log('[DEBUG MenuBtn] Opening menu now');
         toggleMenu();
       }
       
@@ -4916,6 +4922,14 @@ if (document.readyState === 'loading') {
     if (rangeCard) {
       // Function to handle activation click
       function handleActivationClick(e) {
+        // EXCLUDE menuBtn and learnBtn - they have their own activation logic
+        const target = e.target;
+        if (target.id === 'menuBtn' || target.id === 'learnBtn' || 
+            target.closest('#menuBtn') || target.closest('#learnBtn')) {
+          console.log('[DEBUG] Click on menuBtn/learnBtn - skipping rangeCard handler');
+          return;  // Let the button handle activation itself
+        }
+        
         // If container is dimmed (inactive), first click only restores visibility
         if (window.rangeCardDimming && !window.rangeCardActive) {
           // Stop event from reaching buttons
