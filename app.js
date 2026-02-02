@@ -1008,7 +1008,7 @@ if (document.readyState === 'loading') {
       {
         element: '#btn-training',
         title: '🎯 Willkommen in deiner Trainingsarena',
-        content: 'Dart ist mehr als nur Pfeile werfen –<br>es ist Kopfsache. Wer sicher rechnet,<br>verschafft sich einen klaren Vorteil.<br>Denn je weniger du am Board überlegen<br>musst, desto klarer bleibt dein Fokus –<br>und desto einfacher wird das Spiel.<br><br>Ob du zwei oder drei Darts zum Checken<br>hast, macht einen entscheidenden<br>Unterschied. Gute Spieler wissen: Nicht<br>jeder Checkout-Weg ist gleich sinnvoll. In<br>dieser App lernst du, warum – und wie du<br>dein Spiel mit der richtigen Strategie auf<br>das nächste Level bringst.<br><br>Mach dich zum <strong>Checkout-Champion</strong>.',
+        content: 'Dart ist mehr als nur Pfeile werfen –<br>es ist Kopfsache. Wer sicher rechnet,<br>verschafft sich einen klaren Vorteil.<br>Denn je weniger du am Board überlegen<br>musst, desto klarer bleibt dein Fokus –<br>und desto einfacher wird das Spiel.<br><br>Ob du zwei oder drei Darts zum Checken<br>hast, macht einen entscheidenden<br>Unterschied. Gute Spieler wissen: Nicht<br>jeder Checkout-Weg ist gleich sinnvoll.<br>In dieser App lernst du, warum – und wie<br>du dein Spiel mit der richtigen Strategie<br>auf das nächste Level bringst.<br><br>Mach dich zum <strong>Checkout-Champion</strong>.',
         position: 'center',
         screen: 'start'
       },
@@ -1029,14 +1029,14 @@ if (document.readyState === 'loading') {
       {
         element: '#scoreValue',
         title: '🔓 Checkout-Zahl',
-        content: 'Hier wird dir die zu checkende Zahl<br>angezeigt. Durch Antippen kannst du<br>sie manuell ändern.<br><br><strong style="color: #16a34a;">Grün</strong> – 3-Dart-Finish (3DF)<br><strong style="color: #3b82f6;">Blau</strong> – 2-Dart-Finish (2DF)<br><strong style="color: #eab308;">Gelb</strong> – Bogey-Zahl<br><strong>Nur im freien Spiel:</strong><br><strong style="color: #f97316;">Orange</strong> – Checken noch möglich<br><strong style="color: #dc2626;">Rot</strong> – Checken nicht mehr möglich',
+        content: 'Hier wird dir die zu checkende Zahl<br>angezeigt. Durch Antippen kannst du<br>sie manuell ändern.<br><strong style="color: #16a34a;">Grün</strong> – 3-Dart-Finish (3DF)<br><strong style="color: #3b82f6;">Blau</strong> – 2-Dart-Finish (2DF)<br><strong style="color: #eab308;">Gelb</strong> – Bogey-Zahl<br><br><strong>Nur im freien Spiel:</strong><br><strong style="color: #f97316;">Orange</strong> – Checken noch möglich<br><strong style="color: #dc2626;">Rot</strong> – Checken nicht mehr möglich',
         position: 'bottom',
         screen: 'training'
       },
       {
         element: '#dartboard',
         title: '🎯 Dartboard',
-        content: 'Du musst 170 Punkte checken?! Kein<br>Problem – hier ist es genauso leicht wie<br>am echten Board! Triff <strong>T20 · T20 · BULL</strong><br>und schnapp dir den <strong>BIG FISH</strong> 🎣',
+        content: 'Du musst 170 Punkte checken?! Kein<br>Problem – hier ist es genauso leicht wie<br>am echten Board! Triff (klick) <strong>T20 · T20 ·<br>BULL</strong> und schnapp dir den <strong>BIG FISH</strong> 🎣',
         position: 'bottom',
         screen: 'training'
       },
