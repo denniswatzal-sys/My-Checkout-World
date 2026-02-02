@@ -2538,8 +2538,8 @@ if (document.readyState === 'loading') {
       if (rangeCard && !window.rangeCardDimming) {
         window.rangeCardDimming = true;  // Prevent further clicks from resetting
         window.rangeCardActive = false;  // Mark as inactive (needs activation click)
-        rangeCard.style.opacity = '0.1';
-        console.log('[DEBUG] RangeCard dimming to 10% (3-second smooth transition)');
+        rangeCard.style.opacity = '0.2';
+        console.log('[DEBUG] RangeCard dimming to 20% (3-second smooth transition)');
       }
       
       // Wenn Feedback für falsche Antwort angezeigt wird, nächste Aufgabe bei Klick auf Dartscheibe
@@ -4563,6 +4563,13 @@ if (document.readyState === 'loading') {
     function startMenuBtnPress(e) {
       e.preventDefault();
       vibrateMedium(); // Haptic feedback
+      
+      // ACTIVATION CHECK: Don't start long-press timer if container is dimmed
+      if (window.rangeCardDimming && !window.rangeCardActive) {
+        console.log('[DEBUG] MenuBtn press blocked - container dimmed');
+        return;
+      }
+      
       menuBtnLongPressTriggered = false;
       
       menuBtnPressTimer = setTimeout(() => {
@@ -4595,11 +4602,30 @@ if (document.readyState === 'loading') {
         menuBtnPressTimer = null;
       }
       
+      // ACTIVATION CHECK: If container is dimmed, only restore visibility
+      if (window.rangeCardDimming && !window.rangeCardActive) {
+        const rangeCard = document.getElementById('rangeCard');
+        if (rangeCard) {
+          rangeCard.style.transition = 'none';
+          rangeCard.style.opacity = '1.0';
+          window.rangeCardDimming = false;
+          window.rangeCardActive = true;
+          console.log('[DEBUG] RangeCard restored to 100% via menuBtn (first click - menu not opened)');
+          
+          setTimeout(() => {
+            rangeCard.style.transition = 'opacity 3s ease';
+          }, 50);
+        }
+        
+        menuBtnLongPressTriggered = false;
+        return;  // Don't open menu on first click
+      }
+      
       // Check if long-press was triggered
       if (menuBtnLongPressTriggered) {
         // Long press already handled in setTimeout - do nothing
       } else {
-        // Short click - open menu
+        // Short click - open menu (only if container is active)
         toggleMenu();
       }
       
@@ -4680,6 +4706,13 @@ if (document.readyState === 'loading') {
     function startLearnBtnPress(e) {
       e.preventDefault();
       console.log('Long-press started');
+      
+      // ACTIVATION CHECK: Don't start long-press timer if container is dimmed
+      if (window.rangeCardDimming && !window.rangeCardActive) {
+        console.log('[DEBUG] LearnBtn press blocked - container dimmed');
+        return;
+      }
+      
       learnBtnLongPressTriggered = false;
       
       learnBtnPressTimer = setTimeout(() => {
@@ -4709,6 +4742,25 @@ if (document.readyState === 'loading') {
       if (learnBtnPressTimer) {
         clearTimeout(learnBtnPressTimer);
         learnBtnPressTimer = null;
+      }
+      
+      // ACTIVATION CHECK: If container is dimmed, only restore visibility
+      if (window.rangeCardDimming && !window.rangeCardActive) {
+        const rangeCard = document.getElementById('rangeCard');
+        if (rangeCard) {
+          rangeCard.style.transition = 'none';
+          rangeCard.style.opacity = '1.0';
+          window.rangeCardDimming = false;
+          window.rangeCardActive = true;
+          console.log('[DEBUG] RangeCard restored to 100% via learnBtn (first click - function not executed)');
+          
+          setTimeout(() => {
+            rangeCard.style.transition = 'opacity 3s ease';
+          }, 50);
+        }
+        
+        learnBtnLongPressTriggered = false;
+        return;  // Don't execute learn button function on first click
       }
       
       // Check if long-press was triggered
@@ -4741,50 +4793,15 @@ if (document.readyState === 'loading') {
       // Remove any existing onclick
       learnBtn.onclick = null;
       
-      // Add activation handler wrapper
-      function learnBtnActivationWrapper(originalHandler) {
-        return function(e) {
-          // If container is dimmed (inactive), block the event
-          if (window.rangeCardDimming && !window.rangeCardActive) {
-            e.stopPropagation();
-            e.preventDefault();
-            
-            // Restore visibility
-            const rangeCard = document.getElementById('rangeCard');
-            if (rangeCard) {
-              rangeCard.style.transition = 'none';
-              rangeCard.style.opacity = '1.0';
-              window.rangeCardDimming = false;
-              window.rangeCardActive = true;
-              console.log('[DEBUG] RangeCard restored to 100% via learnBtn (first click - button not active yet)');
-              
-              setTimeout(() => {
-                rangeCard.style.transition = 'opacity 3s ease';
-              }, 50);
-            }
-            
-            return false;
-          }
-          
-          // If active, call original handler
-          return originalHandler.call(this, e);
-        };
-      }
-      
-      // Wrap handlers
-      const wrappedStart = learnBtnActivationWrapper(startLearnBtnPress);
-      const wrappedRelease = learnBtnActivationWrapper(handleLearnBtnRelease);
-      const wrappedCancel = learnBtnActivationWrapper(cancelLearnBtnPress);
-      
       // Mouse events
-      learnBtn.addEventListener('mousedown', wrappedStart);
-      learnBtn.addEventListener('mouseup', wrappedRelease);
-      learnBtn.addEventListener('mouseleave', wrappedCancel);
+      learnBtn.addEventListener('mousedown', startLearnBtnPress);
+      learnBtn.addEventListener('mouseup', handleLearnBtnRelease);
+      learnBtn.addEventListener('mouseleave', cancelLearnBtnPress);
       
       // Touch events for mobile
-      learnBtn.addEventListener('touchstart', wrappedStart);
-      learnBtn.addEventListener('touchend', wrappedRelease);
-      learnBtn.addEventListener('touchcancel', wrappedCancel);
+      learnBtn.addEventListener('touchstart', startLearnBtnPress);
+      learnBtn.addEventListener('touchend', handleLearnBtnRelease);
+      learnBtn.addEventListener('touchcancel', cancelLearnBtnPress);
     } else {
       console.error('Learn button not found!');
     }
@@ -4796,50 +4813,15 @@ if (document.readyState === 'loading') {
       // Remove any existing onclick
       menuBtn.onclick = null;
       
-      // Add activation handler wrapper
-      function menuBtnActivationWrapper(originalHandler) {
-        return function(e) {
-          // If container is dimmed (inactive), block the event
-          if (window.rangeCardDimming && !window.rangeCardActive) {
-            e.stopPropagation();
-            e.preventDefault();
-            
-            // Restore visibility
-            const rangeCard = document.getElementById('rangeCard');
-            if (rangeCard) {
-              rangeCard.style.transition = 'none';
-              rangeCard.style.opacity = '1.0';
-              window.rangeCardDimming = false;
-              window.rangeCardActive = true;
-              console.log('[DEBUG] RangeCard restored to 100% via menuBtn (first click - button not active yet)');
-              
-              setTimeout(() => {
-                rangeCard.style.transition = 'opacity 3s ease';
-              }, 50);
-            }
-            
-            return false;
-          }
-          
-          // If active, call original handler
-          return originalHandler.call(this, e);
-        };
-      }
-      
-      // Wrap handlers
-      const wrappedStart = menuBtnActivationWrapper(startMenuBtnPress);
-      const wrappedRelease = menuBtnActivationWrapper(handleMenuBtnRelease);
-      const wrappedCancel = menuBtnActivationWrapper(cancelMenuBtnPress);
-      
       // Mouse events
-      menuBtn.addEventListener('mousedown', wrappedStart);
-      menuBtn.addEventListener('mouseup', wrappedRelease);
-      menuBtn.addEventListener('mouseleave', wrappedCancel);
+      menuBtn.addEventListener('mousedown', startMenuBtnPress);
+      menuBtn.addEventListener('mouseup', handleMenuBtnRelease);
+      menuBtn.addEventListener('mouseleave', cancelMenuBtnPress);
       
       // Touch events for mobile
-      menuBtn.addEventListener('touchstart', wrappedStart);
-      menuBtn.addEventListener('touchend', wrappedRelease);
-      menuBtn.addEventListener('touchcancel', wrappedCancel);
+      menuBtn.addEventListener('touchstart', startMenuBtnPress);
+      menuBtn.addEventListener('touchend', handleMenuBtnRelease);
+      menuBtn.addEventListener('touchcancel', cancelMenuBtnPress);
     } else {
       console.error('Menu button not found!');
     }
