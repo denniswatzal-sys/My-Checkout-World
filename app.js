@@ -2530,11 +2530,15 @@ if (document.readyState === 'loading') {
       // Haptic feedback for dartboard clicks
       vibrateMedium();
       
-      // Fade out rangeCard when user starts training
-      const rangeCard = document.getElementById('rangeCard');
-      if (rangeCard) {
-        rangeCard.style.opacity = '0.02';
-      }
+      // Fade out rangeCard content after 3 seconds of training (border stays visible)
+      clearTimeout(window.rangeCardAutoFadeTimer);
+      window.rangeCardAutoFadeTimer = setTimeout(() => {
+        const modeSelector = document.querySelector('#rangeCard .mode-selector');
+        const rangeGrid = document.querySelector('#rangeCard .range-grid');
+        if (modeSelector) modeSelector.style.opacity = '0.2';
+        if (rangeGrid) rangeGrid.style.opacity = '0.2';
+        console.log('[DEBUG] RangeCard content faded to 20% after 3 seconds');
+      }, 3000);
       
       // Wenn Feedback für falsche Antwort angezeigt wird, nächste Aufgabe bei Klick auf Dartscheibe
       // (Richtige Antworten gehen automatisch weiter)
@@ -4853,18 +4857,19 @@ if (document.readyState === 'loading') {
       btn.addEventListener('touchcancel', cancelRangeBtnPress);
     });
     
-    // RangeCard: Make fully visible when user clicks on it
+    // RangeCard: Make content fully visible when user clicks on it
     const rangeCard = document.getElementById('rangeCard');
     if (rangeCard) {
       rangeCard.addEventListener('click', function(e) {
-        // Restore full opacity when clicking anywhere on rangeCard
-        rangeCard.style.opacity = '1.0';
+        // Cancel any pending auto-fade
+        clearTimeout(window.rangeCardAutoFadeTimer);
         
-        // After 3 seconds of no interaction, fade back to default
-        clearTimeout(window.rangeCardFadeTimer);
-        window.rangeCardFadeTimer = setTimeout(() => {
-          rangeCard.style.opacity = '0.7';
-        }, 3000);
+        // Restore full opacity to content
+        const modeSelector = document.querySelector('#rangeCard .mode-selector');
+        const rangeGrid = document.querySelector('#rangeCard .range-grid');
+        if (modeSelector) modeSelector.style.opacity = '1.0';
+        if (rangeGrid) rangeGrid.style.opacity = '1.0';
+        console.log('[DEBUG] RangeCard content restored to 100%');
       });
     }
     
