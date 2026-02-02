@@ -359,7 +359,7 @@
     }
     
     .remaining-score-outer {
-      width: fit-content;
+      width: 100%;
       margin: -6px auto 12px auto;
       text-align: center;
       font-size: 14px;

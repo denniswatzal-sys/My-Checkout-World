@@ -10,8 +10,8 @@ const ASSETS_TO_LOAD = {
     'Hintergrund10.jpg'
   ],
   videos: [
-    'THE-MENACE.mp4', 'Flugzeug.mp4', 'Waschmachine.mp4',
-    'Schlafen.mp4', 'Angler.mp4'
+    'Flugzeug.mp4', 'THE-MENACE.mp4', 'Waschmachine.mp4',
+    'Angler.mp4', 'Schlafen.mp4'
   ],
   audio: ['Heartbeat.mp3', 'Quiz.mp3'],
   images: ['Logo.png']
@@ -234,6 +234,9 @@ let realisticMode = false;
 
 // Global show remaining score state (loaded from localStorage)
 let showRemainingScore = false;
+
+// Challenge mode video index for sequential playback
+let challengeVideoIndex = 0;
 
 // Load vibration setting from localStorage
 try {
@@ -2566,8 +2569,22 @@ if (document.readyState === 'loading') {
         }
       }
       
-      // Ignore clicks when correct feedback is showing (auto-continue active)
-      if (feedback === 'correct') {
+      // In Challenge-Modus: Ignore clicks when correct feedback is showing (auto-continue active)
+      if (feedback === 'correct' && window.challengeMode) {
+        return;
+      }
+      
+      // Im normalen Trainingsmodus: Bei korrekter Antwort soll Click neue Zahl generieren
+      if (feedback === 'correct' && !window.challengeMode) {
+        // Reset feedback
+        feedback = null;
+        
+        // Generate new score
+        if (window.learnModeActive) {
+          generateLearnScore();
+        } else {
+          generateScore(currentRangeMin, currentRangeMax);
+        }
         return;
       }
       
@@ -3387,17 +3404,14 @@ if (document.readyState === 'loading') {
         // Bei richtig: Nur grün färben, kein Text
         userInputs.classList.add('correct');
         
-        // Automatisch zur nächsten Zahl - Challenge: 500ms, Training: 700ms
-        const delay = window.challengeMode ? 500 : 700;
-        setTimeout(() => {
-          if (window.challengeMode) {
+        // Automatisch zur nächsten Zahl NUR im Challenge-Modus
+        if (window.challengeMode) {
+          const delay = 500;
+          setTimeout(() => {
             generateScore(currentRangeMin, currentRangeMax);
-          } else if (window.learnModeActive) {
-            generateLearnScore();
-          } else {
-            generateScore(currentRangeMin, currentRangeMax);
-          }
-        }, delay);
+          }, delay);
+        }
+        // Im normalen Trainingsmodus KEIN Auto-Continue - User muss manuell klicken
       } else {
         // Bei falsch: Rot färben + Lösung anzeigen
         userInputs.classList.add('wrong');
@@ -3577,12 +3591,16 @@ if (document.readyState === 'loading') {
         // Hide range card during challenge
         document.getElementById('rangeCard').style.display = 'none';
         
-        // Select random MP4 for challenge mode
-        const videos = ['THE-MENACE.mp4', 'Flugzeug.mp4', 'Waschmachine.mp4', 'Schlafen.mp4', 'Angler.mp4'];
-        const randomVideo = videos[Math.floor(Math.random() * videos.length)];
+        // Select MP4 for challenge mode in fixed sequence
+        const videos = ['Flugzeug.mp4', 'THE-MENACE.mp4', 'Waschmachine.mp4', 'Angler.mp4', 'Schlafen.mp4'];
+        const currentVideo = videos[challengeVideoIndex];
+        
+        // Move to next video for next challenge (loop back to start)
+        challengeVideoIndex = (challengeVideoIndex + 1) % videos.length;
+        
         const videoElement = document.querySelector('.challenge-gif video source');
         if (videoElement) {
-          videoElement.src = randomVideo;
+          videoElement.src = currentVideo;
           // Reload video to apply new source
           videoElement.parentElement.load();
         }
