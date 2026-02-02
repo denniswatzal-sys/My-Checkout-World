@@ -2071,6 +2071,13 @@ if (document.readyState === 'loading') {
     }
     
     function generateScore(min, max) {
+      // Reset rangeCard opacity for new task
+      const rangeCard = document.getElementById('rangeCard');
+      if (rangeCard) {
+        rangeCard.style.opacity = '1.0';
+        window.rangeCardDimming = false;
+      }
+      
       // For mixed mode, get ALL available scores (both 2DF and 3DF)
       // Then decide 2DF vs 3DF based on the selected score
       let availableScores;
@@ -2530,15 +2537,13 @@ if (document.readyState === 'loading') {
       // Haptic feedback for dartboard clicks
       vibrateMedium();
       
-      // Fade out rangeCard content after 3 seconds of training (border stays visible)
-      clearTimeout(window.rangeCardAutoFadeTimer);
-      window.rangeCardAutoFadeTimer = setTimeout(() => {
-        const modeSelector = document.querySelector('#rangeCard .mode-selector');
-        const rangeGrid = document.querySelector('#rangeCard .range-grid');
-        if (modeSelector) modeSelector.style.opacity = '0.2';
-        if (rangeGrid) rangeGrid.style.opacity = '0.2';
-        console.log('[DEBUG] RangeCard content faded to 20% after 3 seconds');
-      }, 3000);
+      // Smooth dim rangeCard on first dartboard click (3-second transition via CSS)
+      const rangeCard = document.getElementById('rangeCard');
+      if (rangeCard && !window.rangeCardDimming) {
+        window.rangeCardDimming = true;  // Prevent further clicks from resetting
+        rangeCard.style.opacity = '0.2';
+        console.log('[DEBUG] RangeCard dimming to 20% (3-second smooth transition)');
+      }
       
       // Wenn Feedback für falsche Antwort angezeigt wird, nächste Aufgabe bei Klick auf Dartscheibe
       // (Richtige Antworten gehen automatisch weiter)
@@ -3916,6 +3921,13 @@ if (document.readyState === 'loading') {
     }
     
     function generateLearnScore() {
+      // Reset rangeCard opacity for new task
+      const rangeCard = document.getElementById('rangeCard');
+      if (rangeCard) {
+        rangeCard.style.opacity = '1.0';
+        window.rangeCardDimming = false;
+      }
+      
       const scores = Object.keys(problemScores).map(Number);
       
       if (scores.length === 0) {
@@ -4857,19 +4869,20 @@ if (document.readyState === 'loading') {
       btn.addEventListener('touchcancel', cancelRangeBtnPress);
     });
     
-    // RangeCard: Make content fully visible when user clicks on it
+    // RangeCard: Make fully visible when user clicks on it
     const rangeCard = document.getElementById('rangeCard');
     if (rangeCard) {
       rangeCard.addEventListener('click', function(e) {
-        // Cancel any pending auto-fade
-        clearTimeout(window.rangeCardAutoFadeTimer);
+        // Temporarily disable transition for instant return
+        rangeCard.style.transition = 'none';
+        rangeCard.style.opacity = '1.0';
+        window.rangeCardDimming = false;  // Reset flag to allow dimming again
+        console.log('[DEBUG] RangeCard instantly restored to 100%');
         
-        // Restore full opacity to content
-        const modeSelector = document.querySelector('#rangeCard .mode-selector');
-        const rangeGrid = document.querySelector('#rangeCard .range-grid');
-        if (modeSelector) modeSelector.style.opacity = '1.0';
-        if (rangeGrid) rangeGrid.style.opacity = '1.0';
-        console.log('[DEBUG] RangeCard content restored to 100%');
+        // Re-enable transition after a brief moment
+        setTimeout(() => {
+          rangeCard.style.transition = 'opacity 3s ease';
+        }, 50);
       });
     }
     

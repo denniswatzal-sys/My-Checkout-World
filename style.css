@@ -51,13 +51,8 @@
       border: 1px solid white;
       border-radius: 12px;
       position: relative;
-    }
-    
-    /* Content inside rangeCard fades, but border stays visible */
-    #rangeCard .mode-selector,
-    #rangeCard .range-grid {
-      opacity: 1;
-      transition: opacity 0.3s ease;
+      opacity: 1.0;
+      transition: opacity 3s ease;  /* 3 Sekunden smooth fade wie ein Dimmer */
     }
     
     .card.hidden {
