@@ -2533,7 +2533,7 @@ if (document.readyState === 'loading') {
       // Fade out rangeCard when user starts training
       const rangeCard = document.getElementById('rangeCard');
       if (rangeCard) {
-        rangeCard.style.opacity = '0.1';
+        rangeCard.style.opacity = '0.02';
       }
       
       // Wenn Feedback für falsche Antwort angezeigt wird, nächste Aufgabe bei Klick auf Dartscheibe
