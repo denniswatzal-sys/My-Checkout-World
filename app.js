@@ -2530,10 +2530,10 @@ if (document.readyState === 'loading') {
       // Haptic feedback for dartboard clicks
       vibrateMedium();
       
-      // Fade out range-grid when user starts training
-      const rangeGrid = document.querySelector('.range-grid');
-      if (rangeGrid) {
-        rangeGrid.style.opacity = '0.25';
+      // Fade out rangeCard when user starts training
+      const rangeCard = document.getElementById('rangeCard');
+      if (rangeCard) {
+        rangeCard.style.opacity = '0.1';
       }
       
       // Wenn Feedback für falsche Antwort angezeigt wird, nächste Aufgabe bei Klick auf Dartscheibe
@@ -4853,21 +4853,18 @@ if (document.readyState === 'loading') {
       btn.addEventListener('touchcancel', cancelRangeBtnPress);
     });
     
-    // Range-grid: Make fully visible when user clicks on it
-    const rangeGrid = document.querySelector('.range-grid');
-    if (rangeGrid) {
-      rangeGrid.addEventListener('click', function(e) {
-        // Only restore opacity if clicking on the grid itself or buttons
-        // (not if event bubbled from somewhere else)
-        if (e.target === rangeGrid || e.target.classList.contains('range-btn') || e.target.closest('.range-btn')) {
-          rangeGrid.style.opacity = '1.0';
-          
-          // After 3 seconds of no interaction, fade back to default
-          clearTimeout(window.rangeGridFadeTimer);
-          window.rangeGridFadeTimer = setTimeout(() => {
-            rangeGrid.style.opacity = '0.7';
-          }, 3000);
-        }
+    // RangeCard: Make fully visible when user clicks on it
+    const rangeCard = document.getElementById('rangeCard');
+    if (rangeCard) {
+      rangeCard.addEventListener('click', function(e) {
+        // Restore full opacity when clicking anywhere on rangeCard
+        rangeCard.style.opacity = '1.0';
+        
+        // After 3 seconds of no interaction, fade back to default
+        clearTimeout(window.rangeCardFadeTimer);
+        window.rangeCardFadeTimer = setTimeout(() => {
+          rangeCard.style.opacity = '0.7';
+        }, 3000);
       });
     }
     
