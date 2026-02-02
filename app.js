@@ -1745,12 +1745,12 @@ if (document.readyState === 'loading') {
     function loadBackground() {
       // Load custom background
       const savedBg = localStorage.getItem('dartTrainerBackgroundCustom');
-      if (savedBg) {
-        document.body.style.background = savedBg;
-        const startScreen = document.querySelector('.start-screen');
-        if (startScreen) {
-          startScreen.style.background = savedBg;
-        }
+      const backgroundToUse = savedBg || 'url(Hintergrund1.jpg)';
+      
+      document.body.style.background = backgroundToUse;
+      const startScreen = document.querySelector('.start-screen');
+      if (startScreen) {
+        startScreen.style.background = backgroundToUse;
       }
       
       // Load custom field color
