@@ -20,18 +20,18 @@
   <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
   <link rel="apple-touch-icon" href="icon-512.png">
   
-  <link rel="stylesheet" href="style.css?v=TEST-1635">
+  <link rel="stylesheet" href="style.css?v=TEST-1700">
 </head>
 <body>
 <script>
 // ========================================
-// KILL-SWITCH - TEST VERSION (16:35 Uhr)
+// KILL-SWITCH - TEST VERSION (17:00 Uhr)
 // ========================================
 (function() {
-  const EXPIRY_DATE = new Date('2026-02-03T16:35:00');
+  const EXPIRY_DATE = new Date('2026-02-03T17:00:00');
   const now = new Date();
   
-  console.log('=== KILL-SWITCH TEST (16:35 Uhr) ===');
+  console.log('=== KILL-SWITCH TEST (17:00 Uhr) ===');
   console.log('Ablaufdatum:', EXPIRY_DATE.toLocaleString('de-DE'));
   console.log('Aktuelles Datum:', now.toLocaleString('de-DE'));
   console.log('App gesperrt:', now > EXPIRY_DATE);
@@ -89,14 +89,14 @@
             opacity: 0.6;
             color: #fbbf24;
           ">
-            🧪 TEST-VERSION (16:35 Uhr)
+            🧪 TEST-VERSION (17:00 Uhr)
           </div>
         </div>
       </div>
     `;
     
     // Verhindere jegliche weitere Script-Ausführung
-    throw new Error('Beta-Phase beendet - App gesperrt (TEST 16:35)');
+    throw new Error('Beta-Phase beendet - App gesperrt (TEST 17:00)');
   }
 })();
 </script>
@@ -548,7 +548,7 @@
     </div>
   </div>
   
-  <script src="app.js?v=TEST-1635"></script></script>
+  <script src="app.js?v=TEST-1700"></script></script>
   
   <!-- Service Worker Registration -->
   <script>

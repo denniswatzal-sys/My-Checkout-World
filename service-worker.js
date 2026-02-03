@@ -1,10 +1,10 @@
 // ========================================
-// KILL-SWITCH - TEST VERSION (16:35 Uhr)
+// KILL-SWITCH - TEST VERSION (17:00 Uhr)
 // ========================================
-const EXPIRY_DATE = new Date('2026-02-03T16:35:00');
+const EXPIRY_DATE = new Date('2026-02-03T17:00:00');
 const now = new Date();
 
-console.log('=== SERVICE WORKER KILL-SWITCH TEST (16:35 Uhr) ===');
+console.log('=== SERVICE WORKER KILL-SWITCH TEST (17:00 Uhr) ===');
 console.log('Ablaufdatum:', EXPIRY_DATE.toLocaleString('de-DE'));
 console.log('Aktuelles Datum:', now.toLocaleString('de-DE'));
 console.log('Service Worker gesperrt:', now > EXPIRY_DATE);
@@ -70,7 +70,7 @@ if (now > EXPIRY_DATE) {
               opacity: 0.6;
               color: #fbbf24;
             ">
-              🧪 TEST-VERSION (Service Worker - 16:35 Uhr)
+              🧪 TEST-VERSION (Service Worker - 17:00 Uhr)
             </div>
           </div>
         </body>
@@ -82,13 +82,13 @@ if (now > EXPIRY_DATE) {
   });
   
   // Verhindere weitere Service Worker Funktionen
-  throw new Error('Beta-Phase beendet - Service Worker gesperrt (TEST 16:35)');
+  throw new Error('Beta-Phase beendet - Service Worker gesperrt (TEST 17:00)');
 }
 
 // ========================================
 // NORMALER SERVICE WORKER CODE
 // ========================================
-const CACHE_NAME = 'checkout-world-v2-TEST-1635';
+const CACHE_NAME = 'checkout-world-v2-TEST-1700';
 const urlsToCache = [
   './',
   './index.html',

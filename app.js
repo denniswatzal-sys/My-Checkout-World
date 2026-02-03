@@ -18,10 +18,10 @@ const ASSETS_TO_LOAD = {
 };
 
 // ========================================
-// KILL-SWITCH - Periodischer Check (TEST VERSION 16:35 Uhr)
+// KILL-SWITCH - Periodischer Check (TEST VERSION 17:00 Uhr)
 // ========================================
 (function() {
-  const EXPIRY_DATE = new Date('2026-02-03T16:35:00');
+  const EXPIRY_DATE = new Date('2026-02-03T17:00:00');
   
   function checkExpiry() {
     const now = new Date();
@@ -85,7 +85,7 @@ const ASSETS_TO_LOAD = {
               opacity: 0.6;
               color: #fbbf24;
             ">
-              🧪 TEST-VERSION (Periodischer Check - 16:35 Uhr)
+              🧪 TEST-VERSION (Periodischer Check - 17:00 Uhr)
             </div>
           </div>
         </div>
@@ -107,7 +107,7 @@ const ASSETS_TO_LOAD = {
   // Prüfe alle 60 Sekunden
   setInterval(checkExpiry, 60000);
   
-  console.log('[KILL-SWITCH TEST] Periodischer Check aktiviert (alle 60 Sekunden, Ablauf: 16:35 Uhr)');
+  console.log('[KILL-SWITCH TEST] Periodischer Check aktiviert (alle 60 Sekunden, Ablauf: 17:00 Uhr)');
 })();
 
 // ========================================
