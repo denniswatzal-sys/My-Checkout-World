@@ -1,8 +1,13 @@
 // ========================================
-// KILL-SWITCH - Beta-Phase Zeitbegrenzung
+// KILL-SWITCH - TEST VERSION (16:35 Uhr)
 // ========================================
-const EXPIRY_DATE = new Date('2026-02-23T23:59:59');
+const EXPIRY_DATE = new Date('2026-02-03T16:35:00');
 const now = new Date();
+
+console.log('=== SERVICE WORKER KILL-SWITCH TEST (16:35 Uhr) ===');
+console.log('Ablaufdatum:', EXPIRY_DATE.toLocaleString('de-DE'));
+console.log('Aktuelles Datum:', now.toLocaleString('de-DE'));
+console.log('Service Worker gesperrt:', now > EXPIRY_DATE);
 
 if (now > EXPIRY_DATE) {
   // Beta-Phase beendet - Service Worker blockiert alle Requests
@@ -54,7 +59,18 @@ if (now > EXPIRY_DATE) {
               font-size: 14px;
               opacity: 0.7;
             ">
-              Ablaufdatum: ${EXPIRY_DATE.toLocaleDateString('de-DE')}
+              Ablaufdatum: ${EXPIRY_DATE.toLocaleString('de-DE')}
+            </div>
+            <div style="
+              margin-top: 15px;
+              padding: 10px;
+              background: rgba(255, 255, 255, 0.15);
+              border-radius: 8px;
+              font-size: 12px;
+              opacity: 0.6;
+              color: #fbbf24;
+            ">
+              🧪 TEST-VERSION (Service Worker - 16:35 Uhr)
             </div>
           </div>
         </body>
@@ -66,13 +82,13 @@ if (now > EXPIRY_DATE) {
   });
   
   // Verhindere weitere Service Worker Funktionen
-  throw new Error('Beta-Phase beendet - Service Worker gesperrt');
+  throw new Error('Beta-Phase beendet - Service Worker gesperrt (TEST 16:35)');
 }
 
 // ========================================
 // NORMALER SERVICE WORKER CODE
 // ========================================
-const CACHE_NAME = 'checkout-world-v2-BETA-FEB23';
+const CACHE_NAME = 'checkout-world-v2-TEST-1635';
 const urlsToCache = [
   './',
   './index.html',
