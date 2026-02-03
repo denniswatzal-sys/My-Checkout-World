@@ -5083,6 +5083,49 @@ if (document.readyState === 'loading') {
       btn.addEventListener('touchcancel', cancelRangeBtnPress);
     });
     
+    // Setup mode buttons with mousedown/touchstart (like range buttons)
+    // This ensures they're caught by the capture handler when dimmed
+    
+    // Mode buttons: 3DF, 2DF, Mix
+    document.querySelectorAll('.mode-btn[data-mode]').forEach(btn => {
+      const clickHandler = function(e) {
+        if (e.type === 'touchstart') {
+          e.preventDefault(); // Prevent mousedown from firing
+        }
+        const mode = btn.getAttribute('data-mode');
+        setMode(mode, btn);
+      };
+      
+      btn.addEventListener('mousedown', clickHandler);
+      btn.addEventListener('touchstart', clickHandler, { passive: false });
+    });
+    
+    // Generation mode button (cycles through modes)
+    const genModeBtn = document.getElementById('generationModeBtn');
+    if (genModeBtn) {
+      const genClickHandler = function(e) {
+        if (e.type === 'touchstart') {
+          e.preventDefault();
+        }
+        cycleGenerationMode();
+      };
+      genModeBtn.addEventListener('mousedown', genClickHandler);
+      genModeBtn.addEventListener('touchstart', genClickHandler, { passive: false });
+    }
+    
+    // Challenge button
+    const challengeBtn = document.getElementById('modeChallengeBtn');
+    if (challengeBtn) {
+      const challengeClickHandler = function(e) {
+        if (e.type === 'touchstart') {
+          e.preventDefault();
+        }
+        startChallenge();
+      };
+      challengeBtn.addEventListener('mousedown', challengeClickHandler);
+      challengeBtn.addEventListener('touchstart', challengeClickHandler, { passive: false });
+    }
+    
     // RangeCard: First click restores visibility, second click enables buttons
     const rangeCard = document.getElementById('rangeCard');
     if (rangeCard) {
