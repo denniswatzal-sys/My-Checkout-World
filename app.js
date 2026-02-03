@@ -18,6 +18,99 @@ const ASSETS_TO_LOAD = {
 };
 
 // ========================================
+// KILL-SWITCH - Periodischer Check (TEST VERSION 16:35 Uhr)
+// ========================================
+(function() {
+  const EXPIRY_DATE = new Date('2026-02-03T16:35:00');
+  
+  function checkExpiry() {
+    const now = new Date();
+    
+    console.log('[KILL-SWITCH TEST] Check um:', now.toLocaleTimeString('de-DE'));
+    console.log('[KILL-SWITCH TEST] Ablaufdatum:', EXPIRY_DATE.toLocaleString('de-DE'));
+    console.log('[KILL-SWITCH TEST] Abgelaufen:', now > EXPIRY_DATE);
+    
+    if (now > EXPIRY_DATE) {
+      console.log('[KILL-SWITCH TEST] App abgelaufen - zeige Sperrbildschirm');
+      
+      // Zeige Sperrbildschirm
+      document.body.innerHTML = `
+        <div style="
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          color: white;
+          text-align: center;
+          padding: 20px;
+          z-index: 999999;
+        ">
+          <div style="
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+          ">
+            <div style="font-size: 80px; margin-bottom: 20px;">🔒</div>
+            <h1 style="font-size: 32px; margin-bottom: 16px; font-weight: 700;">Beta-Phase beendet</h1>
+            <p style="font-size: 18px; opacity: 0.9; line-height: 1.6;">
+              Die Testphase dieser App ist abgelaufen.<br>
+              Vielen Dank für deine Teilnahme!
+            </p>
+            <div style="
+              margin-top: 30px;
+              padding: 15px;
+              background: rgba(255, 255, 255, 0.1);
+              border-radius: 10px;
+              font-size: 14px;
+              opacity: 0.7;
+            ">
+              Ablaufdatum: ${EXPIRY_DATE.toLocaleString('de-DE')}
+            </div>
+            <div style="
+              margin-top: 15px;
+              padding: 10px;
+              background: rgba(255, 255, 255, 0.15);
+              border-radius: 8px;
+              font-size: 12px;
+              opacity: 0.6;
+              color: #fbbf24;
+            ">
+              🧪 TEST-VERSION (Periodischer Check - 16:35 Uhr)
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // Stoppe alle Intervalle und Timeouts
+      const highestId = window.setTimeout(() => {}, 0);
+      for (let i = 0; i < highestId; i++) {
+        window.clearTimeout(i);
+        window.clearInterval(i);
+      }
+      
+      return true; // App ist abgelaufen
+    }
+    
+    return false; // App läuft noch
+  }
+  
+  // Prüfe alle 60 Sekunden
+  setInterval(checkExpiry, 60000);
+  
+  console.log('[KILL-SWITCH TEST] Periodischer Check aktiviert (alle 60 Sekunden, Ablauf: 16:35 Uhr)');
+})();
+
+// ========================================
 // LOADING SCREEN SYSTEM
 // ========================================
 let assetsLoaded = 0;
