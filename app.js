@@ -401,7 +401,9 @@ function updateMenuItems() {
   // Update Freies Spiel menu item
   const realisticModeMenuItem = document.getElementById('realisticModeMenuItem');
   if (realisticModeMenuItem) {
-    realisticModeMenuItem.textContent = `Freies Spiel: ${realisticMode ? 'AN' : 'AUS'}`;
+    // CRITICAL FIX: realisticMode = TRUE means NO free play (realistic mode ON)
+    // realisticMode = FALSE means free play is ON
+    realisticModeMenuItem.textContent = `Freies Spiel: ${realisticMode ? 'AUS' : 'AN'}`;
     
     // Deaktiviere im Lernmodus
     if (window.learnModeActive) {
@@ -3540,8 +3542,13 @@ if (document.readyState === 'loading') {
       
       const userInputs = document.getElementById('userInputs');
       
-      // Remove previous states
-      userInputs.classList.remove('correct', 'wrong', 'active');
+      // Remove previous states (but keep 'active' for now if showing correct feedback)
+      if (isCorrect) {
+        userInputs.classList.remove('correct', 'wrong');
+        // Keep 'active' state briefly for visual feedback
+      } else {
+        userInputs.classList.remove('correct', 'wrong', 'active');
+      }
       
       // Remove previous solution text
       const existingSolution = userInputs.querySelector('.solution-text');
@@ -3572,9 +3579,21 @@ if (document.readyState === 'loading') {
       }
       
       if (isCorrect) {
-        // Bei richtig: Nur grün färben, kein Text
-        userInputs.classList.remove('active');  // Entferne active
-        userInputs.classList.add('correct');
+        // Bei richtig: Zeige erst active-Stil kurz an, dann grün
+        // CRITICAL: Ensure user sees the active state before transitioning to correct
+        // This prevents the "nothing happened" perception that leads to double-clicks
+        
+        // Force active state if not already set
+        if (!userInputs.classList.contains('active')) {
+          userInputs.classList.add('active');
+          console.log('[DEBUG Feedback] Added active class (not set yet)');
+        }
+        
+        // Wait briefly to ensure active state is visible, then transition to correct
+        setTimeout(() => {
+          userInputs.classList.remove('active');
+          userInputs.classList.add('correct');
+        }, 100); // 100ms delay to ensure visual feedback
         
         // Automatisch zur nächsten Zahl NUR im Challenge-Modus
         if (window.challengeMode) {
