@@ -401,9 +401,7 @@ function updateMenuItems() {
   // Update Freies Spiel menu item
   const realisticModeMenuItem = document.getElementById('realisticModeMenuItem');
   if (realisticModeMenuItem) {
-    // CRITICAL FIX: realisticMode = TRUE means NO free play (realistic mode ON)
-    // realisticMode = FALSE means free play is ON
-    realisticModeMenuItem.textContent = `Freies Spiel: ${realisticMode ? 'AUS' : 'AN'}`;
+    realisticModeMenuItem.textContent = `Freies Spiel: ${realisticMode ? 'AN' : 'AUS'}`;
     
     // Deaktiviere im Lernmodus
     if (window.learnModeActive) {
@@ -3284,31 +3282,7 @@ if (document.readyState === 'loading') {
       highlightedFields.push(dartValue);
       createDartboard();
       
-      // DEBUG: Log current state
-      console.log('[DEBUG Validation] userInputs.length:', userInputs.length, 'currentCheckout.length:', currentCheckout.length);
-      console.log('[DEBUG Validation] userInputs:', userInputs);
-      console.log('[DEBUG Validation] currentCheckout:', currentCheckout);
-      console.log('[DEBUG Validation] realisticMode:', realisticMode, 'challengeMode:', window.challengeMode);
-      
       if (userInputs.length === currentCheckout.length) {
-        // CRITICAL: Validate that ALL darts were correct before showing success
-        let allCorrect = true;
-        for (let i = 0; i < userInputs.length; i++) {
-          if (userInputs[i] !== currentCheckout[i]) {
-            allCorrect = false;
-            console.log('[DEBUG Validation] ERROR: Dart', i, 'mismatch!', userInputs[i], '!==', currentCheckout[i]);
-            break;
-          }
-        }
-        
-        if (!allCorrect) {
-          console.log('[DEBUG Validation] ERROR: Not all darts correct, but reached end of validation!');
-          // This should never happen - show as wrong
-          showFeedback(false);
-          return;
-        }
-        
-        console.log('[DEBUG Validation] All darts correct - showing success feedback');
         showFeedback(true);
         if (window.challengeMode) {
           challengeStats.correct++;
@@ -3542,13 +3516,8 @@ if (document.readyState === 'loading') {
       
       const userInputs = document.getElementById('userInputs');
       
-      // Remove previous states (but keep 'active' for now if showing correct feedback)
-      if (isCorrect) {
-        userInputs.classList.remove('correct', 'wrong');
-        // Keep 'active' state briefly for visual feedback
-      } else {
-        userInputs.classList.remove('correct', 'wrong', 'active');
-      }
+      // Remove previous states
+      userInputs.classList.remove('correct', 'wrong', 'active');
       
       // Remove previous solution text
       const existingSolution = userInputs.querySelector('.solution-text');
@@ -3579,21 +3548,9 @@ if (document.readyState === 'loading') {
       }
       
       if (isCorrect) {
-        // Bei richtig: Zeige erst active-Stil kurz an, dann grün
-        // CRITICAL: Ensure user sees the active state before transitioning to correct
-        // This prevents the "nothing happened" perception that leads to double-clicks
-        
-        // Force active state if not already set
-        if (!userInputs.classList.contains('active')) {
-          userInputs.classList.add('active');
-          console.log('[DEBUG Feedback] Added active class (not set yet)');
-        }
-        
-        // Wait briefly to ensure active state is visible, then transition to correct
-        setTimeout(() => {
-          userInputs.classList.remove('active');
-          userInputs.classList.add('correct');
-        }, 100); // 100ms delay to ensure visual feedback
+        // Bei richtig: Nur grün färben, kein Text
+        userInputs.classList.remove('active');  // Entferne active
+        userInputs.classList.add('correct');
         
         // Automatisch zur nächsten Zahl NUR im Challenge-Modus
         if (window.challengeMode) {
