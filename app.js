@@ -7,7 +7,7 @@ const ASSETS_TO_LOAD = {
     'Hintergrund1.jpg', 'Hintergrund2.jpg', 'Hintergrund3.jpg',
     'Hintergrund4.jpg', 'Hintergrund5.jpg', 'Hintergrund6.jpg',
     'Hintergrund7.jpg', 'Hintergrund8.jpg', 'Hintergrund9.jpg',
-    'Hintergrund10.jpg'
+    'Hintergrund10.jpg', 'Hintergrund11.jpg'
   ],
   videos: [
     'Flugzeug.mp4', 'THE-MENACE.mp4', 'Waschmachine.mp4',
@@ -1617,6 +1617,12 @@ if (document.readyState === 'loading') {
           startScreen.style.background = imageStyle;
         }
         localStorage.setItem('dartTrainerBackgroundCustom', imageStyle);
+        
+        // Disable random mode when specific background is selected
+        localStorage.setItem('dartTrainerBackgroundRandom', 'false');
+        if (window.updateRandomButtonState) {
+          window.updateRandomButtonState();
+        }
       }
       // Image background only works for body background, not for field
     }
@@ -1745,10 +1751,76 @@ if (document.readyState === 'loading') {
       });
     }
     
+    function setupRandomBackgroundButton() {
+      // Find background image grid/container
+      // This will add a "Random" button to the background selection
+      // We'll create this button programmatically and insert it
+      
+      // Create toggle function for random mode
+      window.toggleRandomBackground = function() {
+        const currentMode = localStorage.getItem('dartTrainerBackgroundRandom');
+        const newMode = currentMode === 'true' ? 'false' : 'true';
+        
+        localStorage.setItem('dartTrainerBackgroundRandom', newMode);
+        
+        // If turning ON random mode, clear custom background
+        if (newMode === 'true') {
+          localStorage.removeItem('dartTrainerBackgroundCustom');
+          console.log('[DEBUG] Random background mode enabled');
+        } else {
+          console.log('[DEBUG] Random background mode disabled');
+        }
+        
+        // Reload background immediately
+        loadBackground();
+        
+        // Update button appearance
+        updateRandomButtonState();
+      };
+      
+      // Function to update random button visual state
+      window.updateRandomButtonState = function() {
+        const randomBtn = document.getElementById('randomBackgroundBtn');
+        if (randomBtn) {
+          const isRandom = localStorage.getItem('dartTrainerBackgroundRandom') === 'true';
+          if (isRandom) {
+            randomBtn.style.border = '3px solid #10b981';
+            randomBtn.style.boxShadow = '0 0 10px rgba(16, 185, 129, 0.5)';
+          } else {
+            randomBtn.style.border = '2px solid #000';
+            randomBtn.style.boxShadow = 'none';
+          }
+        }
+      };
+      
+      // Set initial button state
+      setTimeout(() => {
+        updateRandomButtonState();
+      }, 100);
+    }
+    
     function loadBackground() {
-      // Load custom background
-      const savedBg = localStorage.getItem('dartTrainerBackgroundCustom');
-      const backgroundToUse = savedBg || "url('Hintergrund1.jpg') center/cover no-repeat fixed";
+      // Check if random background mode is enabled
+      const randomMode = localStorage.getItem('dartTrainerBackgroundRandom');
+      
+      let backgroundToUse;
+      
+      if (randomMode === 'true') {
+        // Random mode: Pick a random background from available backgrounds
+        const backgrounds = [
+          'Hintergrund1.jpg', 'Hintergrund2.jpg', 'Hintergrund3.jpg',
+          'Hintergrund4.jpg', 'Hintergrund5.jpg', 'Hintergrund6.jpg',
+          'Hintergrund7.jpg', 'Hintergrund8.jpg', 'Hintergrund9.jpg',
+          'Hintergrund10.jpg', 'Hintergrund11.jpg'
+        ];
+        const randomBg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+        backgroundToUse = `url('${randomBg}') center/cover no-repeat fixed`;
+        console.log('[DEBUG] Random background mode: Selected', randomBg);
+      } else {
+        // Load custom background or default
+        const savedBg = localStorage.getItem('dartTrainerBackgroundCustom');
+        backgroundToUse = savedBg || "url('Hintergrund1.jpg') center/cover no-repeat fixed";
+      }
       
       document.body.style.background = backgroundToUse;
       const startScreen = document.querySelector('.start-screen');
@@ -4965,6 +5037,7 @@ if (document.readyState === 'loading') {
     generateScore(2, 170);
     loadBackground();
     initColorPicker();
+    setupRandomBackgroundButton();
     
     // Mark first range button (2-170) as active
     const firstRangeBtn = document.querySelector('.range-btn.bg-blue-500');
