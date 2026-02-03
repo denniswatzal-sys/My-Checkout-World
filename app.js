@@ -355,7 +355,7 @@ function toggleRealisticMode() {
   // Reset userInputs display
   const userInputsContainer = document.getElementById('userInputs');
   if (userInputsContainer) {
-    userInputsContainer.classList.remove('correct', 'wrong');
+    userInputsContainer.classList.remove('correct', 'wrong', 'active');
     const existingSolution = userInputsContainer.querySelector('.solution-text');
     if (existingSolution) {
       existingSolution.remove();
@@ -733,7 +733,7 @@ if (document.readyState === 'loading') {
       // Reset userInputs display
       const userInputsContainer = document.getElementById('userInputs');
       if (userInputsContainer) {
-        userInputsContainer.classList.remove('correct', 'wrong');
+        userInputsContainer.classList.remove('correct', 'wrong', 'active');
         const existingSolution = userInputsContainer.querySelector('.solution-text');
         if (existingSolution) {
           existingSolution.remove();
@@ -1064,7 +1064,7 @@ if (document.readyState === 'loading') {
           container.innerHTML = userInputs.map(input => 
             `<div class="user-input-chip">${input}</div>`
           ).join('');
-          container.classList.remove('correct', 'wrong');
+          container.classList.remove('correct', 'wrong', 'active');
           
           // Make sure the box is visible
           container.style.display = 'flex';
@@ -1449,7 +1449,7 @@ if (document.readyState === 'loading') {
       const container = document.getElementById('userInputs');
       if (container) {
         container.innerHTML = '';
-        container.classList.remove('correct', 'wrong');
+        container.classList.remove('correct', 'wrong', 'active');
       }
       
       // Generate a fresh score for training
@@ -2080,7 +2080,7 @@ if (document.readyState === 'loading') {
         scoreValueEl.textContent = currentScore;
         const userInputsBox = document.getElementById('userInputs');
         userInputsBox.innerHTML = '';
-        userInputsBox.classList.remove('correct', 'wrong'); // Remove feedback classes
+        userInputsBox.classList.remove('correct', 'wrong', 'active'); // Remove feedback classes
         document.getElementById('feedbackCard').classList.add('hidden');
         
         // Update score card styling based on ACTUAL checkout used
@@ -2614,7 +2614,7 @@ if (document.readyState === 'loading') {
       // Reset user-inputs
       const userInputsEl = document.getElementById('userInputs');
       userInputsEl.innerHTML = '';
-      userInputsEl.classList.remove('correct', 'wrong');
+      userInputsEl.classList.remove('correct', 'wrong', 'active');
       
       // CRITICAL: Remove remaining score box (it's a sibling, not a child of userInputs)
       const remainingScoreOuter = userInputsEl.parentElement.querySelector('.remaining-score-outer');
@@ -3454,6 +3454,11 @@ if (document.readyState === 'loading') {
         // Entferne nur die Chips
         container.querySelectorAll('.user-input-chip').forEach(chip => chip.remove());
         
+        // Bei erster Eingabe: Zeige Container mit active-Stil (wie challenge-card)
+        if (!container.classList.contains('correct') && !container.classList.contains('wrong')) {
+          container.classList.add('active');
+        }
+        
         // Füge neue Chips hinzu (vor solution/remaining wenn vorhanden)
         const chipsHTML = userInputs.map(input => 
           `<div class="user-input-chip">${input}</div>`
@@ -3512,7 +3517,7 @@ if (document.readyState === 'loading') {
       const userInputs = document.getElementById('userInputs');
       
       // Remove previous states
-      userInputs.classList.remove('correct', 'wrong');
+      userInputs.classList.remove('correct', 'wrong', 'active');
       
       // Remove previous solution text
       const existingSolution = userInputs.querySelector('.solution-text');
@@ -3544,6 +3549,7 @@ if (document.readyState === 'loading') {
       
       if (isCorrect) {
         // Bei richtig: Nur grün färben, kein Text
+        userInputs.classList.remove('active');  // Entferne active
         userInputs.classList.add('correct');
         
         // Automatisch zur nächsten Zahl NUR im Challenge-Modus
@@ -3556,6 +3562,7 @@ if (document.readyState === 'loading') {
         // Im normalen Trainingsmodus KEIN Auto-Continue - User muss manuell klicken
       } else {
         // Bei falsch: Rot färben + Lösung anzeigen
+        userInputs.classList.remove('active');  // Entferne active
         userInputs.classList.add('wrong');
         
         // Lösung unter den Eingabefeldern anzeigen
@@ -4145,7 +4152,7 @@ if (document.readyState === 'loading') {
       // Reset user-inputs
       const userInputsEl = document.getElementById('userInputs');
       userInputsEl.innerHTML = '';
-      userInputsEl.classList.remove('correct', 'wrong');
+      userInputsEl.classList.remove('correct', 'wrong', 'active');
       
       // Remove glow from outer ring when generating new score
       const outerRing = document.getElementById('dartboard-outer-ring');
