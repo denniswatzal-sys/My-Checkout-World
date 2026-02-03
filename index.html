@@ -23,6 +23,61 @@
   <link rel="stylesheet" href="style.css?v=TEST5SEC">
 </head>
 <body>
+<script>
+// IMMEDIATE background loading - runs before anything else renders
+(function() {
+  const randomMode = localStorage.getItem('dartTrainerBackgroundRandom');
+  let backgroundToUse;
+  
+  if (randomMode === 'true') {
+    // Random mode: Pick a random background
+    const backgrounds = [
+      'Hintergrund1.jpg', 'Hintergrund2.jpg', 'Hintergrund3.jpg',
+      'Hintergrund4.jpg', 'Hintergrund5.jpg', 'Hintergrund6.jpg',
+      'Hintergrund7.jpg', 'Hintergrund8.jpg', 'Hintergrund9.jpg',
+      'Hintergrund10.jpg', 'Hintergrund11.jpg'
+    ];
+    const randomBg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+    backgroundToUse = "url('" + randomBg + "') center/cover no-repeat fixed";
+    console.log('[DEBUG] Random background selected on load:', randomBg);
+  } else {
+    // Load custom background or default
+    const savedBg = localStorage.getItem('dartTrainerBackgroundCustom');
+    backgroundToUse = savedBg || "url('Hintergrund1.jpg') center/cover no-repeat fixed";
+  }
+  
+  // Apply immediately to body
+  document.body.style.background = backgroundToUse;
+  
+  // Also apply to start-screen and loading-screen when they load
+  // Use MutationObserver to catch them as soon as they're added to DOM
+  const observer = new MutationObserver(function(mutations) {
+    const startScreen = document.querySelector('.start-screen');
+    const loadingScreen = document.querySelector('.loading-screen');
+    
+    if (startScreen && !startScreen.style.background) {
+      startScreen.style.background = backgroundToUse;
+    }
+    if (loadingScreen && !loadingScreen.style.background) {
+      loadingScreen.style.background = backgroundToUse.replace('fixed', '');
+    }
+  });
+  
+  observer.observe(document.documentElement, {
+    childList: true,
+    subtree: true
+  });
+  
+  // Also set immediately if elements already exist
+  setTimeout(function() {
+    const startScreen = document.querySelector('.start-screen');
+    const loadingScreen = document.querySelector('.loading-screen');
+    if (startScreen) startScreen.style.background = backgroundToUse;
+    if (loadingScreen) loadingScreen.style.background = backgroundToUse.replace('fixed', '');
+    observer.disconnect(); // Stop observing after initial set
+  }, 0);
+})();
+</script>
 <div class="phone-screen">
       <!-- Loading Screen -->
       <div id="loadingScreen" class="loading-screen">
