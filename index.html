@@ -41,9 +41,24 @@
     backgroundToUse = "url('" + randomBg + "') center/cover no-repeat fixed";
     console.log('[DEBUG] Random background selected on load:', randomBg);
   } else {
-    // Load custom background or default
+    // Load custom background or use random as default
     const savedBg = localStorage.getItem('dartTrainerBackgroundCustom');
-    backgroundToUse = savedBg || "url('Hintergrund1.jpg') center/cover no-repeat fixed";
+    if (savedBg) {
+      backgroundToUse = savedBg;
+    } else {
+      // Default: Random background
+      const backgrounds = [
+        'Hintergrund1.jpg', 'Hintergrund2.jpg', 'Hintergrund3.jpg',
+        'Hintergrund4.jpg', 'Hintergrund5.jpg', 'Hintergrund6.jpg',
+        'Hintergrund7.jpg', 'Hintergrund8.jpg', 'Hintergrund9.jpg',
+        'Hintergrund10.jpg', 'Hintergrund11.jpg'
+      ];
+      const randomBg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+      backgroundToUse = "url('" + randomBg + "') center/cover no-repeat fixed";
+      // Set random mode as default
+      localStorage.setItem('dartTrainerBackgroundRandom', 'true');
+      console.log('[DEBUG] First load - Random background enabled by default:', randomBg);
+    }
   }
   
   // Apply immediately to body

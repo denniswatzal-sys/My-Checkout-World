@@ -1195,6 +1195,19 @@ if (document.readyState === 'loading') {
     }
     
     function showTutorialStep(stepIndex) {
+      // Restore rangeCard visibility for tutorial
+      const rangeCard = document.getElementById('rangeCard');
+      if (rangeCard) {
+        rangeCard.style.transition = 'none';
+        rangeCard.style.opacity = '1.0';
+        window.rangeCardDimming = false;
+        window.rangeCardActive = true;
+        console.log('[DEBUG] RangeCard restored to 100% for tutorial');
+        setTimeout(() => {
+          if (rangeCard) rangeCard.style.transition = 'opacity 3s ease';
+        }, 50);
+      }
+      
       if (stepIndex < 0 || stepIndex >= tutorialSteps.length) {
         endTutorial();
         return;
@@ -1493,6 +1506,19 @@ if (document.readyState === 'loading') {
     });
     
     function showRangeHint(hintKey) {
+      // Restore rangeCard visibility for hints modal
+      const rangeCard = document.getElementById('rangeCard');
+      if (rangeCard) {
+        rangeCard.style.transition = 'none';
+        rangeCard.style.opacity = '1.0';
+        window.rangeCardDimming = false;
+        window.rangeCardActive = true;
+        console.log('[DEBUG] RangeCard restored to 100% for hints modal');
+        setTimeout(() => {
+          if (rangeCard) rangeCard.style.transition = 'opacity 3s ease';
+        }, 50);
+      }
+      
       const modal = document.getElementById('hintsModal');
       const content = document.getElementById('hintsContent');
       const titleElement = modal.querySelector('.modal-title');
@@ -1524,6 +1550,19 @@ if (document.readyState === 'loading') {
     }
     
     function showBackgroundModal() {
+      // Restore rangeCard visibility for background modal
+      const rangeCard = document.getElementById('rangeCard');
+      if (rangeCard) {
+        rangeCard.style.transition = 'none';
+        rangeCard.style.opacity = '1.0';
+        window.rangeCardDimming = false;
+        window.rangeCardActive = true;
+        console.log('[DEBUG] RangeCard restored to 100% for background modal');
+        setTimeout(() => {
+          if (rangeCard) rangeCard.style.transition = 'opacity 3s ease';
+        }, 50);
+      }
+      
       document.getElementById('backgroundModal').style.display = 'flex';
     }
     
@@ -1817,9 +1856,24 @@ if (document.readyState === 'loading') {
         backgroundToUse = `url('${randomBg}') center/cover no-repeat fixed`;
         console.log('[DEBUG] Random background mode: Selected', randomBg);
       } else {
-        // Load custom background or default
+        // Load custom background or use random as default
         const savedBg = localStorage.getItem('dartTrainerBackgroundCustom');
-        backgroundToUse = savedBg || "url('Hintergrund1.jpg') center/cover no-repeat fixed";
+        if (savedBg) {
+          backgroundToUse = savedBg;
+        } else {
+          // Default: Random background
+          const backgrounds = [
+            'Hintergrund1.jpg', 'Hintergrund2.jpg', 'Hintergrund3.jpg',
+            'Hintergrund4.jpg', 'Hintergrund5.jpg', 'Hintergrund6.jpg',
+            'Hintergrund7.jpg', 'Hintergrund8.jpg', 'Hintergrund9.jpg',
+            'Hintergrund10.jpg', 'Hintergrund11.jpg'
+          ];
+          const randomBg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+          backgroundToUse = `url('${randomBg}') center/cover no-repeat fixed`;
+          // Set random mode as default
+          localStorage.setItem('dartTrainerBackgroundRandom', 'true');
+          console.log('[DEBUG] First load in loadBackground() - Random enabled by default:', randomBg);
+        }
       }
       
       document.body.style.background = backgroundToUse;
@@ -2610,8 +2664,8 @@ if (document.readyState === 'loading') {
       if (rangeCard && !window.rangeCardDimming) {
         window.rangeCardDimming = true;  // Prevent further clicks from resetting
         window.rangeCardActive = false;  // Mark as inactive (needs activation click)
-        rangeCard.style.opacity = '0.2';
-        console.log('[DEBUG] RangeCard dimming to 20% (3-second smooth transition)');
+        rangeCard.style.opacity = '0.1';
+        console.log('[DEBUG] RangeCard dimming to 10% (3-second smooth transition)');
       }
       
       // Wenn Feedback für falsche Antwort angezeigt wird, nächste Aufgabe bei Klick auf Dartscheibe
@@ -4427,6 +4481,20 @@ if (document.readyState === 'loading') {
     
     function openLeaderboard(currentEntry = null) {
       vibrateMedium();
+      
+      // Restore rangeCard visibility for leaderboard modal
+      const rangeCard = document.getElementById('rangeCard');
+      if (rangeCard) {
+        rangeCard.style.transition = 'none';
+        rangeCard.style.opacity = '1.0';
+        window.rangeCardDimming = false;
+        window.rangeCardActive = true;
+        console.log('[DEBUG] RangeCard restored to 100% for leaderboard modal');
+        setTimeout(() => {
+          if (rangeCard) rangeCard.style.transition = 'opacity 3s ease';
+        }, 50);
+      }
+      
       const modal = document.getElementById('leaderboardModal');
       const list = document.getElementById('leaderboardList');
       
