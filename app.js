@@ -3282,7 +3282,31 @@ if (document.readyState === 'loading') {
       highlightedFields.push(dartValue);
       createDartboard();
       
+      // DEBUG: Log current state
+      console.log('[DEBUG Validation] userInputs.length:', userInputs.length, 'currentCheckout.length:', currentCheckout.length);
+      console.log('[DEBUG Validation] userInputs:', userInputs);
+      console.log('[DEBUG Validation] currentCheckout:', currentCheckout);
+      console.log('[DEBUG Validation] realisticMode:', realisticMode, 'challengeMode:', window.challengeMode);
+      
       if (userInputs.length === currentCheckout.length) {
+        // CRITICAL: Validate that ALL darts were correct before showing success
+        let allCorrect = true;
+        for (let i = 0; i < userInputs.length; i++) {
+          if (userInputs[i] !== currentCheckout[i]) {
+            allCorrect = false;
+            console.log('[DEBUG Validation] ERROR: Dart', i, 'mismatch!', userInputs[i], '!==', currentCheckout[i]);
+            break;
+          }
+        }
+        
+        if (!allCorrect) {
+          console.log('[DEBUG Validation] ERROR: Not all darts correct, but reached end of validation!');
+          // This should never happen - show as wrong
+          showFeedback(false);
+          return;
+        }
+        
+        console.log('[DEBUG Validation] All darts correct - showing success feedback');
         showFeedback(true);
         if (window.challengeMode) {
           challengeStats.correct++;
