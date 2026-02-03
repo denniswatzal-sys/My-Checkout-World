@@ -51,8 +51,12 @@
       border: 1px solid white;
       border-radius: 12px;
       position: relative;
-      opacity: 1.0;
-      transition: opacity 3s ease, border-color 3s ease;  /* 3 Sekunden smooth fade für Container und Rahmen */
+      transition: border-color 3s ease;
+    }
+    
+    /* Alle direkten Kinder von rangeCard werden transparent beim Dimmen */
+    #rangeCard > * {
+      transition: opacity 3s ease;
     }
     
     .card.hidden {

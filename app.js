@@ -1200,14 +1200,21 @@ if (document.readyState === 'loading') {
     function restoreRangeCardVisibility(context = '') {
       const rangeCard = document.getElementById('rangeCard');
       if (rangeCard) {
-        rangeCard.style.transition = 'none';
-        rangeCard.style.opacity = '1.0';
+        // Restore all children to full opacity
+        Array.from(rangeCard.children).forEach(child => {
+          child.style.transition = 'none';
+          child.style.opacity = '1.0';
+        });
+        
         rangeCard.style.borderColor = 'white';  // Restore full border
         window.rangeCardDimming = false;
         window.rangeCardActive = true;
         console.log('[DEBUG] RangeCard restored to 100%' + (context ? ' - ' + context : ''));
+        
         setTimeout(() => {
-          if (rangeCard) rangeCard.style.transition = 'opacity 3s ease, border-color 3s ease';
+          Array.from(rangeCard.children).forEach(child => {
+            child.style.transition = 'opacity 3s ease';
+          });
         }, 50);
       }
     }
@@ -2651,14 +2658,18 @@ if (document.readyState === 'loading') {
       // Haptic feedback for dartboard clicks
       vibrateMedium();
       
-      // Smooth dim rangeCard on first dartboard click (3-second transition via CSS)
+      // Smooth dim rangeCard content on first dartboard click (3-second transition via CSS)
       const rangeCard = document.getElementById('rangeCard');
       if (rangeCard && !window.rangeCardDimming) {
         window.rangeCardDimming = true;  // Prevent further clicks from resetting
         window.rangeCardActive = false;  // Mark as inactive (needs activation click)
-        rangeCard.style.opacity = '0';
-        rangeCard.style.borderColor = 'rgba(255, 255, 255, 0.2)';  // Border 20% visible
-        console.log('[DEBUG] RangeCard dimming to 0% (border 20%) - 3-second smooth transition');
+        
+        // Dim all children to 0%, border stays at 20%
+        Array.from(rangeCard.children).forEach(child => {
+          child.style.opacity = '0';
+        });
+        rangeCard.style.borderColor = 'rgba(255, 255, 255, 0.2)';  // Border 20% sichtbar
+        console.log('[DEBUG] RangeCard content dimming to 0% (border 20%) - 3-second smooth transition');
       }
       
       // Wenn Feedback für falsche Antwort angezeigt wird, nächste Aufgabe bei Klick auf Dartscheibe
@@ -4736,20 +4747,7 @@ if (document.readyState === 'loading') {
       // ACTIVATION CHECK: If container is dimmed, only restore visibility
       if (window.rangeCardDimming && !window.rangeCardActive) {
         console.log('[DEBUG MenuBtn] Container dimmed - blocking menu opening');
-        const rangeCard = document.getElementById('rangeCard');
-        if (rangeCard) {
-          rangeCard.style.transition = 'none';
-          rangeCard.style.opacity = '1.0';
-          rangeCard.style.borderColor = 'white';  // Restore full border
-          window.rangeCardDimming = false;
-          window.rangeCardActive = true;
-          console.log('[DEBUG] RangeCard restored to 100% via menuBtn (first click - menu not opened)');
-          
-          setTimeout(() => {
-            rangeCard.style.transition = 'opacity 3s ease, border-color 3s ease';
-          }, 50);
-        }
-        
+        restoreRangeCardVisibility('via menuBtn (first click - menu not opened)');
         menuBtnLongPressTriggered = false;
         return;  // Don't open menu on first click
       }
@@ -4882,20 +4880,7 @@ if (document.readyState === 'loading') {
       
       // ACTIVATION CHECK: If container is dimmed, only restore visibility
       if (window.rangeCardDimming && !window.rangeCardActive) {
-        const rangeCard = document.getElementById('rangeCard');
-        if (rangeCard) {
-          rangeCard.style.transition = 'none';
-          rangeCard.style.opacity = '1.0';
-          rangeCard.style.borderColor = 'white';  // Restore full border
-          window.rangeCardDimming = false;
-          window.rangeCardActive = true;
-          console.log('[DEBUG] RangeCard restored to 100% via learnBtn (first click - function not executed)');
-          
-          setTimeout(() => {
-            rangeCard.style.transition = 'opacity 3s ease, border-color 3s ease';
-          }, 50);
-        }
-        
+        restoreRangeCardVisibility('via learnBtn (first click - function not executed)');
         learnBtnLongPressTriggered = false;
         return;  // Don't execute learn button function on first click
       }
@@ -5110,9 +5095,12 @@ if (document.readyState === 'loading') {
           e.stopPropagation();
           e.preventDefault();
           
-          // Temporarily disable transition for instant return
-          rangeCard.style.transition = 'none';
-          rangeCard.style.opacity = '1.0';
+          // Restore all children to full opacity
+          Array.from(rangeCard.children).forEach(child => {
+            child.style.transition = 'none';
+            child.style.opacity = '1.0';
+          });
+          
           rangeCard.style.borderColor = 'white';  // Restore full border
           window.rangeCardDimming = false;
           window.rangeCardActive = true;  // Mark as active for next click
@@ -5120,7 +5108,9 @@ if (document.readyState === 'loading') {
           
           // Re-enable transition after a brief moment
           setTimeout(() => {
-            rangeCard.style.transition = 'opacity 3s ease, border-color 3s ease';
+            Array.from(rangeCard.children).forEach(child => {
+              child.style.transition = 'opacity 3s ease';
+            });
           }, 50);
           
           return false;
