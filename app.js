@@ -1614,6 +1614,8 @@ if (document.readyState === 'loading') {
           startScreen.style.background = gradient;
         }
         localStorage.setItem('dartTrainerBackgroundCustom', gradient);
+        // Update Session-Hintergrund
+        localStorage.setItem('dartTrainerBackgroundSession', gradient);
       } else {
         const rangeCard = document.querySelector('#rangeCard');
         if (rangeCard) {
@@ -1635,6 +1637,8 @@ if (document.readyState === 'loading') {
           startScreen.style.background = gradient;
         }
         localStorage.setItem('dartTrainerBackgroundCustom', gradient);
+        // Update Session-Hintergrund
+        localStorage.setItem('dartTrainerBackgroundSession', gradient);
       } else {
         const rangeCard = document.querySelector('#rangeCard');
         if (rangeCard) {
@@ -1655,6 +1659,8 @@ if (document.readyState === 'loading') {
           startScreen.style.background = imageStyle;
         }
         localStorage.setItem('dartTrainerBackgroundCustom', imageStyle);
+        // Update Session-Hintergrund
+        localStorage.setItem('dartTrainerBackgroundSession', imageStyle);
         
         // Disable random mode when specific background is selected
         localStorage.setItem('dartTrainerBackgroundRandom', 'false');
@@ -1804,6 +1810,8 @@ if (document.readyState === 'loading') {
         // If turning ON random mode, clear custom background
         if (newMode === 'true') {
           localStorage.removeItem('dartTrainerBackgroundCustom');
+          // Lösche auch Session-Hintergrund, damit beim nächsten Laden ein neuer gewählt wird
+          localStorage.removeItem('dartTrainerBackgroundSession');
           console.log('[DEBUG] Random background mode enabled');
         } else {
           console.log('[DEBUG] Random background mode disabled');
@@ -1838,29 +1846,18 @@ if (document.readyState === 'loading') {
     }
     
     function loadBackground() {
-      // Check if random background mode is enabled
-      const randomMode = localStorage.getItem('dartTrainerBackgroundRandom');
+      // ZUERST: Prüfe ob ein Session-Hintergrund existiert (vom inline Script gesetzt)
+      let backgroundToUse = localStorage.getItem('dartTrainerBackgroundSession');
       
-      let backgroundToUse;
-      
-      if (randomMode === 'true') {
-        // Random mode: Pick a random background from available backgrounds
-        const backgrounds = [
-          'Hintergrund1.jpg', 'Hintergrund2.jpg', 'Hintergrund3.jpg',
-          'Hintergrund4.jpg', 'Hintergrund5.jpg', 'Hintergrund6.jpg',
-          'Hintergrund7.jpg', 'Hintergrund8.jpg', 'Hintergrund9.jpg',
-          'Hintergrund10.jpg', 'Hintergrund11.jpg'
-        ];
-        const randomBg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
-        backgroundToUse = `url('${randomBg}') center/cover no-repeat fixed`;
-        console.log('[DEBUG] Random background mode: Selected', randomBg);
+      if (backgroundToUse) {
+        // Session-Hintergrund existiert - verwende diesen
+        console.log('[DEBUG] Using session background from initial load');
       } else {
-        // Load custom background or use random as default
-        const savedBg = localStorage.getItem('dartTrainerBackgroundCustom');
-        if (savedBg) {
-          backgroundToUse = savedBg;
-        } else {
-          // Default: Random background
+        // Kein Session-Hintergrund - wähle einen (Fallback)
+        const randomMode = localStorage.getItem('dartTrainerBackgroundRandom');
+        
+        if (randomMode === 'true') {
+          // Random mode: Pick a random background from available backgrounds
           const backgrounds = [
             'Hintergrund1.jpg', 'Hintergrund2.jpg', 'Hintergrund3.jpg',
             'Hintergrund4.jpg', 'Hintergrund5.jpg', 'Hintergrund6.jpg',
@@ -1869,10 +1866,30 @@ if (document.readyState === 'loading') {
           ];
           const randomBg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
           backgroundToUse = `url('${randomBg}') center/cover no-repeat fixed`;
-          // Set random mode as default
-          localStorage.setItem('dartTrainerBackgroundRandom', 'true');
-          console.log('[DEBUG] First load in loadBackground() - Random enabled by default:', randomBg);
+          console.log('[DEBUG] Random background mode: Selected', randomBg);
+        } else {
+          // Load custom background or use random as default
+          const savedBg = localStorage.getItem('dartTrainerBackgroundCustom');
+          if (savedBg) {
+            backgroundToUse = savedBg;
+          } else {
+            // Default: Random background
+            const backgrounds = [
+              'Hintergrund1.jpg', 'Hintergrund2.jpg', 'Hintergrund3.jpg',
+              'Hintergrund4.jpg', 'Hintergrund5.jpg', 'Hintergrund6.jpg',
+              'Hintergrund7.jpg', 'Hintergrund8.jpg', 'Hintergrund9.jpg',
+              'Hintergrund10.jpg', 'Hintergrund11.jpg'
+            ];
+            const randomBg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+            backgroundToUse = `url('${randomBg}') center/cover no-repeat fixed`;
+            // Set random mode as default
+            localStorage.setItem('dartTrainerBackgroundRandom', 'true');
+            console.log('[DEBUG] First load in loadBackground() - Random enabled by default:', randomBg);
+          }
         }
+        
+        // Speichere den gewählten Hintergrund als Session-Hintergrund
+        localStorage.setItem('dartTrainerBackgroundSession', backgroundToUse);
       }
       
       document.body.style.background = backgroundToUse;
@@ -4687,6 +4704,8 @@ if (document.readyState === 'loading') {
       localStorage.removeItem('dartTrainerBackgroundCustom');
       localStorage.removeItem('dartTrainerFieldCustom');
       localStorage.removeItem('dartTrainerFieldBorder');
+      // Lösche auch Session-Hintergrund
+      localStorage.removeItem('dartTrainerBackgroundSession');
       console.log('Colors reset to defaults');
       
       // Reload page to apply default colors
