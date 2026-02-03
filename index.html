@@ -20,21 +20,16 @@
   <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
   <link rel="apple-touch-icon" href="icon-512.png">
   
-  <link rel="stylesheet" href="style.css?v=TEST-1545">
+  <link rel="stylesheet" href="style.css?v=BETA-FEB23">
 </head>
 <body>
 <script>
 // ========================================
-// KILL-SWITCH - TEST VERSION (15:45 Uhr)
+// KILL-SWITCH - Beta-Phase Zeitbegrenzung
 // ========================================
 (function() {
-  const EXPIRY_DATE = new Date('2026-02-03T15:45:00');
+  const EXPIRY_DATE = new Date('2026-02-23T23:59:59');
   const now = new Date();
-  
-  console.log('=== KILL-SWITCH TEST (15:45 Uhr) ===');
-  console.log('Ablaufdatum:', EXPIRY_DATE.toLocaleString('de-DE'));
-  console.log('Aktuelles Datum:', now.toLocaleString('de-DE'));
-  console.log('App gesperrt:', now > EXPIRY_DATE);
   
   if (now > EXPIRY_DATE) {
     // App ist abgelaufen - zeige Sperrbildschirm
@@ -78,25 +73,14 @@
             font-size: 14px;
             opacity: 0.7;
           ">
-            Ablaufdatum: ${EXPIRY_DATE.toLocaleString('de-DE')}
-          </div>
-          <div style="
-            margin-top: 15px;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.15);
-            border-radius: 8px;
-            font-size: 12px;
-            opacity: 0.6;
-            color: #fbbf24;
-          ">
-            🧪 TEST-VERSION (15:45 Uhr)
+            Ablaufdatum: ${EXPIRY_DATE.toLocaleDateString('de-DE')}
           </div>
         </div>
       </div>
     `;
     
     // Verhindere jegliche weitere Script-Ausführung
-    throw new Error('Beta-Phase beendet - App gesperrt (TEST 15:45)');
+    throw new Error('Beta-Phase beendet - App gesperrt');
   }
 })();
 </script>
@@ -542,7 +526,7 @@
     </div>
   </div>
   
-  <script src="app.js?v=TEST-1545"></script>
+  <script src="app.js?v=BETA-FEB23"></script>
   
   <!-- Service Worker Registration -->
   <script>
