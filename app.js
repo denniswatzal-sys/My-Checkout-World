@@ -18,20 +18,16 @@ const ASSETS_TO_LOAD = {
 };
 
 // ========================================
-// KILL-SWITCH - Periodischer Check (TEST VERSION 17:00 Uhr)
+// KILL-SWITCH - Periodischer Check
 // ========================================
 (function() {
-  const EXPIRY_DATE = new Date('2026-02-03T17:00:00');
+  const EXPIRY_DATE = new Date('2026-02-23T23:59:59');
   
   function checkExpiry() {
     const now = new Date();
     
-    console.log('[KILL-SWITCH TEST] Check um:', now.toLocaleTimeString('de-DE'));
-    console.log('[KILL-SWITCH TEST] Ablaufdatum:', EXPIRY_DATE.toLocaleString('de-DE'));
-    console.log('[KILL-SWITCH TEST] Abgelaufen:', now > EXPIRY_DATE);
-    
     if (now > EXPIRY_DATE) {
-      console.log('[KILL-SWITCH TEST] App abgelaufen - zeige Sperrbildschirm');
+      console.log('[KILL-SWITCH] App abgelaufen - zeige Sperrbildschirm');
       
       // Zeige Sperrbildschirm
       document.body.innerHTML = `
@@ -74,18 +70,7 @@ const ASSETS_TO_LOAD = {
               font-size: 14px;
               opacity: 0.7;
             ">
-              Ablaufdatum: ${EXPIRY_DATE.toLocaleString('de-DE')}
-            </div>
-            <div style="
-              margin-top: 15px;
-              padding: 10px;
-              background: rgba(255, 255, 255, 0.15);
-              border-radius: 8px;
-              font-size: 12px;
-              opacity: 0.6;
-              color: #fbbf24;
-            ">
-              🧪 TEST-VERSION (Periodischer Check - 17:00 Uhr)
+              Ablaufdatum: ${EXPIRY_DATE.toLocaleDateString('de-DE')}
             </div>
           </div>
         </div>
@@ -107,7 +92,7 @@ const ASSETS_TO_LOAD = {
   // Prüfe alle 60 Sekunden
   setInterval(checkExpiry, 60000);
   
-  console.log('[KILL-SWITCH TEST] Periodischer Check aktiviert (alle 60 Sekunden, Ablauf: 17:00 Uhr)');
+  console.log('[KILL-SWITCH] Periodischer Check aktiviert (alle 60 Sekunden)');
 })();
 
 // ========================================
