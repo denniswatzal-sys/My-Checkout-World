@@ -694,23 +694,6 @@ if (document.readyState === 'loading') {
     }
     
     function setMode(mode, buttonElement) {
-      // ACTIVATION CHECK: If container is dimmed, only restore visibility
-      if (window.rangeCardDimming && !window.rangeCardActive) {
-        const rangeCard = document.getElementById('rangeCard');
-        if (rangeCard) {
-          rangeCard.style.transition = 'none';
-          rangeCard.style.opacity = '1.0';
-          window.rangeCardDimming = false;
-          window.rangeCardActive = true;
-          console.log('[DEBUG] RangeCard restored to 100% via mode button (first click - mode not changed)');
-          
-          setTimeout(() => {
-            if (rangeCard) rangeCard.style.transition = 'opacity 3s ease';
-          }, 50);
-        }
-        return;  // Don't change mode on first click
-      }
-      
       currentMode = mode;
       
       // Set maxDartsForRound based on mode
@@ -833,23 +816,6 @@ if (document.readyState === 'loading') {
     }
     
     function cycleGenerationMode() {
-      // ACTIVATION CHECK: If container is dimmed, only restore visibility
-      if (window.rangeCardDimming && !window.rangeCardActive) {
-        const rangeCard = document.getElementById('rangeCard');
-        if (rangeCard) {
-          rangeCard.style.transition = 'none';
-          rangeCard.style.opacity = '1.0';
-          window.rangeCardDimming = false;
-          window.rangeCardActive = true;
-          console.log('[DEBUG] RangeCard restored to 100% via generation mode button (first click - mode not changed)');
-          
-          setTimeout(() => {
-            if (rangeCard) rangeCard.style.transition = 'opacity 3s ease';
-          }, 50);
-        }
-        return;  // Don't change generation mode on first click
-      }
-      
       // Reset state when changing generation mode
       feedback = null;
       highlightedFields = [];
@@ -3677,23 +3643,6 @@ if (document.readyState === 'loading') {
     
     function startChallenge() {
       if (window.challengeMode) return;
-      
-      // ACTIVATION CHECK: If container is dimmed, only restore visibility
-      if (window.rangeCardDimming && !window.rangeCardActive) {
-        const rangeCard = document.getElementById('rangeCard');
-        if (rangeCard) {
-          rangeCard.style.transition = 'none';
-          rangeCard.style.opacity = '1.0';
-          window.rangeCardDimming = false;
-          window.rangeCardActive = true;
-          console.log('[DEBUG] RangeCard restored to 100% via challenge button (first click - challenge not started)');
-          
-          setTimeout(() => {
-            if (rangeCard) rangeCard.style.transition = 'opacity 3s ease';
-          }, 50);
-        }
-        return;  // Don't start challenge on first click
-      }
       
       // Show countdown first, then start challenge
       showCountdown(() => {
