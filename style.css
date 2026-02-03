@@ -52,7 +52,7 @@
       border-radius: 12px;
       position: relative;
       opacity: 1.0;
-      transition: opacity 3s ease;  /* 3 Sekunden smooth fade wie ein Dimmer */
+      transition: opacity 3s ease, border-color 3s ease;  /* 3 Sekunden smooth fade für Container und Rahmen */
     }
     
     .card.hidden {

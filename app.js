@@ -1194,19 +1194,31 @@ if (document.readyState === 'loading') {
       enterFullscreen();
     }
     
-    function showTutorialStep(stepIndex) {
-      // Restore rangeCard visibility for tutorial
+    // ========================================
+    // HELPER FUNCTION: Restore rangeCard visibility
+    // ========================================
+    function restoreRangeCardVisibility(context = '') {
       const rangeCard = document.getElementById('rangeCard');
       if (rangeCard) {
         rangeCard.style.transition = 'none';
         rangeCard.style.opacity = '1.0';
+        rangeCard.style.borderColor = 'white';  // Restore full border
         window.rangeCardDimming = false;
         window.rangeCardActive = true;
-        console.log('[DEBUG] RangeCard restored to 100% for tutorial');
+        console.log('[DEBUG] RangeCard restored to 100%' + (context ? ' - ' + context : ''));
         setTimeout(() => {
-          if (rangeCard) rangeCard.style.transition = 'opacity 3s ease';
+          if (rangeCard) rangeCard.style.transition = 'opacity 3s ease, border-color 3s ease';
         }, 50);
       }
+    }
+    
+    // ========================================
+    // TUTORIAL SYSTEM
+    // ========================================
+    
+    function showTutorialStep(stepIndex) {
+      // Restore rangeCard visibility for tutorial
+      restoreRangeCardVisibility('tutorial');
       
       if (stepIndex < 0 || stepIndex >= tutorialSteps.length) {
         endTutorial();
@@ -1507,17 +1519,7 @@ if (document.readyState === 'loading') {
     
     function showRangeHint(hintKey) {
       // Restore rangeCard visibility for hints modal
-      const rangeCard = document.getElementById('rangeCard');
-      if (rangeCard) {
-        rangeCard.style.transition = 'none';
-        rangeCard.style.opacity = '1.0';
-        window.rangeCardDimming = false;
-        window.rangeCardActive = true;
-        console.log('[DEBUG] RangeCard restored to 100% for hints modal');
-        setTimeout(() => {
-          if (rangeCard) rangeCard.style.transition = 'opacity 3s ease';
-        }, 50);
-      }
+      restoreRangeCardVisibility('hints modal');
       
       const modal = document.getElementById('hintsModal');
       const content = document.getElementById('hintsContent');
@@ -1551,17 +1553,7 @@ if (document.readyState === 'loading') {
     
     function showBackgroundModal() {
       // Restore rangeCard visibility for background modal
-      const rangeCard = document.getElementById('rangeCard');
-      if (rangeCard) {
-        rangeCard.style.transition = 'none';
-        rangeCard.style.opacity = '1.0';
-        window.rangeCardDimming = false;
-        window.rangeCardActive = true;
-        console.log('[DEBUG] RangeCard restored to 100% for background modal');
-        setTimeout(() => {
-          if (rangeCard) rangeCard.style.transition = 'opacity 3s ease';
-        }, 50);
-      }
+      restoreRangeCardVisibility('background modal');
       
       document.getElementById('backgroundModal').style.display = 'flex';
     }
@@ -2664,8 +2656,9 @@ if (document.readyState === 'loading') {
       if (rangeCard && !window.rangeCardDimming) {
         window.rangeCardDimming = true;  // Prevent further clicks from resetting
         window.rangeCardActive = false;  // Mark as inactive (needs activation click)
-        rangeCard.style.opacity = '0.1';
-        console.log('[DEBUG] RangeCard dimming to 10% (3-second smooth transition)');
+        rangeCard.style.opacity = '0';
+        rangeCard.style.borderColor = 'rgba(255, 255, 255, 0.2)';  // Border 20% visible
+        console.log('[DEBUG] RangeCard dimming to 0% (border 20%) - 3-second smooth transition');
       }
       
       // Wenn Feedback für falsche Antwort angezeigt wird, nächste Aufgabe bei Klick auf Dartscheibe
@@ -3777,17 +3770,7 @@ if (document.readyState === 'loading') {
       window.challengeMode = false;
       
       // Restore rangeCard visibility after challenge
-      const rangeCard = document.getElementById('rangeCard');
-      if (rangeCard) {
-        rangeCard.style.transition = 'none';
-        rangeCard.style.opacity = '1.0';
-        window.rangeCardDimming = false;
-        window.rangeCardActive = true;
-        console.log('[DEBUG] RangeCard restored to 100% after challenge mode');
-        setTimeout(() => {
-          if (rangeCard) rangeCard.style.transition = 'opacity 3s ease';
-        }, 50);
-      }
+      restoreRangeCardVisibility('after challenge mode');
       
       // Stop challenge music
       if (window.challengeMusic) {
@@ -3915,17 +3898,7 @@ if (document.readyState === 'loading') {
       window.challengeMode = false;
       
       // Restore rangeCard visibility after canceling challenge
-      const rangeCard = document.getElementById('rangeCard');
-      if (rangeCard) {
-        rangeCard.style.transition = 'none';
-        rangeCard.style.opacity = '1.0';
-        window.rangeCardDimming = false;
-        window.rangeCardActive = true;
-        console.log('[DEBUG] RangeCard restored to 100% after canceling challenge');
-        setTimeout(() => {
-          if (rangeCard) rangeCard.style.transition = 'opacity 3s ease';
-        }, 50);
-      }
+      restoreRangeCardVisibility('after canceling challenge');
       
       // Stop challenge music
       if (window.challengeMusic) {
@@ -4509,17 +4482,7 @@ if (document.readyState === 'loading') {
       vibrateMedium();
       
       // Restore rangeCard visibility for leaderboard modal
-      const rangeCard = document.getElementById('rangeCard');
-      if (rangeCard) {
-        rangeCard.style.transition = 'none';
-        rangeCard.style.opacity = '1.0';
-        window.rangeCardDimming = false;
-        window.rangeCardActive = true;
-        console.log('[DEBUG] RangeCard restored to 100% for leaderboard modal');
-        setTimeout(() => {
-          if (rangeCard) rangeCard.style.transition = 'opacity 3s ease';
-        }, 50);
-      }
+      restoreRangeCardVisibility('leaderboard modal');
       
       const modal = document.getElementById('leaderboardModal');
       const list = document.getElementById('leaderboardList');
@@ -4777,12 +4740,13 @@ if (document.readyState === 'loading') {
         if (rangeCard) {
           rangeCard.style.transition = 'none';
           rangeCard.style.opacity = '1.0';
+          rangeCard.style.borderColor = 'white';  // Restore full border
           window.rangeCardDimming = false;
           window.rangeCardActive = true;
           console.log('[DEBUG] RangeCard restored to 100% via menuBtn (first click - menu not opened)');
           
           setTimeout(() => {
-            rangeCard.style.transition = 'opacity 3s ease';
+            rangeCard.style.transition = 'opacity 3s ease, border-color 3s ease';
           }, 50);
         }
         
@@ -4922,12 +4886,13 @@ if (document.readyState === 'loading') {
         if (rangeCard) {
           rangeCard.style.transition = 'none';
           rangeCard.style.opacity = '1.0';
+          rangeCard.style.borderColor = 'white';  // Restore full border
           window.rangeCardDimming = false;
           window.rangeCardActive = true;
           console.log('[DEBUG] RangeCard restored to 100% via learnBtn (first click - function not executed)');
           
           setTimeout(() => {
-            rangeCard.style.transition = 'opacity 3s ease';
+            rangeCard.style.transition = 'opacity 3s ease, border-color 3s ease';
           }, 50);
         }
         
@@ -5148,13 +5113,14 @@ if (document.readyState === 'loading') {
           // Temporarily disable transition for instant return
           rangeCard.style.transition = 'none';
           rangeCard.style.opacity = '1.0';
+          rangeCard.style.borderColor = 'white';  // Restore full border
           window.rangeCardDimming = false;
           window.rangeCardActive = true;  // Mark as active for next click
           console.log('[DEBUG] RangeCard restored to 100% (first click - buttons not active yet)');
           
           // Re-enable transition after a brief moment
           setTimeout(() => {
-            rangeCard.style.transition = 'opacity 3s ease';
+            rangeCard.style.transition = 'opacity 3s ease, border-color 3s ease';
           }, 50);
           
           return false;
